@@ -59,3 +59,14 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+# Lệnh cần chạy trước khi chạy dự án
+composer install
+
+php artisan migrate
+
+# Tải ảnh mẫu
+php artisan storage:link
+
+php artisan storage:seed-images

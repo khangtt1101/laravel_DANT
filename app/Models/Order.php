@@ -8,15 +8,33 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    protected $guarded = [];
 
-    // Một Order thuộc về một User
-    public function user() {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id',
+        'total_amount',
+        'status',
+        'shipping_address',
+        'payment_method',
+    ];
+
+    /**
+     * Một đơn hàng thuộc về một người dùng.
+     */
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    // Một Order có nhiều OrderItems
-    public function items() {
+    /**
+     * Một đơn hàng có nhiều chi tiết sản phẩm (order items).
+     */
+    public function items()
+    {
         return $this->hasMany(OrderItem::class);
     }
 }
