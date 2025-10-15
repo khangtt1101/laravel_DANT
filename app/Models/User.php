@@ -10,23 +10,56 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
-        'full_name', 'email', 'password', 'phone_number', 'address', 'role',
+        'full_name',
+        'email',
+        'password',
+        'phone_number',
+        'address',
+        'role',
     ];
 
-    protected $hidden = [ 'password', 'remember_token', ];
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
-    protected function casts(): array {
-        return ['email_verified_at' => 'datetime', 'password' => 'hashed', ];
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 
-    // Một User có nhiều Orders
-    public function orders() {
+    /**
+     * Một User có thể có nhiều đơn hàng.
+     */
+    public function orders()
+    {
         return $this->hasMany(Order::class);
     }
 
-    // Một User có nhiều Reviews
-    public function reviews() {
+    /**
+     * Một User có thể viết nhiều đánh giá.
+     */
+    public function reviews()
+    {
         return $this->hasMany(Review::class);
     }
 }

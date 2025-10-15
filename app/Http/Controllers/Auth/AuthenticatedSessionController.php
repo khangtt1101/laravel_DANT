@@ -24,11 +24,20 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // === THAY ĐỔI BẮT ĐẦU TỪ ĐÂY ===
+
+        // Kiểm tra vai trò của người dùng vừa đăng nhập
+        if ($request->user()->role === 'admin') {
+            // Nếu là admin, chuyển hướng đến admin dashboard
+            return redirect()->route('admin.dashboard');
+        }
+
+        // Nếu không phải admin, chuyển hướng đến dashboard mặc định của người dùng
+        return redirect()->intended('/dashboard');
     }
 
     /**

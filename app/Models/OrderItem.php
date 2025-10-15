@@ -10,14 +10,37 @@ class OrderItem extends Model
     use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
+     * Bảng này không dùng timestamps.
      *
-     * @var array
-     */
-    protected $guarded = []; // Hoặc $fillable = [...]
-
-    /**
-     * Tắt tính năng tự động quản lý timestamps (created_at, updated_at).
+     * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'order_id',
+        'product_id',
+        'quantity',
+        'price',
+    ];
+
+    /**
+     * Một chi tiết đơn hàng thuộc về một đơn hàng.
+     */
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    /**
+     * Một chi tiết đơn hàng tương ứng với một sản phẩm.
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

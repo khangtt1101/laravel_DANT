@@ -8,21 +8,53 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $guarded = [];
-    protected $casts = ['specifications' => 'array']; // Tự động chuyển JSON sang array
 
-    // Một Product thuộc về một Category
-    public function category() {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'category_id',
+        'name',
+        'slug',
+        'description',
+        'specifications',
+        'price',
+        'stock_quantity',
+        'sku',
+    ];
+
+    /**
+     * Tự động chuyển đổi cột 'specifications' từ JSON trong DB sang array trong PHP.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'specifications' => 'array',
+    ];
+
+    /**
+     * Một sản phẩm thuộc về một danh mục.
+     */
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    // Một Product có nhiều Images
-    public function images() {
+    /**
+     * Một sản phẩm có nhiều hình ảnh.
+     */
+    public function images()
+    {
         return $this->hasMany(ProductImage::class);
     }
 
-    // Một Product có nhiều Reviews
-    public function reviews() {
+    /**
+     * Một sản phẩm có nhiều đánh giá.
+     */
+    public function reviews()
+    {
         return $this->hasMany(Review::class);
     }
 }
