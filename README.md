@@ -61,12 +61,26 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 
-# Lệnh cần chạy trước khi chạy dự án
+# Lệnh cần chạy trước khi chạy dự án(Chỉ cân chạy 1 lần)
 composer install
 
 php artisan migrate
+
+php artisan db:seed
+
+
+
+
+# Bật 1 terminal riêng để chạy 
+npm install(Chỉ chạy 1 lần)
+
+npm run dev
 
 # Tải ảnh mẫu
 php artisan storage:link
 
 php artisan storage:seed-images
+# Mở terminal khác chạy lệnh
+
+php artisan serve
+
