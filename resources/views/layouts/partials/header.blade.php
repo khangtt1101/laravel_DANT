@@ -9,8 +9,8 @@
 
             <nav class="hidden md:flex md:space-x-8">
                 <a href="/" class="font-medium text-gray-500 hover:text-gray-900">Trang chủ</a>
-                <a href="#" class="font-medium text-gray-500 hover:text-gray-900">Sản phẩm</a>
-                <a href="#" class="font-medium text-gray-500 hover:text-gray-900">Danh mục</a>
+                <a href="#" class="font-medium text-gray-500 hover:text-gray-900">Giới thiệu</a>
+                <a href="{{ route('shop.index') }}" class="font-medium text-gray-500 hover:text-gray-900">Sản phẩm</a>
                 <a href="#" class="font-medium text-gray-500 hover:text-gray-900">Liên hệ</a>
             </nav>
 
@@ -42,8 +42,8 @@
     <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" class="md:hidden" x-transition>
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Trang chủ</a>
-            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Sản phẩm</a>
-            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Danh mục</a>
+            <a href="{{ route('shop.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Sản phẩm</a>
+            <a href="{{ route('shop.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Danh mục</a>
             <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Liên hệ</a>
         </div>
         <div class="pt-4 pb-3 border-t border-gray-200">
@@ -58,3 +58,20 @@
         </div>
     </div>
 </header>
+<nav class="bg-white text-black shadow-lg">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center h-12 space-x-6 justify-center flex-wrap">
+            
+            @if(isset($allCategories))
+                @foreach($allCategories as $category)
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-300 transition duration-150">
+                        {{ $category->name }}
+                        </a>
+                @endforeach
+            @else
+                <p class="text-sm">Không thể tải danh mục...</p>
+            @endif
+
+        </div>
+    </div>
+</nav>  

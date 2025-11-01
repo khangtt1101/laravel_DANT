@@ -71,15 +71,18 @@ php artisan db:seed
 
 
 
-# Bật 1 terminal riêng để chạy 
-npm install(Chỉ chạy 1 lần)
 
-npm run dev
 
 # Tải ảnh mẫu
 php artisan storage:link
 
 php artisan storage:seed-images
+
+# Bật 1 terminal riêng để chạy 
+npm install(Chỉ chạy 1 lần)
+
+npm run dev
+
 # Mở terminal khác chạy lệnh
 
 php artisan serve
