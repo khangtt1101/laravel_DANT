@@ -5,18 +5,40 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\ProductImage; // <-- Thêm model ProductImage
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; // <-- Thêm DB Facade để dùng transaction
-use Illuminate\Support\Str; // <-- Thêm Str để tạo slug
+use App\Models\ProductImage;
+use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Str; 
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
     // ... các phương thức index, create, edit, show giữ nguyên ...
-    public function index()
+    public function index(Request $request) // <-- Thêm Request $request
     {
-        $products = Product::with('category')->latest()->paginate(10);
-        return view('admin.products.index', compact('products'));
+        // 1. Lấy danh sách categories để hiển thị trong dropdown filter
+        $categories = Category::all();
+
+        // 2. Bắt đầu truy vấn sản phẩm
+        $query = Product::with('category')->latest();
+
+        // 3. Xử lý tìm kiếm (nếu có)
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where('name', 'like', '%' . $searchTerm . '%');
+        }
+
+        // 4. Xử lý lọc theo danh mục (nếu có)
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->input('category'));
+        }
+
+        // 5. Lấy kết quả, phân trang và giữ lại các tham số query (search, category)
+        $products = $query->paginate(10)->withQueryString();
+
+        // 6. Trả về view với cả $products và $categories
+        return view('admin.products.index', compact('products', 'categories'));
     }
 
     public function create()
@@ -28,6 +50,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::all();
+        $product->load('images'); // <-- Tải các ảnh liên quan
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
@@ -95,29 +118,84 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        // Tương tự phương thức store, bạn cũng sẽ cần cập nhật logic cho việc
-        // tải lên ảnh mới và xóa các ảnh cũ nếu cần.
-        // Tạm thời chúng ta sẽ tập trung vào việc tạo mới trước.
         $validatedData = $request->validate([
             'name' => 'required|string|max:255|unique:products,name,' . $product->id,
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
-            // ... các validation khác
+            'stock_quantity' => 'required|integer|min:0',
+            'sku' => 'nullable|string|max:100|unique:products,sku,' . $product->id,
+            'description' => 'nullable|string',
+            'images' => 'nullable|array', // Ảnh mới tải lên
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'delete_images' => 'nullable|array', // Mảng ID của các ảnh cần xóa
+            'delete_images.*' => 'integer|exists:product_images,id',
         ]);
 
-        $productData = $request->except(['_token', '_method', 'images']);
-        $productData['slug'] = Str::slug($request->name);
-        
-        $product->update($productData);
-        // Logic xử lý ảnh cho update sẽ được thêm vào sau...
+        DB::beginTransaction();
+        try {
+            // 1. Cập nhật thông tin sản phẩm (trừ ảnh)
+            $productData = $request->except(['_token', '_method', 'images', 'delete_images']);
+            $productData['slug'] = Str::slug($request->name);
+            $product->update($productData);
 
-        return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được cập nhật thành công.');
+            // 2. Xử lý xóa ảnh cũ (nếu có)
+            if ($request->has('delete_images')) {
+                foreach ($request->input('delete_images') as $imageId) {
+                    $image = ProductImage::find($imageId);
+                    if ($image) {
+                        // Xóa file khỏi storage
+                        Storage::disk('public')->delete($image->image_url);
+                        // Xóa bản ghi khỏi database
+                        $image->delete();
+                    }
+                }
+            }
+
+            // 3. Xử lý tải ảnh mới (nếu có)
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $file) {
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $path = $file->storeAs('products', $fileName, 'public');
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image_url' => $path,
+                    ]);
+                }
+            }
+
+            DB::commit();
+            return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được cập nhật thành công.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            return back()->with('error', 'Đã xảy ra lỗi khi cập nhật.')->withInput();
+        }
     }
 
     public function destroy(Product $product)
     {
-        // Thêm logic xóa file ảnh trong storage trước khi xóa bản ghi
-        $product->delete();
-        return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được xóa thành công.');
+        DB::beginTransaction();
+        try {
+            // Lấy tất cả ảnh liên quan
+            $images = $product->images;
+            
+            // 1. Xóa tất cả file ảnh khỏi storage
+            foreach ($images as $image) {
+                Storage::disk('public')->delete($image->image_url);
+            }
+            
+            // 2. Xóa các bản ghi ảnh (sẽ tự động nếu có onDelete('cascade'))
+            // $product->images()->delete(); // Bỏ comment dòng này nếu bạn không set cascade
+
+            // 3. Xóa sản phẩm
+            $product->delete(); // Thao tác này sẽ tự động xóa images và order_items nếu migration của bạn có onDelete('cascade')
+
+            DB::commit();
+            return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được xóa thành công.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            return back()->with('error', 'Đã xảy ra lỗi khi xóa sản phẩm.');
+        }
     }
 }

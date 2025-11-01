@@ -7,15 +7,26 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\ShopController;
+use App\Models\Product;
 
 Route::get('/', function () {
-    return view('welcome');
+    // Lấy 8 sản phẩm mới nhất, đồng thời tải trước ảnh và danh mục
+    $featuredProducts = Product::with(['category', 'images'])
+                               ->latest() // Sắp xếp theo ngày tạo mới nhất
+                               ->take(8)    // Giới hạn 8 sản phẩm
+                               ->get();
+
+    // Trả về view 'welcome' và truyền biến $featuredProducts vào
+    return view('welcome', compact('featuredProducts'));
 });
 
 // ROUTE CHO USER THÔNG THƯỜNG (của Breeze)
-Route::get('/dashboard', function () {
+Route::get('/home', function () {
     return view('dashboard'); // Trỏ đến view 'dashboard.blade.php'
 })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 
 // ROUTE CHO ADMIN
 Route::middleware(['auth', 'verified', 'admin'])
@@ -24,9 +35,7 @@ Route::middleware(['auth', 'verified', 'admin'])
     ->group(function () {
     
     // Route cho trang dashboard admin
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard'); // Tên đầy đủ sẽ là 'admin.dashboard'
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Các resource route khác
     Route::resource('products', ProductController::class);

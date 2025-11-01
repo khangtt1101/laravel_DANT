@@ -11,6 +11,38 @@
                 </a>
             </div>
         </div>
+
+        <div class="mt-8">
+            <form method="GET" action="{{ route('admin.products.index') }}">
+                <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                    <div class="flex-1">
+                        <label for="search" class="sr-only">Tìm kiếm</label>
+                        <input type="text" name="search" id="search"
+                               class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                               placeholder="Tìm theo tên sản phẩm..."
+                               value="{{ request('search') }}">
+                    </div>
+
+                    <div class="flex-1">
+                        <label for="category" class="sr-only">Danh mục</label>
+                        <select id="category" name="category"
+                                class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                            <option value="">Tất cả danh mục</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <button type="submit"
+                            class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700">
+                        Lọc
+                    </button>
+                </div>
+            </form>
+        </div>
         <div class="mt-8 flex flex-col">
             <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -45,7 +77,9 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Không có sản phẩm nào.</td>
+                                    <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                        Không tìm thấy sản phẩm nào.
+                                    </td>
                                 </tr>
                                 @endforelse
                             </tbody>
