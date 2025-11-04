@@ -29,9 +29,14 @@ class AppServiceProvider extends ServiceProvider
             $categories = Category::whereNull('parent_id')
                                   ->with('children') 
                                   ->get();
+            $cartCount = 0;
+            foreach(session('cart', []) as $id => $details) {
+                $cartCount += $details['quantity'];
+            }
             
             // Gửi biến $allCategories đến view
-            $view->with('allCategories', $categories);
+            $view->with('allCategories', $categories)
+                ->with('cartCount', $cartCount);
         });
     }
 }

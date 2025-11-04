@@ -30,7 +30,7 @@
                 <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:shadow-xl">
                     
                     
-                    <a href="#" class="group">
+                    <a href="{{ route('products.show', ['category' => $product->category, 'product' => $product]) }}" class="group">
                         
                         
                         <div class="h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
