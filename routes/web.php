@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\CartController;
 use App\Models\Product;
 
 Route::get('/', function () {
@@ -27,8 +28,17 @@ Route::get('/home', function () {
     return view('dashboard'); // Trỏ đến view 'dashboard.blade.php'
 })->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/products/{category:slug}/{product:slug}', [ShopController::class, 'show'])
+     ->name('products.show')
+     ->scopeBindings();
 
-// ROUTE CHO ADMIN
+// ===== BẮT ĐẦU CÁC ROUTE GIỎ HÀNG =====
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+// ===== KẾT THÚC CÁC ROUTE GIỎ HÀNG =====
+     // ROUTE CHO ADMIN
 Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.') // <-- THÊM DÒNG NÀY ĐỂ TẠO TIỀN TỐ TÊN

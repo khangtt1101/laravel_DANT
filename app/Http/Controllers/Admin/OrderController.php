@@ -8,10 +8,28 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('user')->latest()->paginate(10);
-        return view('admin.orders.index', compact('orders')); // <-- Cập nhật
+        $query = Order::with('user')->latest();
+
+        // Xử lý logic tìm kiếm
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            
+            $query->where(function($q) use ($searchTerm) {
+                // 1. Tìm theo Mã đơn hàng
+                $q->where('order_code', 'like', '%' . $searchTerm . '%')
+                  // 2. Hoặc tìm theo tên sản phẩm (thông qua quan hệ)
+                  ->orWhereHas('items.product', function ($subQuery) use ($searchTerm) {
+                      $subQuery->where('name', 'like', '%' . $searchTerm . '%');
+                  });
+            });
+        }
+
+        // Lấy kết quả và phân trang (giữ lại query string)
+        $orders = $query->paginate(10)->withQueryString();
+
+        return view('admin.orders.index', compact('orders'));
     }
 
     public function show(Order $order)
@@ -24,7 +42,7 @@ class OrderController extends Controller
     {
         $request->validate(['status' => 'required|in:pending,processing,shipped,delivered,cancelled']);
         $order->update(['status' => $request->status]);
-        return redirect()->route('admin.orders.show', $order)->with('success', 'Trạng thái đơn hàng đã được cập nhật.'); // <-- Cập nhật
+        return redirect()->route('admin.orders.index', $order)->with('success', 'Trạng thái đơn hàng đã được cập nhật.'); // <-- Cập nhật
     }
 
     public function destroy(Order $order)

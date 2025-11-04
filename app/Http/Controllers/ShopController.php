@@ -30,4 +30,16 @@ class ShopController extends Controller
         // 3. Trả về view với cả 2 bộ dữ liệu
         return view('shop', compact('featuredProducts', 'categoriesWithProducts'));
     }
+
+    public function show(Category $category, Product $product)
+    {
+        // Nhờ scopeBindings(), $product đã được tự động
+        // xác thực là thuộc về $category.
+        
+        // Tải các thông tin liên quan (ảnh)
+        $product->load(['images']); 
+
+        // Trả về view
+        return view('product-detail', compact('product', 'category'));
+    }
 }
