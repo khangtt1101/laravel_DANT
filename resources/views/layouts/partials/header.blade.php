@@ -1,17 +1,117 @@
 <header class="bg-white shadow-md sticky top-0 z-50">
-    <!-- Top Bar -->
-    <div class="bg-indigo-600 text-white py-2 text-sm">
+    <!-- Top Bar với Marquee -->
+    <div class="bg-gradient-to-r from-pink-600 to-purple-600 text-white py-2 text-sm overflow-hidden relative">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center gap-4">
-                    <span>📞 Hotline: 1900 1234</span>
-                    <span class="hidden sm:inline">|</span>
-                    <span class="hidden sm:inline">🚚 Miễn phí vận chuyển đơn hàng trên 500k</span>
+            <div class="flex items-center justify-between">
+                <!-- Marquee Section - Chạy chữ tự động -->
+                <div class="flex-1 overflow-hidden relative">
+                    <div class="marquee-container flex items-center gap-6 whitespace-nowrap">
+                        <div class="marquee-content flex items-center gap-6 animate-marquee">
+                            <!-- Item 1 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <span class="text-lg">🎉</span>
+                                <span>Đơn hàng 300k: Miễn phí vận chuyển toàn quốc</span>
+                            </div>
+                            <span class="text-pink-200">|</span>
+                            <!-- Item 2 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                                <span>Thu cũ giá ngon - Lên đời tiết kiệm</span>
+                            </div>
+                            <span class="text-pink-200">|</span>
+                            <!-- Item 3 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>Sản phẩm Chính hãng - Xuất VAT đầy đủ</span>
+                            </div>
+                            <span class="text-pink-200">|</span>
+                            <!-- Item 4 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                <span>Giao nhanh - Miễn phí ship</span>
+                            </div>
+                            <span class="text-pink-200">|</span>
+                            <!-- Item 5 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <span>Cửa hàng gần bạn</span>
+                            </div>
+                            <span class="text-pink-200">|</span>
+                            <!-- Item 6 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <span>Tra cứu đơn hàng</span>
+                            </div>
+                        </div>
+                        <!-- Duplicate for seamless loop -->
+                        <div class="marquee-content flex items-center gap-6 animate-marquee" aria-hidden="true">
+                            <!-- Item 1 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <span class="text-lg">🎉</span>
+                                <span>Đơn hàng 300k: Miễn phí vận chuyển toàn quốc</span>
+                            </div>
+                            <span class="text-pink-200">|</span>
+                            <!-- Item 2 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                                <span>Thu cũ giá ngon - Lên đời tiết kiệm</span>
+                            </div>
+                            <span class="text-pink-200">|</span>
+                            <!-- Item 3 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>Sản phẩm Chính hãng - Xuất VAT đầy đủ</span>
+                            </div>
+                            <span class="text-pink-200">|</span>
+                            <!-- Item 4 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                <span>Giao nhanh - Miễn phí ship</span>
+                            </div>
+                            <span class="text-pink-200">|</span>
+                            <!-- Item 5 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <span>Cửa hàng gần bạn</span>
+                            </div>
+                            <span class="text-pink-200">|</span>
+                            <!-- Item 6 -->
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                <span>Tra cứu đơn hàng</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="hidden md:flex items-center gap-4">
-                    <a href="#" class="hover:text-indigo-200 transition">Hỗ trợ</a>
-                    <span>|</span>
-                    <a href="#" class="hover:text-indigo-200 transition">Theo dõi đơn hàng</a>
+                
+                <!-- Hotline - Fixed on the right -->
+                <div class="flex items-center gap-2 ml-6 flex-shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    <a href="tel:18002097" class="font-semibold hover:text-pink-200 transition">1800 2097</a>
                 </div>
             </div>
         </div>
@@ -31,10 +131,11 @@
 
             <!-- Search Bar -->
             <div class="flex-1 max-w-2xl mx-4 hidden md:block">
-                <form action="#" method="GET" class="relative">
+                <form action="{{ route('shop.search') }}" method="GET" class="relative">
                     <input 
                         type="text" 
                         name="search"
+                        value="{{ request('search') }}"
                         placeholder="Tìm kiếm sản phẩm..." 
                         class="w-full px-4 py-2.5 pl-10 pr-24 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                     >
@@ -81,10 +182,10 @@
             <!-- Mobile Menu Button -->
             <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-gray-700 hover:text-indigo-600">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path :class="{'hidden': mobileMenuOpen, 'inline-flex': !mobileMenuOpen }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                    <path :class="{'inline-flex': mobileMenuOpen, 'hidden': !mobileMenuOpen }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+                        <path :class="{'hidden': mobileMenuOpen, 'inline-flex': !mobileMenuOpen }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        <path :class="{'inline-flex': mobileMenuOpen, 'hidden': !mobileMenuOpen }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
         </div>
     </div>
 
@@ -117,9 +218,9 @@
                             @empty
                                 <p class="px-4 py-2 text-gray-500 text-sm">Chưa có danh mục</p>
                             @endforelse
-                        </div>
-                    </div>
-                </div>
+            </div>
+        </div>
+    </div>
 
                 <!-- Main Navigation Links -->
                 <div class="hidden lg:flex items-center gap-6">
@@ -136,9 +237,11 @@
     <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" class="md:hidden bg-white border-t shadow-lg" x-transition>
         <div class="px-4 py-4 space-y-3">
             <!-- Mobile Search -->
-                <form action="#" method="GET" class="mb-4">
+                <form action="{{ route('shop.search') }}" method="GET" class="mb-4">
                 <input 
                     type="text" 
+                    name="search"
+                    value="{{ request('search') }}"
                     placeholder="Tìm kiếm..." 
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >

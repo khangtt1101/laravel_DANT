@@ -21,6 +21,7 @@ Route::get('/home', function () {
     return view('dashboard'); // Trỏ đến view 'dashboard.blade.php'
 })->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
 Route::get('/products/{category:slug}/{product:slug}', [ShopController::class, 'show'])
      ->name('products.show')
      ->scopeBindings();

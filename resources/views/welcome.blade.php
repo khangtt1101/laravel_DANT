@@ -1,58 +1,180 @@
 <x-main-layout>
-    <!-- Hero Banner Section - Đơn giản, chuyên nghiệp -->
-    <section class="relative bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-20 md:py-28">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="text-gray-800 animate-fade-in">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-gray-900">
-                        Cửa hàng 
-                        <span class="text-indigo-600">Điện tử</span>
-                        <br>
-                        Chất lượng cao
-            </h1>
-                    <p class="text-lg md:text-xl mb-8 text-gray-600 leading-relaxed">
-                        Chuyên cung cấp các sản phẩm công nghệ chính hãng với giá cả hợp lý và dịch vụ uy tín nhất.
-                    </p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="#products" class="inline-flex items-center gap-2 bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 transition hover:shadow-lg scroll-smooth">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                            </svg>
-                            Xem sản phẩm
-                        </a>
-                        <a href="#categories" class="inline-flex items-center gap-2 bg-white text-gray-700 font-semibold py-3 px-8 rounded-lg border-2 border-gray-200 hover:border-indigo-300 hover:text-indigo-600 transition scroll-smooth">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
-                            Danh mục
-                        </a>
-                    </div>
+    <!-- Hero Banner Slider - Carousel với ảnh đẹp -->
+    <section class="relative overflow-hidden">
+        <div class="hero-slider relative h-[500px] md:h-[650px]">
+            <!-- Slide 1 - Technology Products -->
+            <div class="slide absolute inset-0 flex items-center transition-all duration-700 ease-in-out opacity-100">
+                <!-- Background Image với Overlay -->
+                <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1498049794561-7780e7231661?w=1920&q=80');">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-800/70 to-transparent"></div>
                 </div>
-                <div class="hidden md:block">
-                    <div class="bg-white rounded-2xl p-8 shadow-xl">
-                        <div class="text-center">
-                            <div class="w-24 h-24 mx-auto mb-6 bg-indigo-100 rounded-full flex items-center justify-center">
-                                <svg class="w-12 h-12 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                </svg>
+                
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="text-white animate-fade-in">
+                            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 drop-shadow-lg">
+                                Cửa hàng 
+                                <span class="text-yellow-300">Điện tử</span>
+                                <br>
+                                Chất lượng cao
+            </h1>
+                            <p class="text-lg md:text-xl mb-8 text-white/90 leading-relaxed drop-shadow-md">
+                                Chuyên cung cấp các sản phẩm công nghệ chính hãng với giá cả hợp lý và dịch vụ uy tín nhất.
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="#products" class="inline-flex items-center gap-2 bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-indigo-700 transition hover:shadow-xl hover:scale-105 scroll-smooth">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                    </svg>
+                                    Xem sản phẩm
+                                </a>
+                                <a href="#categories" class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white font-semibold py-3 px-8 rounded-lg border-2 border-white/30 hover:bg-white/30 hover:border-white transition scroll-smooth">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                    </svg>
+                                    Danh mục
+                                </a>
                             </div>
-                            <div class="grid grid-cols-3 gap-4 mt-6">
+                        </div>
+                        <div class="hidden md:block">
+                            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20">
                                 <div class="text-center">
-                                    <div class="text-2xl font-bold text-indigo-600">1000+</div>
-                                    <div class="text-sm text-gray-500">Sản phẩm</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold text-indigo-600">5000+</div>
-                                    <div class="text-sm text-gray-500">Khách hàng</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-2xl font-bold text-indigo-600">4.8★</div>
-                                    <div class="text-sm text-gray-500">Đánh giá</div>
+                                    <div class="w-24 h-24 mx-auto mb-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/30">
+                                        <svg class="w-12 h-12 text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-4 mt-6">
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-white">1000+</div>
+                                            <div class="text-sm text-white/80">Sản phẩm</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-white">5000+</div>
+                                            <div class="text-sm text-white/80">Khách hàng</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-yellow-300">4.8★</div>
+                                            <div class="text-sm text-white/80">Đánh giá</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Slide 2 - Sale/Discount -->
+            <div class="slide absolute inset-0 flex items-center transition-all duration-700 ease-in-out opacity-0">
+                <!-- Background Image với Overlay -->
+                <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1607082349566-187342175e2f?w=1920&q=80');">
+                    <div class="absolute inset-0 bg-gradient-to-r from-red-900/85 via-orange-800/75 to-red-700/65"></div>
+                </div>
+                
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="text-white">
+                            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 drop-shadow-lg">
+                                Giảm giá 
+                                <span class="text-yellow-300">Sốc</span>
+                                <br>
+                                Lên đến <span class="text-yellow-300">50%</span>
+                            </h1>
+                            <p class="text-lg md:text-xl mb-8 text-white/90 leading-relaxed drop-shadow-md">
+                                Khuyến mãi đặc biệt trong tháng này. Mua ngay để nhận ưu đãi tốt nhất!
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="#hot-deals" class="inline-flex items-center gap-2 bg-red-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-red-700 transition hover:shadow-xl hover:scale-105 scroll-smooth">
+                                    Xem Deal sốc
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hidden md:block">
+                            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20">
+                                <div class="text-center">
+                                    <div class="text-7xl mb-4">🎉</div>
+                                    <div class="text-4xl font-bold text-yellow-300 mb-2 drop-shadow-lg">-50%</div>
+                                    <div class="text-sm text-white/90">Cho tất cả sản phẩm</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3 - New Products -->
+            <div class="slide absolute inset-0 flex items-center transition-all duration-700 ease-in-out opacity-0">
+                <!-- Background Image với Overlay -->
+                <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1920&q=80');">
+                    <div class="absolute inset-0 bg-gradient-to-r from-green-900/80 via-emerald-800/70 to-green-700/60"></div>
+                </div>
+                
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="text-white">
+                            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 drop-shadow-lg">
+                                Sản phẩm 
+                                <span class="text-yellow-300">Mới</span>
+                                <br>
+                                Đã về hàng
+            </h1>
+                            <p class="text-lg md:text-xl mb-8 text-white/90 leading-relaxed drop-shadow-md">
+                                Cập nhật những sản phẩm công nghệ mới nhất, hot nhất trên thị trường.
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="#new-products" class="inline-flex items-center gap-2 bg-green-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-green-700 transition hover:shadow-xl hover:scale-105 scroll-smooth">
+                                    Xem sản phẩm mới
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hidden md:block">
+                            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl border border-white/20">
+                                <div class="text-center">
+                                    <div class="text-7xl mb-4">🆕</div>
+                                    <div class="text-2xl font-bold text-yellow-300 mb-2 drop-shadow-lg">Hàng mới</div>
+                                    <div class="text-sm text-white/90">Mỗi ngày</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Slider Controls -->
+        <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+            <button class="slider-dot w-3 h-3 rounded-full bg-white shadow-lg transition-all duration-300 hover:scale-125" data-slide="0"></button>
+            <button class="slider-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white/80 shadow-lg transition-all duration-300 hover:scale-125" data-slide="1"></button>
+            <button class="slider-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white/80 shadow-lg transition-all duration-300 hover:scale-125" data-slide="2"></button>
+        </div>
+        <!-- Prev/Next Buttons -->
+        <button class="slider-prev absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white backdrop-blur-sm text-gray-800 p-3 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 z-10">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+        <button class="slider-next absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white backdrop-blur-sm text-gray-800 p-3 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 z-10">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
+    </section>
+
+    <!-- Promotional Banner Section -->
+    <section class="bg-gradient-to-r from-red-600 to-orange-600 text-white py-4">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-center gap-4 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                    </svg>
+                    <span class="font-bold text-lg">KHUYẾN MÃI ĐẶC BIỆT</span>
+                </div>
+                <span class="hidden md:inline">|</span>
+                <span class="text-sm md:text-base">Giảm giá lên đến 50% cho tất cả sản phẩm</span>
+                <a href="#hot-deals" class="ml-auto bg-white text-red-600 font-semibold px-4 py-1 rounded hover:bg-gray-100 transition text-sm">
+                    Mua ngay →
+                </a>
             </div>
         </div>
     </section>
@@ -81,7 +203,7 @@
         </div>
     </section>
 
-    <!-- Brand Filter Section -->
+    <!-- Brand Filter Section - Slider chạy ngang -->
     <section class="bg-white py-8 border-b">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-6">
@@ -90,12 +212,29 @@
                     Xem tất cả <span>→</span>
                 </a>
             </div>
-            <div class="flex flex-wrap gap-3 items-center">
-                @foreach($popularBrands as $brand)
-                    <button class="px-4 py-2 bg-gray-100 hover:bg-indigo-600 hover:text-white text-gray-700 rounded-lg transition-all duration-300 font-medium text-sm">
-                        {{ $brand }}
-                    </button>
-                @endforeach
+            <!-- Brand Slider Container -->
+            <div class="relative overflow-hidden">
+                <div class="brand-slider-container flex items-center gap-3 whitespace-nowrap">
+                    <!-- First set of brands -->
+                    <div class="brand-slider-content flex items-center gap-3">
+                        @foreach($popularBrands as $brand)
+                            <button class="px-6 py-2.5 bg-gray-100 hover:bg-indigo-600 hover:text-white text-gray-700 rounded-lg transition-all duration-300 font-medium text-sm whitespace-nowrap flex-shrink-0 shadow-sm hover:shadow-md">
+                                {{ $brand }}
+                            </button>
+                        @endforeach
+                    </div>
+                    <!-- Duplicate for seamless loop -->
+                    <div class="brand-slider-content flex items-center gap-3" aria-hidden="true">
+                        @foreach($popularBrands as $brand)
+                            <button class="px-6 py-2.5 bg-gray-100 hover:bg-indigo-600 hover:text-white text-gray-700 rounded-lg transition-all duration-300 font-medium text-sm whitespace-nowrap flex-shrink-0 shadow-sm hover:shadow-md">
+                                {{ $brand }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+                <!-- Gradient overlays for smooth fade effect -->
+                <div class="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent pointer-events-none z-10"></div>
+                <div class="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent pointer-events-none z-10"></div>
             </div>
         </div>
     </section>
@@ -136,7 +275,7 @@
     </section>
 
     <!-- Featured Products Section - Layout đẹp hơn -->
-    <section id="products" class="bg-white py-16">
+    <section id="products" class="bg-white py-16 fade-in-on-scroll">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Sản phẩm nổi bật</h2>
@@ -145,22 +284,48 @@
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($featuredProducts as $product)
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-                        <a href="#" class="block">
-                            <div class="relative h-56 bg-gray-50 overflow-hidden">
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group product-card fade-in-on-scroll" data-product-id="{{ $product->id }}">
+                        <a href="{{ $product->category && $product->category->slug ? route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]) : '#' }}" class="block">
+                            <div class="relative h-56 bg-gray-50 overflow-hidden product-image-container">
                                 @if($product->images->first())
                                     <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
                                          alt="{{ $product->name }}"
                                          loading="lazy"
-                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                         class="w-full h-full object-cover product-image-zoom">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
                                         <span class="text-gray-400">Chưa có ảnh</span>
                                     </div>
                                 @endif
                                 
-                                <div class="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                                <div class="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold z-10">
                                     Hot
+                                </div>
+                                
+                                <!-- Social Proof Badge -->
+                                <div class="absolute top-3 left-16 bg-blue-500 text-white px-2 py-1 rounded text-xs font-semibold z-10 social-proof-badge">
+                                    <span class="inline-flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ rand(5, 25) }} đang xem
+                                    </span>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                    <button onclick="event.preventDefault(); openQuickView({{ $product->id }});" class="bg-white/95 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all hover:scale-110">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                    </button>
+                                    <button onclick="event.preventDefault(); toggleWishlist({{ $product->id }});" class="wishlist-btn bg-white/95 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all hover:scale-110">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                             
@@ -196,7 +361,7 @@
                                     <p class="text-xs text-red-600 mb-2">✗ Hết hàng</p>
                                 @endif
                                 
-                                <button class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition text-sm font-medium">
+                                <button onclick="event.preventDefault(); addToCart({{ $product->id }});" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition text-sm font-medium add-to-cart-btn">
                                     Thêm vào giỏ
                                 </button>
                             </div>
@@ -265,7 +430,7 @@
     @endif
 
     <!-- Best Sellers Section -->
-    <section class="bg-gray-50 py-16">
+    <section class="bg-gray-50 py-16 fade-in-on-scroll">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Sản phẩm bán chạy</h2>
@@ -333,12 +498,113 @@
         </div>
     </section>
 
-    <!-- Hot Deals Section -->
-    <section class="bg-white py-16">
+    <!-- Flash Sale Section - Nổi bật với timer riêng -->
+    <section class="bg-gradient-to-br from-red-600 via-pink-600 to-orange-600 py-16 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%221%22%3E%3Cpath d=%22M36 34v-4h-4v-4h-4v4h-4v4h4v4h4v-4h4zm0-30V0h-4v4h-4v4h4v4h4V8h4V4h4V0h-4z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
+                    <svg class="w-5 h-5 text-yellow-300 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-white font-bold text-sm">FLASH SALE</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">Siêu khuyến mãi</h2>
+                <p class="text-white/90 text-lg mb-6">Giảm giá cực sốc - Chỉ còn hôm nay!</p>
+                
+                <!-- Flash Sale Countdown -->
+                <div class="flex items-center justify-center gap-3 mb-8">
+                    <div class="bg-white/20 backdrop-blur-md rounded-xl px-6 py-4 text-center min-w-[80px] border border-white/30">
+                        <div class="text-3xl font-bold text-white" id="flash-hours">00</div>
+                        <div class="text-xs text-white/80 mt-1">Giờ</div>
+                    </div>
+                    <span class="text-white text-2xl font-bold">:</span>
+                    <div class="bg-white/20 backdrop-blur-md rounded-xl px-6 py-4 text-center min-w-[80px] border border-white/30">
+                        <div class="text-3xl font-bold text-white" id="flash-minutes">00</div>
+                        <div class="text-xs text-white/80 mt-1">Phút</div>
+                    </div>
+                    <span class="text-white text-2xl font-bold">:</span>
+                    <div class="bg-white/20 backdrop-blur-md rounded-xl px-6 py-4 text-center min-w-[80px] border border-white/30">
+                        <div class="text-3xl font-bold text-white" id="flash-seconds">00</div>
+                        <div class="text-xs text-white/80 mt-1">Giây</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                @foreach($hotDeals->take(6) as $index => $product)
+                    <div class="bg-white rounded-xl shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 group">
+                        <a href="{{ $product->category && $product->category->slug ? route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]) : '#' }}" class="block">
+                            <div class="relative h-40 bg-gray-50 overflow-hidden">
+                                @if($product->images->first())
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
+                                         alt="{{ $product->name }}"
+                                         loading="lazy"
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                        <span class="text-gray-400 text-xs">No image</span>
+                                    </div>
+                                @endif
+                                <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                    -{{ rand(20, 50) }}%
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <h4 class="text-xs font-semibold text-gray-900 line-clamp-2 mb-2 min-h-[2.5rem]">{{ $product->name }}</h4>
+                                <div class="flex items-center gap-2">
+                                    <p class="text-sm font-bold text-red-600">
+                                        {{ number_format($product->price * 0.7, 0, ',', '.') }}đ
+                                    </p>
+                                    <p class="text-xs text-gray-400 line-through">
+                                        {{ number_format($product->price, 0, ',', '.') }}đ
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+            
+            <div class="text-center mt-8">
+                <a href="#hot-deals" class="inline-flex items-center gap-2 bg-white text-red-600 font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-gray-100 transition hover:scale-105">
+                    Xem tất cả deal sốc
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hot Deals Section - Với Countdown Timer -->
+    <section id="hot-deals" class="bg-white py-16">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Deal sốc hôm nay</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Những ưu đãi đặc biệt không thể bỏ qua</p>
+                <p class="text-gray-600 max-w-2xl mx-auto mb-4">Những ưu đãi đặc biệt không thể bỏ qua</p>
+                <!-- Countdown Timer -->
+                <div class="flex items-center justify-center gap-4 mb-6">
+                    <span class="text-sm text-gray-600 font-medium">Kết thúc sau:</span>
+                    <div id="countdown" class="flex gap-2">
+                        <div class="bg-red-600 text-white px-4 py-2 rounded-lg min-w-[60px] text-center">
+                            <div class="text-2xl font-bold" id="hours">00</div>
+                            <div class="text-xs">Giờ</div>
+                        </div>
+                        <div class="bg-red-600 text-white px-4 py-2 rounded-lg min-w-[60px] text-center">
+                            <div class="text-2xl font-bold" id="minutes">00</div>
+                            <div class="text-xs">Phút</div>
+                        </div>
+                        <div class="bg-red-600 text-white px-4 py-2 rounded-lg min-w-[60px] text-center">
+                            <div class="text-2xl font-bold" id="seconds">00</div>
+                            <div class="text-xs">Giây</div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -347,7 +613,7 @@
                         <div class="absolute top-3 right-3 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
                             -20%
                         </div>
-                        <a href="#" class="block">
+                        <a href="{{ $product->category && $product->category->slug ? route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]) : '#' }}" class="block">
                             <div class="relative h-64 bg-gray-50 overflow-hidden">
                                 @if($product->images->first())
                                     <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
@@ -374,10 +640,10 @@
                                     <p class="text-sm text-gray-400 line-through">
                                         {{ number_format($product->price, 0, ',', '.') }} đ
                                     </p>
-                                </div>
-                                
-                                <button class="w-full bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 transition text-sm font-medium">
-                                    Mua ngay
+    </div>
+
+                                <button onclick="event.preventDefault(); addToCart({{ $product->id }});" class="w-full bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 transition text-sm font-medium">
+                    Mua ngay
                                 </button>
                             </div>
                         </a>
@@ -387,7 +653,7 @@
                         <p class="text-gray-500">Chưa có deal sốc</p>
                     </div>
                 @endforelse
-    </div>
+            </div>
 
             <div class="text-center mt-8">
                 <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
@@ -409,8 +675,8 @@
                 <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
                     Xem tất cả <span>→</span>
                 </a>
-            </div>
-            
+    </div>
+
             <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     @foreach($usedProducts->take(12) as $product)
@@ -436,6 +702,99 @@
                             </p>
                         </a>
                     @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Badges Section -->
+    <section class="bg-white py-12 border-y">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">Được tin tưởng bởi</h3>
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-8 md:gap-12 opacity-60 hover:opacity-100 transition-opacity">
+                <!-- Partner Logos -->
+                <div class="flex items-center gap-2">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        <span class="text-indigo-600 font-bold text-lg">S</span>
+                    </div>
+                    <span class="text-gray-700 font-semibold">Samsung</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <span class="text-blue-600 font-bold text-lg">A</span>
+                    </div>
+                    <span class="text-gray-700 font-semibold">Apple</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <span class="text-green-600 font-bold text-lg">X</span>
+                    </div>
+                    <span class="text-gray-700 font-semibold">Xiaomi</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <span class="text-purple-600 font-bold text-lg">P</span>
+                    </div>
+                    <span class="text-gray-700 font-semibold">Philips</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <span class="text-orange-600 font-bold text-lg">S</span>
+                    </div>
+                    <span class="text-gray-700 font-semibold">Sony</span>
+                </div>
+            </div>
+            
+            <!-- Trust Certificates -->
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-6">
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Chứng nhận uy tín</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01A1 1 0 0011 9H9zm0 4a1 1 0 100 2h.01A1 1 0 0011 13H9zm-2-4a1 1 0 11-2 0 1 1 0 012 0zm-1 5a1 1 0 100-2h.01A1 1 0 1011 14H7z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Xuất hóa đơn VAT</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
+                    <span>Đánh giá 4.8/5</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recently Viewed Products Section -->
+    <section class="bg-gray-50 py-16 fade-in-on-scroll">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Sản phẩm đã xem</h2>
+                    <p class="text-gray-600">Tiếp tục mua sắm những sản phẩm bạn quan tâm</p>
+                </div>
+                <a href="{{ route('shop.index') }}" class="hidden md:inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
+                    Xem tất cả <span>→</span>
+                </a>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <div id="recentlyViewed" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <!-- Will be populated by JavaScript from localStorage -->
+                    <div class="col-span-full text-center py-8 text-gray-500">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        <p class="text-sm">Chưa có sản phẩm nào đã xem</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -490,7 +849,7 @@
     </section>
 
     <!-- New Products Section -->
-    <section class="bg-white py-16">
+    <section id="new-products" class="bg-white py-16 fade-in-on-scroll">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Sản phẩm mới nhất</h2>
@@ -500,7 +859,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($newProducts->take(8) as $product)
                     <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-                        <a href="#" class="block">
+                        <a href="{{ $product->category && $product->category->slug ? route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]) : '#' }}" class="block">
                             <div class="relative h-56 bg-gray-50 overflow-hidden">
                                 @if($product->images->first())
                                     <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
@@ -526,7 +885,7 @@
                                 <p class="text-lg font-bold text-indigo-600 mb-3">
                                     {{ number_format($product->price, 0, ',', '.') }} đ
                                 </p>
-                                <button class="w-full bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-indigo-600 hover:text-white transition text-sm font-medium">
+                                <button onclick="event.preventDefault(); {{ $product->category && $product->category->slug ? 'window.location.href=\'' . route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]) . '\'' : '#' }}" class="w-full bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-indigo-600 hover:text-white transition text-sm font-medium">
                                     Xem chi tiết
                                 </button>
                             </div>
@@ -545,6 +904,245 @@
                     <span>→</span>
                 </a>
                 </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section - Đánh giá khách hàng -->
+    <section class="bg-gray-50 py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Khách hàng nói gì về chúng tôi?</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Những phản hồi chân thật từ khách hàng đã sử dụng dịch vụ</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Testimonial 1 -->
+                <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center text-yellow-400 mr-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 italic">"Sản phẩm chất lượng cao, giao hàng nhanh, nhân viên tư vấn nhiệt tình. Rất hài lòng với dịch vụ!"</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-indigo-600 font-bold">NV</span>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-gray-900">Nguyễn Văn</div>
+                            <div class="text-sm text-gray-500">Khách hàng thân thiết</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center text-yellow-400 mr-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 italic">"Giá cả hợp lý, sản phẩm chính hãng, bảo hành tốt. Đã mua nhiều lần và rất tin tưởng!"</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-green-600 font-bold">TH</span>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-gray-900">Trần Thị Hoa</div>
+                            <div class="text-sm text-gray-500">Khách hàng VIP</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center text-yellow-400 mr-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4 italic">"Đóng gói cẩn thận, giao hàng đúng hẹn. Sẽ tiếp tục ủng hộ shop trong tương lai!"</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-purple-600 font-bold">LM</span>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-gray-900">Lê Minh</div>
+                            <div class="text-sm text-gray-500">Khách hàng mới</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog/Tin tức Section -->
+    <section class="bg-white py-16 fade-in-on-scroll">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Tin tức & Công nghệ</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Cập nhật những tin tức mới nhất về công nghệ và sản phẩm</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Blog Post 1 -->
+                <article class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
+                    <a href="#" class="block">
+                        <div class="relative h-48 bg-gradient-to-br from-indigo-400 to-purple-500 overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="absolute top-3 left-3 bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                                Tin tức
+                            </div>
+                    </div>
+                    <div class="p-6">
+                            <div class="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <span>{{ date('d/m/Y') }}</span>
+                    </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition line-clamp-2">
+                                Top 10 sản phẩm công nghệ hot nhất năm 2024
+                            </h3>
+                            <p class="text-sm text-gray-600 line-clamp-3 mb-4">
+                                Khám phá những sản phẩm công nghệ đang được săn đón nhất trong năm 2024, từ smartphone đến laptop và các thiết bị thông minh.
+                            </p>
+                            <div class="flex items-center gap-2 text-indigo-600 text-sm font-medium">
+                                <span>Đọc thêm</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                </div>
+                        </div>
+                    </a>
+                </article>
+
+                <!-- Blog Post 2 -->
+                <article class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
+                    <a href="#" class="block">
+                        <div class="relative h-48 bg-gradient-to-br from-green-400 to-blue-500 overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01A1 1 0 0011 9H9zm0 4a1 1 0 100 2h.01A1 1 0 0011 13H9zm-2-4a1 1 0 11-2 0 1 1 0 012 0zm-1 5a1 1 0 100-2h.01A1 1 0 1011 14H7z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="absolute top-3 left-3 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                                Hướng dẫn
+                            </div>
+                    </div>
+                    <div class="p-6">
+                            <div class="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <span>{{ date('d/m/Y', strtotime('-1 day')) }}</span>
+                    </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition line-clamp-2">
+                                Cách chọn mua điện thoại phù hợp với nhu cầu
+                            </h3>
+                            <p class="text-sm text-gray-600 line-clamp-3 mb-4">
+                                Hướng dẫn chi tiết giúp bạn chọn được chiếc smartphone phù hợp nhất với nhu cầu và ngân sách của mình.
+                            </p>
+                            <div class="flex items-center gap-2 text-indigo-600 text-sm font-medium">
+                                <span>Đọc thêm</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                </div>
+                        </div>
+                    </a>
+                </article>
+
+                <!-- Blog Post 3 -->
+                <article class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
+                    <a href="#" class="block">
+                        <div class="relative h-48 bg-gradient-to-br from-orange-400 to-red-500 overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <svg class="w-16 h-16 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                </div>
+                            <div class="absolute top-3 left-3 bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                                Đánh giá
+        </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center gap-2 text-xs text-gray-500 mb-3">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <span>{{ date('d/m/Y', strtotime('-2 days')) }}</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition line-clamp-2">
+                                Review chi tiết: Laptop mới nhất 2024 có gì đặc biệt?
+                            </h3>
+                            <p class="text-sm text-gray-600 line-clamp-3 mb-4">
+                                Đánh giá toàn diện về các dòng laptop mới nhất năm 2024, so sánh hiệu năng, giá cả và tính năng nổi bật.
+                            </p>
+                            <div class="flex items-center gap-2 text-indigo-600 text-sm font-medium">
+                                <span>Đọc thêm</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+    </div>
+
+            <div class="text-center mt-8">
+                <a href="#" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
+                    Xem tất cả tin tức
+                    <span>→</span>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -752,8 +1350,192 @@
         </div>
     </div>
 
-    <!-- JavaScript for Floating Buttons -->
+    <!-- Quick View Modal -->
+    <div id="quickViewModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+            <button onclick="closeQuickView()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <div id="quickViewContent" class="p-6">
+                <!-- Content will be loaded here -->
+                <div class="text-center py-12">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+                    <p class="mt-4 text-gray-600">Đang tải...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
     <script>
+        // Hero Slider
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('opacity-100'));
+            slides.forEach(slide => slide.classList.add('opacity-0'));
+            dots.forEach(dot => {
+                dot.classList.remove('active', 'bg-white');
+                dot.classList.add('bg-white/50');
+            });
+            
+            if (slides[index]) {
+                slides[index].classList.remove('opacity-0');
+                slides[index].classList.add('opacity-100');
+            }
+            if (dots[index]) {
+                dots[index].classList.remove('bg-white/50');
+                dots[index].classList.add('active', 'bg-white');
+            }
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        // Slider controls
+        document.querySelectorAll('.slider-dot').forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                showSlide(currentSlide);
+            });
+        });
+
+        document.querySelector('.slider-next')?.addEventListener('click', nextSlide);
+        document.querySelector('.slider-prev')?.addEventListener('click', prevSlide);
+
+        // Auto slide every 5 seconds
+        setInterval(nextSlide, 5000);
+
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const endTime = now + (24 * 60 * 60 * 1000); // 24 hours from now
+            const distance = endTime - now;
+
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown').innerHTML = '<div class="text-red-600 font-bold">Đã kết thúc</div>';
+            }
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Add to Cart
+        function addToCart(productId) {
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Đang thêm...';
+            btn.disabled = true;
+
+            fetch('{{ route("cart.add") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    btn.textContent = '✓ Đã thêm';
+                    btn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                    btn.classList.add('bg-green-600', 'hover:bg-green-700');
+                    
+                    // Update cart count if exists
+                    const cartCount = document.querySelector('[data-cart-count]');
+                    if (cartCount) {
+                        cartCount.textContent = data.cart_count || 0;
+                    }
+                    
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                        btn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+                        btn.disabled = false;
+                    }, 2000);
+                } else {
+                    alert(data.message || 'Có lỗi xảy ra');
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                btn.textContent = originalText;
+                btn.disabled = false;
+            });
+        }
+
+        // Quick View
+        function openQuickView(productId) {
+            const modal = document.getElementById('quickViewModal');
+            const content = document.getElementById('quickViewContent');
+            modal.classList.remove('hidden');
+            
+            // Fetch product details
+            fetch(`/api/products/${productId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // You can customize this based on your API response
+                    content.innerHTML = `
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <img src="${data.image || '/placeholder.jpg'}" alt="${data.name}" class="w-full rounded-lg">
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold mb-4">${data.name}</h2>
+                                <p class="text-3xl font-bold text-indigo-600 mb-4">${new Intl.NumberFormat('vi-VN').format(data.price)} đ</p>
+                                <p class="text-gray-600 mb-4">${data.description || ''}</p>
+                                <button onclick="addToCart(${productId})" class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-medium">
+                                    Thêm vào giỏ
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    content.innerHTML = '<p class="text-red-600">Không thể tải thông tin sản phẩm</p>';
+                });
+        }
+
+        function closeQuickView() {
+            document.getElementById('quickViewModal').classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('quickViewModal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeQuickView();
+            }
+        });
+
         // Scroll to Top Button
         const scrollToTopBtn = document.getElementById('scrollToTop');
         
@@ -785,7 +1567,7 @@
             });
         });
 
-        // Auto-hide app banner after 10 seconds (optional)
+        // Auto-hide app banner after 10 seconds
         setTimeout(() => {
             const banner = document.getElementById('appBanner');
             if (banner) {
@@ -795,6 +1577,176 @@
                     banner.style.display = 'none';
                 }, 500);
             }
-        }, 10000); // Hide after 10 seconds
+        }, 10000);
+
+        // Flash Sale Countdown Timer
+        function updateFlashSaleCountdown() {
+            const now = new Date().getTime();
+            const endTime = now + (12 * 60 * 60 * 1000); // 12 hours from now
+            const distance = endTime - now;
+
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            const flashHoursEl = document.getElementById('flash-hours');
+            const flashMinutesEl = document.getElementById('flash-minutes');
+            const flashSecondsEl = document.getElementById('flash-seconds');
+
+            if (flashHoursEl) flashHoursEl.textContent = String(hours).padStart(2, '0');
+            if (flashMinutesEl) flashMinutesEl.textContent = String(minutes).padStart(2, '0');
+            if (flashSecondsEl) flashSecondsEl.textContent = String(seconds).padStart(2, '0');
+
+            if (distance < 0) {
+                clearInterval(flashSaleInterval);
+                if (flashHoursEl) flashHoursEl.textContent = '00';
+                if (flashMinutesEl) flashMinutesEl.textContent = '00';
+                if (flashSecondsEl) flashSecondsEl.textContent = '00';
+            }
+        }
+
+        const flashSaleInterval = setInterval(updateFlashSaleCountdown, 1000);
+        updateFlashSaleCountdown();
+
+        // Wishlist Toggle
+        function toggleWishlist(productId) {
+            const btn = event.target.closest('.wishlist-btn') || event.target;
+            let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            
+            if (wishlist.includes(productId)) {
+                wishlist = wishlist.filter(id => id !== productId);
+                btn.classList.remove('active');
+                btn.querySelector('svg').setAttribute('fill', 'none');
+            } else {
+                wishlist.push(productId);
+                btn.classList.add('active');
+                btn.querySelector('svg').setAttribute('fill', 'currentColor');
+            }
+            
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            
+            // Visual feedback
+            btn.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                btn.style.transform = '';
+            }, 200);
+        }
+
+        // Load wishlist state on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            document.querySelectorAll('.wishlist-btn').forEach(btn => {
+                const productId = parseInt(btn.closest('.product-card')?.dataset.productId);
+                if (productId && wishlist.includes(productId)) {
+                    btn.classList.add('active');
+                    const svg = btn.querySelector('svg');
+                    if (svg) svg.setAttribute('fill', 'currentColor');
+                }
+            });
+        });
+
+        // Track Product Views & Recently Viewed
+        function trackProductView(productId, productName, productImage, productPrice, productUrl) {
+            let viewed = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+            
+            // Remove if already exists
+            viewed = viewed.filter(item => item.id !== productId);
+            
+            // Add to beginning
+            viewed.unshift({
+                id: productId,
+                name: productName,
+                image: productImage,
+                price: productPrice,
+                url: productUrl,
+                viewedAt: new Date().toISOString()
+            });
+            
+            // Keep only last 6
+            viewed = viewed.slice(0, 6);
+            
+            localStorage.setItem('recentlyViewed', JSON.stringify(viewed));
+            loadRecentlyViewed();
+        }
+
+        // Load Recently Viewed Products
+        function loadRecentlyViewed() {
+            const container = document.getElementById('recentlyViewed');
+            if (!container) return;
+
+            const viewed = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+            
+            if (viewed.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-gray-500">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        <p class="text-sm">Chưa có sản phẩm nào đã xem</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = viewed.map(item => `
+                <a href="${item.url}" class="group text-center p-4 rounded-lg hover:bg-gray-50 transition-all duration-300 border border-gray-100 hover:border-indigo-200">
+                    <div class="relative h-32 mb-3 bg-gray-50 rounded overflow-hidden mx-auto">
+                        <img src="${item.image}" alt="${item.name}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                             onerror="this.src='https://via.placeholder.com/150/f3f4f6/9ca3af?text=No+Image'">
+                    </div>
+                    <h4 class="text-sm font-semibold text-gray-900 group-hover:text-indigo-600 transition line-clamp-2 mb-1">
+                        ${item.name}
+                    </h4>
+                    <p class="text-sm font-bold text-indigo-600">
+                        ${new Intl.NumberFormat('vi-VN').format(item.price)} đ
+                    </p>
+                </a>
+            `).join('');
+        }
+
+        // Load recently viewed on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadRecentlyViewed();
+        });
+
+        // Lazy Loading Animation on Scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in-on-scroll elements
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // Track product views when clicking product cards
+        document.querySelectorAll('.product-card').forEach(card => {
+            const link = card.querySelector('a[href]');
+            if (link) {
+                link.addEventListener('click', function(e) {
+                    const productId = card.dataset.productId;
+                    const productName = card.querySelector('h3')?.textContent?.trim() || '';
+                    const productImage = card.querySelector('img')?.src || '';
+                    const productPrice = parseInt(card.querySelector('.text-lg.font-bold')?.textContent?.replace(/[^\d]/g, '') || '0');
+                    const productUrl = link.href;
+                    
+                    trackProductView(productId, productName, productImage, productPrice, productUrl);
+                });
+            }
+        });
     </script>
 </x-main-layout>

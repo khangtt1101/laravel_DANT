@@ -42,4 +42,31 @@ class ShopController extends Controller
         // Trả về view
         return view('product-detail', compact('product', 'category'));
     }
+
+    /**
+     * Tìm kiếm sản phẩm.
+     */
+    public function search(Request $request)
+    {
+        $query = $request->input('search');
+        
+        // Nếu không có từ khóa, redirect về shop
+        if (empty($query)) {
+            return redirect()->route('shop.index');
+        }
+
+        // Tìm kiếm sản phẩm theo tên hoặc mô tả
+        $products = Product::with(['category', 'images'])
+            ->where(function($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%')
+                  ->orWhere('description', 'like', '%' . $query . '%');
+            })
+            ->latest()
+            ->paginate(12);
+
+        // Lấy các danh mục để hiển thị filter
+        $categories = Category::whereNull('parent_id')->get();
+
+        return view('shop', compact('products', 'categories', 'query'));
+    }
 }
