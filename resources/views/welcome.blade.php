@@ -81,6 +81,25 @@
         </div>
     </section>
 
+    <!-- Brand Filter Section -->
+    <section class="bg-white py-8 border-b">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">ĐỒ GIA DỤNG</h2>
+                <a href="{{ route('shop.index') }}" class="text-indigo-600 hover:text-indigo-700 font-semibold flex items-center gap-1">
+                    Xem tất cả <span>→</span>
+                </a>
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+                @foreach($popularBrands as $brand)
+                    <button class="px-4 py-2 bg-gray-100 hover:bg-indigo-600 hover:text-white text-gray-700 rounded-lg transition-all duration-300 font-medium text-sm">
+                        {{ $brand }}
+                    </button>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     <!-- Categories Section - Gọn gàng hơn -->
     <section id="categories" class="bg-gray-50 py-16">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -130,7 +149,7 @@
                         <a href="#" class="block">
                             <div class="relative h-56 bg-gray-50 overflow-hidden">
                                 @if($product->images->first())
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" 
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
                                          alt="{{ $product->name }}"
                                          loading="lazy"
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -191,10 +210,233 @@
             </div>
             
             <div class="text-center mt-8">
-                <a href="#" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
+                <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
                     Xem tất cả sản phẩm
                     <span>→</span>
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Showcase Section - 3 Cột lớn -->
+    @if($mainCategories->count() >= 3)
+    <section class="bg-white py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-6">
+                @foreach($mainCategories as $mainCategory)
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                        <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">{{ $mainCategory->name }}</h3>
+                            <div class="grid grid-cols-2 gap-3">
+                                @foreach($mainCategory->products->take(6) as $product)
+                                    <a href="#" class="group bg-white rounded-lg p-3 hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-indigo-300">
+                                        <div class="relative h-32 mb-2 bg-gray-50 rounded overflow-hidden">
+                                            @if($product->images->first())
+                                                <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
+                                                     alt="{{ $product->name }}"
+                                                     loading="lazy"
+                                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            @else
+                                                <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                                    <span class="text-gray-400 text-xs">Chưa có ảnh</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <h4 class="text-xs font-semibold text-gray-900 group-hover:text-indigo-600 transition line-clamp-2 mb-1">
+                                            {{ $product->name }}
+                                        </h4>
+                                        <p class="text-xs font-bold text-indigo-600">
+                                            {{ number_format($product->price, 0, ',', '.') }} đ
+                                        </p>
+                                    </a>
+                                @endforeach
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-700 font-semibold text-sm">
+                                    Xem tất cả <span>→</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
+    <!-- Best Sellers Section -->
+    <section class="bg-gray-50 py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Sản phẩm bán chạy</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Những sản phẩm được khách hàng yêu thích và mua nhiều nhất</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @forelse($bestSellers->take(8) as $product)
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
+                        <a href="#" class="block">
+                            <div class="relative h-56 bg-gray-50 overflow-hidden">
+                                @if($product->images->first())
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
+                                         alt="{{ $product->name }}"
+                                         loading="lazy"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                        <span class="text-gray-400">Chưa có ảnh</span>
+                                    </div>
+                                @endif
+                                
+                                <div class="absolute top-3 left-3 bg-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                                    Bán chạy
+                                </div>
+                            </div>
+                            
+                            <div class="p-4">
+                                <span class="text-xs text-gray-500">{{ $product->category->name ?? 'Chưa phân loại' }}</span>
+                                <h3 class="text-base font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition min-h-[3rem]">
+                                    {{ $product->name }}
+                                </h3>
+                                
+                                <div class="flex items-center justify-between mb-2">
+                                    <p class="text-lg font-bold text-indigo-600">
+                                        {{ number_format($product->price, 0, ',', '.') }} đ
+                                    </p>
+                                    <div class="flex items-center text-yellow-400">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                        </svg>
+                                        <span class="ml-1 text-xs text-gray-600">4.9</span>
+                                    </div>
+                                </div>
+                                
+                                <button class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition text-sm font-medium">
+                                    Thêm vào giỏ
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                @empty
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-500">Chưa có sản phẩm bán chạy</p>
+                    </div>
+                @endforelse
+            </div>
+            
+            <div class="text-center mt-8">
+                <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
+                    Xem tất cả sản phẩm bán chạy
+                    <span>→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hot Deals Section -->
+    <section class="bg-white py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Deal sốc hôm nay</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Những ưu đãi đặc biệt không thể bỏ qua</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                @forelse($hotDeals->take(6) as $product)
+                    <div class="bg-gradient-to-br from-red-50 to-orange-50 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-red-200 group relative">
+                        <div class="absolute top-3 right-3 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
+                            -20%
+                        </div>
+                        <a href="#" class="block">
+                            <div class="relative h-64 bg-gray-50 overflow-hidden">
+                                @if($product->images->first())
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
+                                         alt="{{ $product->name }}"
+                                         loading="lazy"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                        <span class="text-gray-400">Chưa có ảnh</span>
+                                    </div>
+                                @endif
+                            </div>
+                            
+                            <div class="p-5">
+                                <span class="text-xs text-gray-600">{{ $product->category->name ?? 'Chưa phân loại' }}</span>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-red-600 transition">
+                                    {{ $product->name }}
+                                </h3>
+                                
+                                <div class="flex items-center gap-3 mb-3">
+                                    <p class="text-xl font-bold text-red-600">
+                                        {{ number_format($product->price * 0.8, 0, ',', '.') }} đ
+                                    </p>
+                                    <p class="text-sm text-gray-400 line-through">
+                                        {{ number_format($product->price, 0, ',', '.') }} đ
+                                    </p>
+                                </div>
+                                
+                                <button class="w-full bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 transition text-sm font-medium">
+                                    Mua ngay
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                @empty
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-500">Chưa có deal sốc</p>
+                    </div>
+                @endforelse
+    </div>
+
+            <div class="text-center mt-8">
+                <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
+                    Xem tất cả deal sốc
+                    <span>→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Used Products Section -->
+    <section class="bg-gray-50 py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">HÀNG CŨ</h2>
+                    <p class="text-gray-600">Sản phẩm đã qua sử dụng với giá tốt</p>
+                </div>
+                <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
+                    Xem tất cả <span>→</span>
+                </a>
+            </div>
+            
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    @foreach($usedProducts->take(12) as $product)
+                        <a href="#" class="group text-center p-4 rounded-lg hover:bg-gray-50 transition-all duration-300 border border-gray-100 hover:border-indigo-200">
+                            <div class="relative h-32 mb-3 bg-gray-50 rounded overflow-hidden mx-auto">
+                                @if($product->images->first())
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
+                                         alt="{{ $product->name }}"
+                                         loading="lazy"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                        <span class="text-gray-400 text-xs">Chưa có ảnh</span>
+                                    </div>
+                                @endif
+                            </div>
+                            <h4 class="text-sm font-semibold text-gray-900 group-hover:text-indigo-600 transition line-clamp-2 mb-1">
+                                {{ $product->name }}
+                            </h4>
+                            <p class="text-xs text-gray-600 mb-2">{{ $product->category->name ?? '' }}</p>
+                            <p class="text-sm font-bold text-indigo-600">
+                                {{ number_format($product->price, 0, ',', '.') }} đ
+                            </p>
+                        </a>
+                    @endforeach
+                </div>
             </div>
         </div>
     </section>
@@ -261,7 +503,7 @@
                         <a href="#" class="block">
                             <div class="relative h-56 bg-gray-50 overflow-hidden">
                                 @if($product->images->first())
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" 
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
                                          alt="{{ $product->name }}"
                                          loading="lazy"
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -298,7 +540,7 @@
                 </div>
 
             <div class="text-center mt-8">
-                <a href="#" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
+                <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
                     Xem tất cả sản phẩm mới
                     <span>→</span>
                 </a>
@@ -306,40 +548,106 @@
         </div>
     </section>
 
-    <!-- Reviews Section - Đơn giản hơn -->
-    <section class="bg-gray-50 py-16">
+    <!-- Video Reviews Section - Giống CellphoneS -->
+    <section class="bg-white py-16">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-3">Đánh giá khách hàng</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Những phản hồi và đánh giá từ khách hàng đã sử dụng sản phẩm</p>
-    </div>
+            <div class="flex items-center justify-between mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">REVIEW SẢN PHẨM</h2>
+                <a href="https://www.youtube.com" target="_blank" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold whitespace-nowrap text-lg">
+                    Xem YouTube <span>→</span>
+                </a>
+            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @forelse($reviews->take(6) as $review)
-                    <div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition border border-gray-100">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold">
-                                {{ substr($review->user->name ?? 'U', 0, 1) }}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach($videoReviews->take(4) as $index => $product)
+                    <div class="bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300 group">
+                        <!-- Video Short Container - Tự động phát -->
+                        <div class="relative bg-gray-100 overflow-hidden">
+                            <!-- Video Player - YouTube Shorts hoặc HTML5 Video tự động phát -->
+                            <div class="relative w-full h-64 overflow-hidden bg-black rounded-t-lg">
+                                @php
+                                    // Tạo video ID dựa trên index (có thể thay bằng video ID thật sau)
+                                    $videoIds = ['dQw4w9WgXcQ', 'kJQP7kiw5Fk'];
+                                    $videoId = $videoIds[$index % count($videoIds)];
+                                @endphp
+                                
+                                <!-- YouTube Shorts Embed - Tự động phát, lặp lại, tắt tiếng -->
+                                <iframe 
+                                    class="w-full h-full"
+                                    src="https://www.youtube.com/embed/{{ $videoId }}?autoplay=1&loop=1&playlist={{ $videoId }}&mute=1&controls=0&modestbranding=1&rel=0&playsinline=1"
+                                    frameborder="0"
+                                    allow="autoplay; encrypted-media; accelerometer; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                    loading="lazy"
+                                ></iframe>
+                                
+                                <!-- Fallback: Nếu không có YouTube, dùng ảnh với animation -->
+                                @if($product->images->first())
+                                    <div class="absolute inset-0 hidden fallback-video">
+                                        <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
+                                             alt="{{ $product->name }}"
+                                             class="w-full h-full object-cover animate-pulse">
+                                    </div>
+                                @endif
                             </div>
-                            <div>
-                                <h4 class="font-semibold text-gray-900">{{ $review->user->name ?? 'Khách hàng' }}</h4>
-                                <div class="flex items-center gap-1">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <svg class="w-3 h-3 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </div>
+
+                        <!-- Video Info -->
+                        <div class="p-4">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-2 line-clamp-2 min-h-[2.5rem] group-hover:text-indigo-600 transition">
+                                {{ $product->name }} - Review chi tiết | DATN Store
+                            </h3>
+                            
+                            <!-- Channel Info -->
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center">
+                                        <span class="text-white text-xs font-bold">S</span>
+                                    </div>
+                                    <span class="text-xs text-gray-600 font-medium">DATN Store</span>
+                                </div>
+                                <button class="px-3 py-1 bg-red-600 text-white text-xs font-semibold rounded-full hover:bg-red-700 transition">
+                                    Đăng ký
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Info Below -->
+                        <div class="px-4 pb-4 pt-0 border-t border-gray-100">
+                            <div class="flex items-center gap-3 mt-3">
+                                @if($product->images->first())
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
+                                         alt="{{ $product->name }}"
+                                         class="w-16 h-16 object-cover rounded border border-gray-200"
+                                         onerror="this.onerror=null; this.src='https://via.placeholder.com/64x64/f3f4f6/9ca3af?text=No+Image';">
+                                @else
+                                    <div class="w-16 h-16 bg-gray-200 rounded border border-gray-200 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                         </svg>
-                                    @endfor
+                                    </div>
+                                @endif
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-sm font-semibold text-gray-900 line-clamp-1">{{ $product->name }}</h4>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        @if($product->price > 10000000)
+                                            <p class="text-base font-bold text-red-600">
+                                                {{ number_format($product->price * 0.95, 0, ',', '.') }} đ
+                                            </p>
+                                            <p class="text-xs text-gray-400 line-through">
+                                                {{ number_format($product->price, 0, ',', '.') }} đ
+                                            </p>
+                                        @else
+                                            <p class="text-base font-bold text-indigo-600">
+                                                {{ number_format($product->price, 0, ',', '.') }} đ
+                                            </p>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <p class="text-gray-600 text-sm mb-3 line-clamp-3">{{ $review->comment }}</p>
-                        <p class="text-xs text-gray-500">Sản phẩm: {{ $review->product->name ?? 'N/A' }}</p>
                     </div>
-                @empty
-                    <div class="col-span-full text-center py-12">
-                        <p class="text-gray-500">Chưa có đánh giá nào</p>
-                    </div>
-                @endforelse
+                @endforeach
             </div>
         </div>
     </section>
