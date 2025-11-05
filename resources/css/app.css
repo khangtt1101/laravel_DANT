@@ -1,4 +1,350 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Smooth animations - nhẹ nhàng hơn */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes gentle-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-in {
+    animation: slideIn 0.6s ease-out;
+}
+
+.animate-gentle-pulse {
+    animation: gentle-pulse 2s ease-in-out infinite;
+}
+
+/* Icon hover - nhẹ nhàng */
+.icon-hover:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Better line clamping */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Image loading placeholder */
+img {
+    background-color: #f3f4f6;
+    transition: opacity 0.3s;
+}
+
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+    opacity: 1;
+}
+
+/* Floating Animation - Lắc lư nhẹ nhàng */
+@keyframes gentleFloat {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-8px) rotate(1deg);
+    }
+    50% {
+        transform: translateY(-4px) rotate(0deg);
+    }
+    75% {
+        transform: translateY(-8px) rotate(-1deg);
+    }
+}
+
+@keyframes gentleBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes gentleShake {
+    0%, 100% {
+        transform: translateX(0) rotate(0deg);
+    }
+    25% {
+        transform: translateX(-2px) rotate(-1deg);
+    }
+    50% {
+        transform: translateX(2px) rotate(1deg);
+    }
+    75% {
+        transform: translateX(-2px) rotate(-0.5deg);
+    }
+}
+
+/* Apply animations to floating buttons */
+.animate-float-gentle {
+    animation: gentleFloat 3s ease-in-out infinite;
+}
+
+.animate-bounce-gentle {
+    animation: gentleBounce 2s ease-in-out infinite;
+}
+
+.animate-shake-gentle {
+    animation: gentleShake 2.5s ease-in-out infinite;
+}
+
+/* Delayed animations for different buttons */
+.animate-float-delay-1 {
+    animation: gentleFloat 3s ease-in-out infinite;
+    animation-delay: 0.5s;
+}
+
+.animate-float-delay-2 {
+    animation: gentleFloat 3s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+.animate-float-delay-3 {
+    animation: gentleFloat 3s ease-in-out infinite;
+    animation-delay: 1.5s;
+}
+
+/* Marquee Animation - Chạy chữ tự động */
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.marquee-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.marquee-content {
+    display: inline-flex;
+    animation: marquee 30s linear infinite;
+    will-change: transform;
+}
+
+.marquee-content:hover {
+    animation-play-state: paused;
+}
+
+/* Hero Slider Image Background */
+.hero-slider .slide {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Smooth transitions for slider */
+.slide {
+    transition: opacity 0.7s ease-in-out;
+}
+
+/* Slider dots active state */
+.slider-dot.active {
+    background-color: white !important;
+    width: 12px !important;
+    height: 12px !important;
+}
+
+/* Brand Slider Animation - Chạy ngang tự động */
+@keyframes brandSlide {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.brand-slider-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.brand-slider-content {
+    display: inline-flex;
+    animation: brandSlide 40s linear infinite;
+    will-change: transform;
+}
+
+.brand-slider-content:hover {
+    animation-play-state: paused;
+}
+
+/* Lazy Loading Animation - Fade in khi scroll */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-on-scroll {
+    opacity: 0;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-on-scroll.visible {
+    opacity: 1;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Image Zoom on Hover */
+.product-image-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.product-image-zoom {
+    transition: transform 0.5s ease, scale 0.5s ease;
+}
+
+.product-card:hover .product-image-zoom {
+    transform: scale(1.1);
+}
+
+/* Wishlist Button Animation */
+.wishlist-btn {
+    transition: all 0.3s ease;
+}
+
+.wishlist-btn.active {
+    color: #ef4444;
+    fill: #ef4444;
+}
+
+.wishlist-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Social Proof Badge */
+.social-proof-badge {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Loading Skeleton */
+@keyframes skeleton-loading {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+.skeleton-text {
+    height: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-title {
+    height: 1.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    width: 60%;
+}
+
+.skeleton-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+}
+
+/* FAQ Accordion Animation */
+.faq-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+
+.faq-content.open {
+    max-height: 500px;
+    padding: 0 1.5rem 1rem 1.5rem;
+}
+
+.faq-icon {
+    transition: transform 0.3s ease;
+}
+
+.faq-icon.open {
+    transform: rotate(180deg);
+}

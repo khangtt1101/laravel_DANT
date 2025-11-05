@@ -11,26 +11,20 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
 use App\Models\Product;
+use App\Models\Category;
+use App\Http\Controllers\UserAddressController;
 
-Route::get('/', function () {
-    // Lấy 8 sản phẩm mới nhất, đồng thời tải trước ảnh và danh mục
-    $featuredProducts = Product::with(['category', 'images'])
-                               ->latest() // Sắp xếp theo ngày tạo mới nhất
-                               ->take(8)    // Giới hạn 8 sản phẩm
-                               ->get();
+use App\Http\Controllers\HomeController;
 
-    // Trả về view 'welcome' và truyền biến $featuredProducts vào
-    return view('welcome', compact('featuredProducts'));
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // ROUTE CHO USER THÔNG THƯỜNG (của Breeze)
-Route::get('/home', function () {
-    return view('dashboard'); // Trỏ đến view 'dashboard.blade.php'
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/home', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
 Route::get('/products/{category:slug}/{product:slug}', [ShopController::class, 'show'])
-     ->name('products.show')
-     ->scopeBindings();
+    ->name('products.show')
+    ->scopeBindings();
 
 // ===== BẮT ĐẦU CÁC ROUTE GIỎ HÀNG =====
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -38,28 +32,30 @@ Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
 // ===== KẾT THÚC CÁC ROUTE GIỎ HÀNG =====
-     // ROUTE CHO ADMIN
+// ROUTE CHO ADMIN
 Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.') // <-- THÊM DÒNG NÀY ĐỂ TẠO TIỀN TỐ TÊN
     ->group(function () {
-    
-    // Route cho trang dashboard admin
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Các resource route khác
-    Route::resource('products', ProductController::class);
-    Route::resource('orders', OrderController::class)->only(['index', 'show', 'update', 'destroy']);
-    Route::resource('reviews', ReviewController::class)->only(['index', 'destroy']);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('users', UserController::class)->except(['create', 'store', 'show']);
-});
+        // Route cho trang dashboard admin
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Các resource route khác
+        Route::resource('products', ProductController::class);
+        Route::resource('orders', OrderController::class)->only(['index', 'show', 'update', 'destroy']);
+        Route::resource('reviews', ReviewController::class)->only(['index', 'destroy']);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('users', UserController::class)->except(['create', 'store', 'show']);
+    });
 
 // ROUTE PROFILE (của Breeze)
 Route::middleware('auth')->group(function () {
+    Route::post('/profile/address', [UserAddressController::class, 'store'])->name('profile.address.store');
+    Route::delete('/profile/address/{address}', [UserAddressController::class, 'destroy'])->name('profile.address.destroy');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
