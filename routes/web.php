@@ -7,26 +7,38 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\CartController;
+use App\Models\Product;
 
 use App\Http\Controllers\HomeController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // ROUTE CHO USER THÔNG THƯỜNG (của Breeze)
-Route::get('/dashboard', function () {
+Route::get('/home', function () {
     return view('dashboard'); // Trỏ đến view 'dashboard.blade.php'
 })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/products/{category:slug}/{product:slug}', [ShopController::class, 'show'])
+     ->name('products.show')
+     ->scopeBindings();
 
-// ROUTE CHO ADMIN
+// ===== BẮT ĐẦU CÁC ROUTE GIỎ HÀNG =====
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+// ===== KẾT THÚC CÁC ROUTE GIỎ HÀNG =====
+     // ROUTE CHO ADMIN
 Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.') // <-- THÊM DÒNG NÀY ĐỂ TẠO TIỀN TỐ TÊN
     ->group(function () {
     
     // Route cho trang dashboard admin
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard'); // Tên đầy đủ sẽ là 'admin.dashboard'
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Các resource route khác
     Route::resource('products', ProductController::class);

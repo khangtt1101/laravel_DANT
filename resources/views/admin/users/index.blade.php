@@ -15,6 +15,9 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
                             @foreach ($users as $user)
+                            @if ( $user->role === 'customer')
+                            
+                            
                             <tr>
                                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ $user->full_name }}</td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $user->email }}</td>
@@ -27,6 +30,7 @@
                                     <a href="{{ route('admin.users.edit', $user) }}" class="text-indigo-600 hover:text-indigo-900">Sửa</a>
                                 </td>
                             </tr>
+                            @endif
                             @endforeach
                         </tbody>
                     </table>
