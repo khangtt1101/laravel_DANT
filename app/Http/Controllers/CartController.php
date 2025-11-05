@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-
+use Validator;
 class CartController extends Controller
 {
     /**
@@ -28,36 +28,60 @@ class CartController extends Controller
      */
     public function add(Request $request)
     {
-        $request->validate([
+        // ===== BẮT ĐẦU SỬA LỖI =====
+        // 1. Dùng Validator::make() để đọc request JSON
+        $validator = Validator::make($request->all(), [
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
         ]);
 
-        $product = Product::with('images')->find($request->product_id);
+        // 2. Tự kiểm tra nếu validation thất bại
+        if ($validator->fails()) {
+            // 3. Luôn luôn trả về 422 JSON
+            return response()->json([
+                'success' => false,
+                'message' => 'Dữ liệu không hợp lệ.',
+                'errors' => $validator->errors()
+            ], 422); // 422 = Unprocessable Entity
+        }
+        // ===== KẾT THÚC SỬA LỖI =====
+
+        // Lấy dữ liệu đã được validate
+        $productId = $request->input('product_id');
+        $quantity = $request->input('quantity');
+
+        $product = Product::with('images')->find($productId);
         if (!$product) {
-            return back()->with('error', 'Sản phẩm không tồn tại!');
+            return response()->json(['success' => false, 'message' => 'Sản phẩm không tồn tại!'], 404);
         }
 
-        // Lấy giỏ hàng từ session
         $cart = session()->get('cart', []);
 
-        // Kiểm tra nếu sản phẩm đã có trong giỏ
-        if (isset($cart[$product->id])) {
-            $cart[$product->id]['quantity'] += $request->quantity;
+        if (isset($cart[$productId])) {
+            $cart[$productId]['quantity'] += $quantity;
         } else {
-            // Thêm mới sản phẩm vào giỏ
-            $cart[$product->id] = [
+            $cart[$productId] = [
                 'name' => $product->name,
-                'quantity' => $request->quantity,
+                'quantity' => $quantity,
                 'price' => $product->price,
                 'image_url' => $product->images->isEmpty() ? '' : $product->images->first()->image_url,
             ];
         }
 
-        // Lưu giỏ hàng trở lại session
         session()->put('cart', $cart);
 
-        return back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng!');
+        // Tính lại tổng số lượng
+        $newCartCount = 0;
+        foreach($cart as $id => $details) {
+            $newCartCount += $details['quantity'];
+        }
+        
+        // Trả về JSON thành công
+        return response()->json([
+            'success' => true,
+            'message' => 'Đã thêm sản phẩm!',
+            'cartCount' => $newCartCount 
+        ]);
     }
 
     /**

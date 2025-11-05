@@ -113,6 +113,7 @@
                     </div>
                 </div>
             </div>
+            
         @else
             <div class="text-center py-12 bg-white shadow rounded-lg">
                 <p class="text-xl text-gray-700">Giỏ hàng của bạn đang trống.</p>

@@ -21,12 +21,10 @@ Route::get('/', function () {
 
     // Trả về view 'welcome' và truyền biến $featuredProducts vào
     return view('welcome', compact('featuredProducts'));
-});
+})->name('dashboard');;
 
 // ROUTE CHO USER THÔNG THƯỜNG (của Breeze)
-Route::get('/home', function () {
-    return view('dashboard'); // Trỏ đến view 'dashboard.blade.php'
-})->middleware(['auth', 'verified'])->name('dashboard');
+;
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/products/{category:slug}/{product:slug}', [ShopController::class, 'show'])
      ->name('products.show')
