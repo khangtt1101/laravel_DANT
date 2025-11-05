@@ -180,7 +180,7 @@
     </section>
 
     <!-- Statistics Section -->
-    <section class="bg-white py-12 border-b">
+    <section class="bg-white py-8 border-b">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                 <div class="text-center">
@@ -204,7 +204,7 @@
     </section>
 
     <!-- Brand Filter Section - Slider chạy ngang -->
-    <section class="bg-white py-8 border-b">
+    <section class="bg-white py-6 border-b">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-2xl font-bold text-gray-900">ĐỒ GIA DỤNG</h2>
@@ -240,7 +240,7 @@
     </section>
 
     <!-- Categories Section - Gọn gàng hơn -->
-    <section id="categories" class="bg-gray-50 py-16">
+    <section id="categories" class="bg-gray-50 py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Danh mục sản phẩm</h2>
@@ -275,7 +275,7 @@
     </section>
 
     <!-- Featured Products Section - Layout đẹp hơn -->
-    <section id="products" class="bg-white py-16 fade-in-on-scroll">
+    <section id="products" class="bg-white py-12 fade-in-on-scroll">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Sản phẩm nổi bật</h2>
@@ -430,7 +430,7 @@
     @endif
 
     <!-- Best Sellers Section -->
-    <section class="bg-gray-50 py-16 fade-in-on-scroll">
+    <section class="bg-gray-50 py-12 fade-in-on-scroll">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Sản phẩm bán chạy</h2>
@@ -582,7 +582,7 @@
     </section>
 
     <!-- Hot Deals Section - Với Countdown Timer -->
-    <section id="hot-deals" class="bg-white py-16">
+    <section id="hot-deals" class="bg-white py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Deal sốc hôm nay</h2>
@@ -665,7 +665,7 @@
     </section>
 
     <!-- Used Products Section -->
-    <section class="bg-gray-50 py-16">
+    <section class="bg-gray-50 py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-8">
                 <div>
@@ -801,7 +801,7 @@
     </section>
 
     <!-- Why Choose Us Section -->
-    <section class="bg-gray-50 py-16">
+    <section class="bg-gray-50 py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Tại sao chọn chúng tôi?</h2>
@@ -849,7 +849,7 @@
     </section>
 
     <!-- New Products Section -->
-    <section id="new-products" class="bg-white py-16 fade-in-on-scroll">
+    <section id="new-products" class="bg-white py-12 fade-in-on-scroll">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Sản phẩm mới nhất</h2>
@@ -908,7 +908,7 @@
     </section>
 
     <!-- Testimonials Section - Đánh giá khách hàng -->
-    <section class="bg-gray-50 py-16">
+    <section class="bg-gray-50 py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Khách hàng nói gì về chúng tôi?</h2>
@@ -1019,7 +1019,7 @@
     </section>
 
     <!-- Blog/Tin tức Section -->
-    <section class="bg-white py-16 fade-in-on-scroll">
+    <section class="bg-white py-12 fade-in-on-scroll">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-3">Tin tức & Công nghệ</h2>
@@ -1147,7 +1147,7 @@
     </section>
 
     <!-- Video Reviews Section - Giống CellphoneS -->
-    <section class="bg-white py-16">
+    <section class="bg-white py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900">REVIEW SẢN PHẨM</h2>
@@ -1246,6 +1246,267 @@
                         </div>
                     </div>
                 @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Map Section -->
+    <section id="contact" class="bg-white py-12 fade-in-on-scroll">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Liên hệ với chúng tôi</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Chúng tôi luôn sẵn sàng hỗ trợ và giải đáp mọi thắc mắc của bạn</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Contact Form -->
+                <div class="bg-gray-50 rounded-xl p-8 shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Gửi tin nhắn</h3>
+                    <form id="contactForm" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Họ tên *</label>
+                                <input 
+                                    type="text" 
+                                    name="name"
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                                    placeholder="Nhập họ tên"
+                                >
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Số điện thoại *</label>
+                                <input 
+                                    type="tel" 
+                                    name="phone"
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                                    placeholder="0900 123 456"
+                                >
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                            <input 
+                                type="email" 
+                                name="email"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                                placeholder="email@example.com"
+                            >
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Chủ đề *</label>
+                            <select 
+                                name="subject"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                            >
+                                <option value="">Chọn chủ đề</option>
+                                <option value="product">Hỏi về sản phẩm</option>
+                                <option value="order">Hỏi về đơn hàng</option>
+                                <option value="warranty">Bảo hành</option>
+                                <option value="support">Hỗ trợ kỹ thuật</option>
+                                <option value="other">Khác</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nội dung *</label>
+                            <textarea 
+                                name="message"
+                                rows="5"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition resize-none"
+                                placeholder="Nhập nội dung tin nhắn..."
+                            ></textarea>
+                        </div>
+                        <button 
+                            type="submit"
+                            class="w-full bg-indigo-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-indigo-700 transition shadow-lg hover:shadow-xl"
+                        >
+                            Gửi tin nhắn
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Info & Map -->
+                <div class="space-y-6">
+                    <!-- Contact Info -->
+                    <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-8 shadow-lg">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Thông tin liên hệ</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900 mb-1">Địa chỉ</h4>
+                                    <p class="text-gray-600 text-sm">123 Đường ABC, Quận Sơn Trà, Đà Nẵng</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900 mb-1">Điện thoại</h4>
+                                    <a href="tel:19001234" class="text-indigo-600 hover:text-indigo-700 text-sm">1900 1234</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900 mb-1">Email</h4>
+                                    <a href="mailto:support@datn.com" class="text-indigo-600 hover:text-indigo-700 text-sm">support@datn.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900 mb-1">Giờ làm việc</h4>
+                                    <p class="text-gray-600 text-sm">Thứ 2 - Chủ nhật: 8:00 - 22:00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map -->
+                    <div class="bg-gray-100 rounded-xl overflow-hidden shadow-lg h-64">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.962836084121!2d108.247157!3d16.054408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314219c9f6b1b6e1%3A0x2c4e5d3e8f5f3a2b!2zU8OibiBUcsOgLCBEYSBOxINuZywgVmlldG5hbQ!5e0!3m2!1sen!2s!4v1234567890"
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            class="w-full h-full"
+                        ></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="bg-gray-50 py-12 fade-in-on-scroll">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Câu hỏi thường gặp</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Tìm câu trả lời cho những thắc mắc phổ biến nhất</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto">
+                <div class="space-y-4" id="faqAccordion">
+                    <!-- FAQ Item 1 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <button 
+                            class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition"
+                            onclick="toggleFAQ(this)"
+                        >
+                            <span class="font-semibold text-gray-900">Làm thế nào để đặt hàng?</span>
+                            <svg class="w-5 h-5 text-gray-500 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <p class="text-gray-600">Bạn có thể đặt hàng trực tuyến trên website, qua hotline 1900 1234, hoặc đến trực tiếp cửa hàng. Sau khi đặt hàng, chúng tôi sẽ xác nhận và giao hàng trong vòng 24-48 giờ.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 2 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <button 
+                            class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition"
+                            onclick="toggleFAQ(this)"
+                        >
+                            <span class="font-semibold text-gray-900">Chính sách đổi trả như thế nào?</span>
+                            <svg class="w-5 h-5 text-gray-500 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <p class="text-gray-600">Chúng tôi hỗ trợ đổi trả trong vòng 7 ngày kể từ ngày nhận hàng. Sản phẩm phải còn nguyên vẹn, chưa sử dụng và có đầy đủ hóa đơn, phụ kiện đi kèm.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 3 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <button 
+                            class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition"
+                            onclick="toggleFAQ(this)"
+                        >
+                            <span class="font-semibold text-gray-900">Phương thức thanh toán nào được chấp nhận?</span>
+                            <svg class="w-5 h-5 text-gray-500 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <p class="text-gray-600">Chúng tôi chấp nhận thanh toán bằng tiền mặt, chuyển khoản ngân hàng, thẻ tín dụng/ghi nợ, và các ví điện tử phổ biến như Momo, ZaloPay, VNPay.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 4 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <button 
+                            class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition"
+                            onclick="toggleFAQ(this)"
+                        >
+                            <span class="font-semibold text-gray-900">Thời gian giao hàng là bao lâu?</span>
+                            <svg class="w-5 h-5 text-gray-500 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <p class="text-gray-600">Đối với khu vực nội thành: 1-2 ngày. Khu vực ngoại thành: 2-3 ngày. Các tỉnh thành khác: 3-5 ngày làm việc. Miễn phí vận chuyển cho đơn hàng trên 300.000đ.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 5 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <button 
+                            class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition"
+                            onclick="toggleFAQ(this)"
+                        >
+                            <span class="font-semibold text-gray-900">Sản phẩm có bảo hành không?</span>
+                            <svg class="w-5 h-5 text-gray-500 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <p class="text-gray-600">Tất cả sản phẩm đều có bảo hành chính hãng từ nhà sản xuất. Thời gian bảo hành tùy thuộc vào từng sản phẩm, thường từ 12-24 tháng. Chúng tôi hỗ trợ xử lý bảo hành tại cửa hàng.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 6 -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <button 
+                            class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition"
+                            onclick="toggleFAQ(this)"
+                        >
+                            <span class="font-semibold text-gray-900">Có thể mua trả góp không?</span>
+                            <svg class="w-5 h-5 text-gray-500 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <p class="text-gray-600">Có, chúng tôi hỗ trợ mua trả góp qua các ngân hàng đối tác với lãi suất 0% trong 6-12 tháng. Áp dụng cho đơn hàng từ 5.000.000đ trở lên.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1748,5 +2009,80 @@
                 });
             }
         });
+
+        // FAQ Toggle Function
+        function toggleFAQ(button) {
+            const faqItem = button.parentElement;
+            const content = faqItem.querySelector('.faq-content');
+            const icon = button.querySelector('.faq-icon');
+            
+            const isOpen = content.classList.contains('open');
+            
+            // Close all other FAQs
+            document.querySelectorAll('.faq-content').forEach(item => {
+                if (item !== content) {
+                    item.classList.remove('open');
+                    item.parentElement.querySelector('.faq-icon')?.classList.remove('open');
+                }
+            });
+            
+            // Toggle current FAQ
+            if (isOpen) {
+                content.classList.remove('open');
+                icon.classList.remove('open');
+            } else {
+                content.classList.add('open');
+                icon.classList.add('open');
+            }
+        }
+
+        // Contact Form Handler
+        document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = 'Đang gửi...';
+            submitBtn.disabled = true;
+            
+            // Simulate form submission (replace with actual API call)
+            setTimeout(() => {
+                submitBtn.textContent = '✓ Đã gửi thành công!';
+                submitBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                submitBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                
+                // Reset form
+                this.reset();
+                
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    submitBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+                    submitBtn.disabled = false;
+                }, 3000);
+            }, 1500);
+        });
+
+        // Loading Skeleton for Products (optional - can be shown while loading)
+        function showProductSkeleton(container) {
+            const skeletonHTML = `
+                <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
+                    <div class="relative h-56 bg-gray-50 overflow-hidden">
+                        <div class="skeleton skeleton-image"></div>
+                    </div>
+                    <div class="p-4">
+                        <div class="skeleton skeleton-title mb-2"></div>
+                        <div class="skeleton skeleton-text mb-2"></div>
+                        <div class="skeleton skeleton-text w-3/4"></div>
+                    </div>
+                </div>
+            `;
+            
+            for (let i = 0; i < 4; i++) {
+                container.innerHTML += skeletonHTML;
+            }
+        }
     </script>
 </x-main-layout>
