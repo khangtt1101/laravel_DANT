@@ -24,14 +24,24 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        // 1. Validate dữ liệu mới
+        $validatedData = $request->validate([
+            'full_name' => ['required', 'string', 'max:255'],
+            'phone_number' => ['nullable', 'string', 'max:20'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', \Illuminate\Validation\Rule::unique('users')->ignore($request->user()->id)],
+        ]);
 
+        // 2. Cập nhật các trường
+        $request->user()->fill($validatedData);
+
+        // 3. Xử lý nếu email thay đổi (logic của Breeze)
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
+        // 4. Lưu lại
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');

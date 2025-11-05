@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         // Nếu không phải admin, chuyển hướng đến dashboard mặc định của người dùng
-        return redirect()->intended('/dashboard');
+        return redirect()->intended('/home');
     }
 
     /**

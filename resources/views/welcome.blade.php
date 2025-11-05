@@ -288,9 +288,9 @@
                         <a href="{{ $product->category && $product->category->slug ? route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]) : '#' }}" class="block">
                             <div class="relative h-56 bg-gray-50 overflow-hidden product-image-container">
                                 @if($product->images->first())
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
+                                    <img src="{{ Storage::url($product->images->first()->image_url) }}" 
                                          alt="{{ $product->name }}"
-                                         loading="lazy"
+                                         
                                          class="w-full h-full object-cover product-image-zoom">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
@@ -1709,7 +1709,7 @@
             btn.textContent = 'Đang thêm...';
             btn.disabled = true;
 
-            fetch('{{ route("cart.add") }}', {
+            fetch('/cart/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1955,7 +1955,7 @@
                     <div class="relative h-32 mb-3 bg-gray-50 rounded overflow-hidden mx-auto">
                         <img src="${item.image}" alt="${item.name}" 
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                             onerror="this.src='https://via.placeholder.com/150/f3f4f6/9ca3af?text=No+Image'">
+                             onerror="this.src='{{ asset('images/no-placehoder.jpg') }}'">
                     </div>
                     <h4 class="text-sm font-semibold text-gray-900 group-hover:text-indigo-600 transition line-clamp-2 mb-1">
                         ${item.name}
