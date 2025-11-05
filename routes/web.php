@@ -8,9 +8,9 @@ use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\HomeController;
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // ROUTE CHO USER THÔNG THƯỜNG (của Breeze)
 Route::get('/dashboard', function () {

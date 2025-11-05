@@ -1,54 +1,370 @@
 <x-main-layout>
-    <div class="bg-white">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 text-center">
-            <h1 class="text-4xl md:text-6xl font-sans text-gray-900 leading-tight">
-                Sản phẩm <span class="text-indigo-600">Công nghệ</span>
-                <br>
-                Dẫn đầu Xu hướng
-            </h1>
-            <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-500">
-                Khám phá bộ sưu tập điện thoại, laptop, và phụ kiện mới nhất với giá ưu đãi nhất.
-            </p>
-            <div class="mt-8 flex justify-center space-x-4">
-                <a href="#" class="inline-block bg-indigo-600 text-white font-medium py-3 px-8 rounded-md shadow-md hover:bg-indigo-700">
-                    Mua ngay
-                </a>
-                <a href="#" class="inline-block bg-gray-200 text-gray-700 font-medium py-3 px-8 rounded-md hover:bg-gray-300">
-                    Tìm hiểu thêm
+    <!-- Hero Banner Section - Đơn giản, chuyên nghiệp -->
+    <section class="relative bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-20 md:py-28">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-gray-800 animate-fade-in">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-gray-900">
+                        Cửa hàng 
+                        <span class="text-indigo-600">Điện tử</span>
+                        <br>
+                        Chất lượng cao
+                    </h1>
+                    <p class="text-lg md:text-xl mb-8 text-gray-600 leading-relaxed">
+                        Chuyên cung cấp các sản phẩm công nghệ chính hãng với giá cả hợp lý và dịch vụ uy tín nhất.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#products" class="inline-flex items-center gap-2 bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 transition hover:shadow-lg scroll-smooth">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                            </svg>
+                            Xem sản phẩm
+                        </a>
+                        <a href="#categories" class="inline-flex items-center gap-2 bg-white text-gray-700 font-semibold py-3 px-8 rounded-lg border-2 border-gray-200 hover:border-indigo-300 hover:text-indigo-600 transition scroll-smooth">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                            Danh mục
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="bg-white rounded-2xl p-8 shadow-xl">
+                        <div class="text-center">
+                            <div class="w-24 h-24 mx-auto mb-6 bg-indigo-100 rounded-full flex items-center justify-center">
+                                <svg class="w-12 h-12 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 mt-6">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-indigo-600">1000+</div>
+                                    <div class="text-sm text-gray-500">Sản phẩm</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-indigo-600">5000+</div>
+                                    <div class="text-sm text-gray-500">Khách hàng</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-indigo-600">4.8★</div>
+                                    <div class="text-sm text-gray-500">Đánh giá</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="bg-white py-12 border-b">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-indigo-600 mb-2">{{ $featuredProducts->count() }}+</div>
+                    <div class="text-sm text-gray-600">Sản phẩm nổi bật</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-indigo-600 mb-2">{{ $categories->count() }}+</div>
+                    <div class="text-sm text-gray-600">Danh mục</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-indigo-600 mb-2">24/7</div>
+                    <div class="text-sm text-gray-600">Hỗ trợ khách hàng</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-indigo-600 mb-2">100%</div>
+                    <div class="text-sm text-gray-600">Chính hãng</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section - Gọn gàng hơn -->
+    <section id="categories" class="bg-gray-50 py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Danh mục sản phẩm</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Khám phá các danh mục sản phẩm đa dạng của chúng tôi</p>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                @forelse($categories as $category)
+                    <a href="#" class="group bg-white rounded-lg p-6 text-center hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-indigo-200">
+                        <div class="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">
+                            @if($category->name === 'Điện thoại')
+                                📱
+                            @elseif($category->name === 'Laptop')
+                                💻
+                            @elseif($category->name === 'Tablet')
+                                📱
+                            @elseif($category->name === 'Tai nghe')
+                                🎧
+                            @elseif($category->name === 'Phụ kiện')
+                                🔌
+                            @else
+                                📦
+                            @endif
+                        </div>
+                        <h3 class="font-semibold text-gray-900 group-hover:text-indigo-600 transition text-sm">{{ $category->name }}</h3>
+                        <p class="text-xs text-gray-500 mt-1">{{ $category->products->count() }} sản phẩm</p>
+                    </a>
+                @empty
+                    <p class="col-span-full text-center text-gray-500 py-8">Chưa có danh mục nào</p>
+                @endforelse
+        </div>
+    </div>
+    </section>
+
+    <!-- Featured Products Section - Layout đẹp hơn -->
+    <section id="products" class="bg-white py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Sản phẩm nổi bật</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Những sản phẩm được nhiều khách hàng yêu thích và đánh giá cao</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @forelse($featuredProducts as $product)
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
+                        <a href="#" class="block">
+                            <div class="relative h-56 bg-gray-50 overflow-hidden">
+                                @if($product->images->first())
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" 
+                                         alt="{{ $product->name }}"
+                                         loading="lazy"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                        <span class="text-gray-400">Chưa có ảnh</span>
+                                    </div>
+                                @endif
+                                
+                                <div class="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                                    Hot
+                                </div>
+                            </div>
+                            
+                            <div class="p-4">
+                                <div class="mb-1">
+                                    <span class="text-xs text-gray-500">{{ $product->category->name ?? 'Chưa phân loại' }}</span>
+                                </div>
+                                <h3 class="text-base font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition min-h-[3rem]">
+                                    {{ $product->name }}
+                                </h3>
+                                
+                                @if($product->specifications && isset($product->specifications['RAM']))
+                                    <p class="text-xs text-gray-600 mb-2">{{ $product->specifications['RAM'] }}</p>
+                                @endif
+                                
+                                <div class="flex items-center justify-between mb-2">
+                                    <div>
+                                        <p class="text-lg font-bold text-indigo-600">
+                                            {{ number_format($product->price, 0, ',', '.') }} đ
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center text-yellow-400">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                        </svg>
+                                        <span class="ml-1 text-xs text-gray-600">4.8</span>
+                                    </div>
+                                </div>
+                                
+                                @if($product->stock_quantity > 0)
+                                    <p class="text-xs text-green-600 mb-2">✓ Còn hàng</p>
+                                @else
+                                    <p class="text-xs text-red-600 mb-2">✗ Hết hàng</p>
+                                @endif
+                                
+                                <button class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition text-sm font-medium">
+                                    Thêm vào giỏ
+                                </button>
+                            </div>
+                        </a>
+                    </div>
+                @empty
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-500">Chưa có sản phẩm nào</p>
+                    </div>
+                @endforelse
+            </div>
+            
+            <div class="text-center mt-8">
+                <a href="#" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
+                    Xem tất cả sản phẩm
+                    <span>→</span>
                 </a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="bg-gray-100">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <h2 class="text-3xl font-sans text-center text-gray-900 mb-12">Sản phẩm nổi bật</h2>
+    <!-- Why Choose Us Section -->
+    <section class="bg-gray-50 py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Tại sao chọn chúng tôi?</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Những lý do khiến khách hàng tin tưởng và lựa chọn chúng tôi</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Chất lượng đảm bảo</h3>
+                    <p class="text-sm text-gray-600">100% sản phẩm chính hãng, có bảo hành</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Giá cả hợp lý</h3>
+                    <p class="text-sm text-gray-600">Giá tốt nhất thị trường, nhiều ưu đãi</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Giao hàng nhanh</h3>
+                    <p class="text-sm text-gray-600">Miễn phí vận chuyển cho đơn hàng lớn</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 text-center shadow-sm hover:shadow-md transition">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-indigo-100 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Bảo hành uy tín</h3>
+                    <p class="text-sm text-gray-600">Chế độ bảo hành tốt, hỗ trợ tận tâm</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Products Section -->
+    <section class="bg-white py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Sản phẩm mới nhất</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Cập nhật những sản phẩm công nghệ mới nhất trên thị trường</p>
+            </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="h-48 bg-gray-200 flex items-center justify-center">
-                        <span class="text-gray-500">(Hình ảnh sản phẩm)</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900">iPhone 17 Pro Max</h3>
-                        <p class="mt-2 text-gray-500 text-sm">Điện thoại</p>
-                        <p class="mt-4 text-xl font-bold text-indigo-600">35.000.000 đ</p>
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @forelse($newProducts->take(8) as $product)
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
+                        <a href="#" class="block">
+                            <div class="relative h-56 bg-gray-50 overflow-hidden">
+                                @if($product->images->first())
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" 
+                                         alt="{{ $product->name }}"
+                                         loading="lazy"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                        <span class="text-gray-400">Chưa có ảnh</span>
+                                    </div>
+                                @endif
+                                
+                                <div class="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                                    Mới
+                                </div>
+                            </div>
                 
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="h-48 bg-gray-200 flex items-center justify-center">
-                        <span class="text-gray-500">(Hình ảnh sản phẩm)</span>
+                            <div class="p-4">
+                                <span class="text-xs text-gray-500">{{ $product->category->name ?? 'Chưa phân loại' }}</span>
+                                <h3 class="text-base font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition min-h-[3rem]">
+                                    {{ $product->name }}
+                                </h3>
+                                <p class="text-lg font-bold text-indigo-600 mb-3">
+                                    {{ number_format($product->price, 0, ',', '.') }} đ
+                                </p>
+                                <button class="w-full bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-indigo-600 hover:text-white transition text-sm font-medium">
+                                    Xem chi tiết
+                                </button>
+                            </div>
+                        </a>
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900">MacBook Pro M4</h3>
-                        <p class="mt-2 text-gray-500 text-sm">Laptop</p>
-                        <p class="mt-4 text-xl font-bold text-indigo-600">55.000.000 đ</p>
+                @empty
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-500">Chưa có sản phẩm mới</p>
                     </div>
+                @endforelse
                 </div>
 
+            <div class="text-center mt-8">
+                <a href="#" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
+                    Xem tất cả sản phẩm mới
+                    <span>→</span>
+                </a>
                 </div>
         </div>
+    </section>
+
+    <!-- Reviews Section - Đơn giản hơn -->
+    <section class="bg-gray-50 py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">Đánh giá khách hàng</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Những phản hồi và đánh giá từ khách hàng đã sử dụng sản phẩm</p>
     </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @forelse($reviews->take(6) as $review)
+                    <div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition border border-gray-100">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold">
+                                {{ substr($review->user->name ?? 'U', 0, 1) }}
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">{{ $review->user->name ?? 'Khách hàng' }}</h4>
+                                <div class="flex items-center gap-1">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <svg class="w-3 h-3 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                        </svg>
+                                    @endfor
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-3 line-clamp-3">{{ $review->comment }}</p>
+                        <p class="text-xs text-gray-500">Sản phẩm: {{ $review->product->name ?? 'N/A' }}</p>
+                    </div>
+                @empty
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-gray-500">Chưa có đánh giá nào</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section - Đơn giản hơn -->
+    <section class="bg-indigo-600 text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="text-2xl font-bold mb-3">Đăng ký nhận tin</h2>
+                <p class="text-indigo-100 mb-6">Nhận thông tin về sản phẩm mới và các chương trình khuyến mãi đặc biệt</p>
+                <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                    <input 
+                        type="email" 
+                        placeholder="Nhập email của bạn..." 
+                        class="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
+                        required
+                    >
+                    <button 
+                        type="submit" 
+                        class="bg-white text-indigo-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition whitespace-nowrap"
+                    >
+                        Đăng ký
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
 </x-main-layout>

@@ -61,26 +61,68 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 
-# Lệnh cần chạy trước khi chạy dự án(Chỉ cân chạy 1 lần)
+# ⚙️ CÀI ĐẶT BAN ĐẦU (Chỉ chạy 1 lần)
+
+## 1. Cài đặt dependencies
+```powershell
 composer install
+npm install
+```
+
+## 2. Setup database
+```powershell
+# Set PATH cho PHP 8.2 (quan trọng!)
+$env:PATH = "C:\xampp82\php;$env:PATH"
 
 php artisan migrate
-
 php artisan db:seed
+```
 
-
-
-
-# Bật 1 terminal riêng để chạy 
-npm install(Chỉ chạy 1 lần)
-
-npm run dev
-
-# Tải ảnh mẫu
+## 3. Tải ảnh mẫu
+```powershell
 php artisan storage:link
-
 php artisan storage:seed-images
-# Mở terminal khác chạy lệnh
+```
 
+---
+
+# 🚀 CHẠY DỰ ÁN (Mỗi lần mở lại)
+
+## Bước 1: Bật XAMPP
+- Mở XAMPP Control Panel
+- Start **Apache** và **MySQL**
+
+## Bước 2: Chạy Frontend (Terminal 1)
+```powershell
+cd C:\Users\Admin\Downloads\laravel_DANT-main
+npm run dev
+```
+**Giữ terminal này chạy**
+
+## Bước 3: Chạy Laravel Server (Terminal 2)
+```powershell
+cd C:\Users\Admin\Downloads\laravel_DANT-main
+$env:PATH = "C:\xampp82\php;$env:PATH"
 php artisan serve
+```
+**Giữ terminal này chạy**
+
+## Bước 4: Truy cập website
+🌐 **http://127.0.0.1:8000**
+
+---
+
+# ⚠️ LƯU Ý QUAN TRỌNG
+
+- **PHP 8.2+ bắt buộc**: Luôn set PATH trước khi chạy `php artisan`:
+  ```powershell
+  $env:PATH = "C:\xampp82\php;$env:PATH"
+  ```
+
+- **Nếu gặp lỗi PowerShell execution policy** khi chạy `npm run dev`:
+  ```powershell
+  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+  ```
+
+- **Giữ cả 2 terminal chạy** (`npm run dev` và `php artisan serve`)
 
