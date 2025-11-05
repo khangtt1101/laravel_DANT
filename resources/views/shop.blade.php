@@ -16,10 +16,6 @@
                 @if($products->count() > 0)
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
                         @foreach($products as $product)
-                            @php
-                                $inCart = session('cart', []) && array_key_exists($product->id, session('cart', []));
-                            @endphp
-
                             <div class="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:shadow-xl group">
                                 <a href="{{ route('products.show', ['category' => $product->category->slug ?? $product->category->id, 'product' => $product->slug ?? $product->id]) }}">
                                     <div class="h-48 bg-gray-200 flex items-center justify-center overflow-hidden">

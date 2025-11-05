@@ -13,6 +13,12 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased text-gray-900 bg-white">
+    @php
+        // Lấy chỉ các ID sản phẩm từ session cart
+        $cartItemIds = array_keys(session('cart', []));
+    @endphp
+    {{-- Khởi tạo (init) Alpine store với dữ liệu từ PHP --}}
+    <div x-data x-init="$store.cart.init({{ json_encode($cartItemIds) }})"></div>
     <div x-data="{ mobileMenuOpen: false }" class="min-h-screen bg-gray-100">
 
         @include('layouts.partials.header')
