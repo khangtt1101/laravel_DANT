@@ -89,3 +89,72 @@ img[loading="lazy"] {
 img[loading="lazy"].loaded {
     opacity: 1;
 }
+
+/* Floating Animation - Lắc lư nhẹ nhàng */
+@keyframes gentleFloat {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-8px) rotate(1deg);
+    }
+    50% {
+        transform: translateY(-4px) rotate(0deg);
+    }
+    75% {
+        transform: translateY(-8px) rotate(-1deg);
+    }
+}
+
+@keyframes gentleBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes gentleShake {
+    0%, 100% {
+        transform: translateX(0) rotate(0deg);
+    }
+    25% {
+        transform: translateX(-2px) rotate(-1deg);
+    }
+    50% {
+        transform: translateX(2px) rotate(1deg);
+    }
+    75% {
+        transform: translateX(-2px) rotate(-0.5deg);
+    }
+}
+
+/* Apply animations to floating buttons */
+.animate-float-gentle {
+    animation: gentleFloat 3s ease-in-out infinite;
+}
+
+.animate-bounce-gentle {
+    animation: gentleBounce 2s ease-in-out infinite;
+}
+
+.animate-shake-gentle {
+    animation: gentleShake 2.5s ease-in-out infinite;
+}
+
+/* Delayed animations for different buttons */
+.animate-float-delay-1 {
+    animation: gentleFloat 3s ease-in-out infinite;
+    animation-delay: 0.5s;
+}
+
+.animate-float-delay-2 {
+    animation: gentleFloat 3s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+.animate-float-delay-3 {
+    animation: gentleFloat 3s ease-in-out infinite;
+    animation-delay: 1.5s;
+}

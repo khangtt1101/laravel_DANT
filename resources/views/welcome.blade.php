@@ -9,7 +9,7 @@
                         <span class="text-indigo-600">Điện tử</span>
                         <br>
                         Chất lượng cao
-                    </h1>
+            </h1>
                     <p class="text-lg md:text-xl mb-8 text-gray-600 leading-relaxed">
                         Chuyên cung cấp các sản phẩm công nghệ chính hãng với giá cả hợp lý và dịch vụ uy tín nhất.
                     </p>
@@ -273,8 +273,8 @@
                                 
                                 <div class="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded text-xs font-semibold">
                                     Mới
-                                </div>
-                            </div>
+                    </div>
+                </div>
                 
                             <div class="p-4">
                                 <span class="text-xs text-gray-500">{{ $product->category->name ?? 'Chưa phân loại' }}</span>
@@ -367,4 +367,126 @@
             </div>
         </div>
     </section>
+
+    <!-- Floating Action Buttons - Nhẹ nhàng, chuyên nghiệp -->
+    <div class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 flex flex-col gap-3">
+        <!-- Scroll to Top Button -->
+        <button 
+            id="scrollToTop" 
+            class="hidden bg-indigo-600 text-white p-3 md:p-3.5 rounded-full shadow-lg hover:bg-indigo-700 transition-all duration-300 hover:shadow-xl hover:scale-110 active:scale-95 group animate-float-delay-1"
+            aria-label="Lên đầu trang"
+            title="Lên đầu trang"
+        >
+            <svg class="w-5 h-5 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+            </svg>
+        </button>
+
+        <!-- Contact/Phone Button -->
+        <a 
+            id="contactButton"
+            href="tel:19001234"
+            class="bg-green-600 text-white p-3 md:p-3.5 rounded-full shadow-lg hover:bg-green-700 transition-all duration-300 hover:shadow-xl hover:scale-110 active:scale-95 group animate-float-gentle"
+            aria-label="Gọi điện liên hệ"
+            title="Liên hệ: 1900 1234"
+        >
+            <svg class="w-5 h-5 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+            </svg>
+        </a>
+
+        <!-- Chat/Support Button -->
+        <button 
+            id="chatButton"
+            class="bg-indigo-500 text-white p-3 md:p-3.5 rounded-full shadow-lg hover:bg-indigo-600 transition-all duration-300 hover:shadow-xl hover:scale-110 active:scale-95 group animate-float-delay-2"
+            aria-label="Hỗ trợ trực tuyến"
+            title="Hỗ trợ trực tuyến"
+            onclick="window.location.href='#contact'"
+        >
+            <svg class="w-5 h-5 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Floating Notification Banner - Nhẹ nhàng, có thể đóng -->
+    <div id="appBanner" class="fixed bottom-24 left-4 md:left-6 z-40 hidden md:block animate-fade-in animate-bounce-gentle">
+        <div class="bg-white rounded-lg shadow-xl p-4 max-w-xs border border-gray-200 hover:shadow-2xl transition-shadow">
+            <div class="flex items-start gap-3">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-semibold text-gray-900 text-sm mb-1">Tải ứng dụng</h3>
+                    <p class="text-xs text-gray-600 mb-2">Nhận ưu đãi đặc biệt khi mua hàng trên app</p>
+                    <a href="#" class="text-xs text-indigo-600 hover:text-indigo-700 font-medium inline-flex items-center gap-1">
+                        Tìm hiểu thêm 
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+                <button 
+                    onclick="document.getElementById('appBanner').style.display='none'"
+                    class="text-gray-400 hover:text-gray-600 transition p-1"
+                    aria-label="Đóng"
+                    title="Đóng"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Floating Buttons -->
+    <script>
+        // Scroll to Top Button
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.remove('hidden');
+                scrollToTopBtn.classList.add('flex');
+            } else {
+                scrollToTopBtn.classList.add('hidden');
+                scrollToTopBtn.classList.remove('flex');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Pause animation on hover for better UX
+        const floatingButtons = document.querySelectorAll('#scrollToTop, #contactButton, #chatButton');
+        floatingButtons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.animationPlayState = 'paused';
+            });
+            button.addEventListener('mouseleave', function() {
+                this.style.animationPlayState = 'running';
+            });
+        });
+
+        // Auto-hide app banner after 10 seconds (optional)
+        setTimeout(() => {
+            const banner = document.getElementById('appBanner');
+            if (banner) {
+                banner.style.opacity = '0';
+                banner.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    banner.style.display = 'none';
+                }, 500);
+            }
+        }, 10000); // Hide after 10 seconds
+    </script>
 </x-main-layout>
