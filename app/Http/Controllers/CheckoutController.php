@@ -61,7 +61,7 @@ class CheckoutController extends Controller
                 'total_amount' => $totalPrice,
                 'status' => 'pending', // Trạng thái mặc định
                 'shipping_address' => sprintf(
-                    "%s, %s, %s. (SĐT: %s)",
+                    "%s, %s, %s.",
                     $address->address_line,
                     $address->district,
                     $address->city
