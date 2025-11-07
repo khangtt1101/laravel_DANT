@@ -1,7 +1,8 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
-
+import 'lazysizes'; 
+import 'lazysizes/plugins/parent-fit/ls.parent-fit';
 
 // ===== BẮT ĐẦU THÊM CODE MỚI =====
 

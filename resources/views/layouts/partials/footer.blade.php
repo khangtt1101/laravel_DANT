@@ -5,7 +5,7 @@
             <div>
                 <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
                     <span>📱</span>
-                    DATN Store
+                    PolyTech Store
                 </h3>
                 <p class="text-sm text-gray-400 mb-4">
                     Chuyên cung cấp các thiết bị điện tử chính hãng, uy tín, chất lượng hàng đầu. 

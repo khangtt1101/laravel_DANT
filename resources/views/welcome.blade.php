@@ -482,9 +482,10 @@
                                             class="group bg-white rounded-lg p-3 hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-indigo-300">
                                             <div class="relative h-32 mb-2 bg-gray-50 rounded overflow-hidden">
                                                 @if($product->images->first())
-                                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}"
-                                                        alt="{{ $product->name }}" loading="lazy"
-                                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                                    <img data-src="{{ Storage::url($product->images->first()->image_url) }}"
+                                                        src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                                                        alt="{{ $product->name }}" 
+                                                        class="lazyload w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                                 @else
                                                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
                                                         <span class="text-gray-400 text-xs">Chưa có ảnh</span>
@@ -526,54 +527,82 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($bestSellers->take(8) as $product)
+                    
+                    
+
                     <div
                         class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-                        <a href="#" class="block">
-                            <div class="relative h-56 bg-gray-50 overflow-hidden">
-                                @if($product->images->first())
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}"
-                                        alt="{{ $product->name }}" loading="lazy"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center bg-gray-100">
-                                        <span class="text-gray-400">Chưa có ảnh</span>
-                                    </div>
-                                @endif
 
-                                <div
-                                    class="absolute top-3 left-3 bg-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                                    Bán chạy
-                                </div>
-                            </div>
+                        {{-- 1. Chuẩn bị link an toàn --}}
+                        @php
+                            $productUrl = '#'; // Link dự phòng
+                            if ($product->category && $product->category->slug) {
+                                $productUrl = route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]);
+                            }
+                        @endphp
 
-                            <div class="p-4">
-                                <span
-                                    class="text-xs text-gray-500">{{ $product->category->name ?? 'Chưa phân loại' }}</span>
-                                <h3
-                                    class="text-base font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition min-h-[3rem]">
-                                    {{ $product->name }}
-                                </h3>
+                        {{-- 2. Thẻ <a> bọc toàn bộ card (GIỮ NGUYÊN NHƯ CODE GỐC CỦA BẠN) --}}
+                            <a href="{{ $productUrl }}" class="block">
+                                <div class="relative h-56 bg-gray-50 overflow-hidden">
+                                    @if($product->images->first())
+                                        <img src="{{ Storage::url($product->images->first()->image_url) }}" {{-- <-- Sửa: Dùng
+                                            Storage::url() --}} alt="{{ $product->name }}"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                            <span class="text-gray-400">Chưa có ảnh</span>
+                                        </div>
+                                    @endif
 
-                                <div class="flex items-center justify-between mb-2">
-                                    <p class="text-lg font-bold text-indigo-600">
-                                        {{ number_format($product->price, 0, ',', '.') }} đ
-                                    </p>
-                                    <div class="flex items-center text-yellow-400">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <span class="ml-1 text-xs text-gray-600">4.9</span>
+                                    <div
+                                        class="absolute top-3 left-3 bg-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                                        Bán chạy
                                     </div>
                                 </div>
 
-                                <button
-                                    class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition text-sm font-medium">
-                                    Thêm vào giỏ
-                                </button>
-                            </div>
-                        </a>
+                                <div class="p-4">
+                                    <span
+                                        class="text-xs text-gray-500">{{ $product->category->name ?? 'Chưa phân loại' }}</span>
+                                    <h3
+                                        class="text-base font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition min-h-[3rem]">
+                                        {{ $product->name }}
+                                    </h3>
+
+                                    <div class="flex items-center justify-between mb-2">
+                                        <p class="text-lg font-bold text-indigo-600">
+                                            {{ number_format($product->price, 0, ',', '.') }} đ
+                                        </p>
+                                        <div class="flex items-center text-yellow-400">
+                                            <svg class="w-4 h-4" ...>...</svg>
+                                            <span class="ml-1 text-xs text-gray-600">4.9</span>
+                                        </div>
+                                    </div>
+
+                                    {{-- 3. NÚT BẤM "THÔNG MINH" SỬ DỤNG $store --}}
+                                    <div class="relative h-9"> {{-- Cung cấp chiều cao cố định cho 2 nút --}}
+
+                                        <button type="button" {{-- Chỉ hiển thị khi CHƯA có trong $store --}}
+                                            x-show="!$store.cart.isInCart({{ $product->id }})" {{-- SỬA LỖI QUAN TRỌNG: -
+                                            event.preventDefault(): Ngăn thẻ <a> cha (link) chạy.
+                                            - event.stopPropagation(): Ngăn sự kiện click "nổi bọt" lên thẻ <a>.
+                                                --}}
+                                                @click="event.preventDefault(); event.stopPropagation();
+                                                $store.cart.addToCart({{ $product->id }})"
+                                                x-transition
+                                                class="absolute inset-0 w-full bg-indigo-600 text-white py-2 rounded-lg
+                                                hover:bg-indigo-700 transition text-sm font-medium">
+                                                Thêm vào giỏ
+                                        </button>
+
+                                        <a href="{{ route('cart.index') }}" {{-- Chỉ hiển thị khi ĐÃ CÓ trong $store --}}
+                                            x-show="$store.cart.isInCart({{ $product->id }})" x-transition
+                                            style="display: none;"
+                                            class="absolute inset-0 w-full flex items-center justify-center bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition text-sm font-medium">
+                                            ✓ Đã thêm (Xem giỏ)
+                                        </a>
+                                    </div>
+                                </div>
+                            </a>
                     </div>
                 @empty
                     <div class="col-span-full text-center py-12">
@@ -644,9 +673,11 @@
                             class="block">
                             <div class="relative h-40 bg-gray-50 overflow-hidden">
                                 @if($product->images->first())
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}"
-                                        alt="{{ $product->name }}" loading="lazy"
-                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                    <img
+                                        data-src="{{ Storage::url($product->images->first()->image_url) }}"
+                                        src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                                        alt="{{ $product->name }}" 
+                                        class="lazyload w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
                                         <span class="text-gray-400 text-xs">No image</span>
@@ -726,9 +757,11 @@
                             class="block">
                             <div class="relative h-64 bg-gray-50 overflow-hidden">
                                 @if($product->images->first())
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}"
-                                        alt="{{ $product->name }}" loading="lazy"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <img
+                                        data-src="{{ Storage::url($product->images->first()->image_url) }}"
+                                        src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                                        alt="{{ $product->name }}" 
+                                        class="lazyload w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
                                         <span class="text-gray-400">Chưa có ảnh</span>
@@ -798,11 +831,13 @@
                             class="group text-center p-4 rounded-lg hover:bg-gray-50 transition-all duration-300 border border-gray-100 hover:border-indigo-200">
                             <div class="relative h-32 mb-3 bg-gray-50 rounded overflow-hidden mx-auto">
                                 @if($product->images->first())
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}"
-                                        alt="{{ $product->name }}" loading="lazy"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    <img 
+                                        data-src="{{ Storage::url($product->images->first()->image_url) }}"
+                                        src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                                        alt="{{ $product->name }}" 
+                                        class="lazyload w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 @else
-                                    <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                    <div class="lazyload w-full h-full flex items-center justify-center bg-gray-100">
                                         <span class="text-gray-400 text-xs">Chưa có ảnh</span>
                                     </div>
                                 @endif
@@ -1000,9 +1035,11 @@
                             class="block">
                             <div class="relative h-56 bg-gray-50 overflow-hidden">
                                 @if($product->images->first())
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}"
-                                        alt="{{ $product->name }}" loading="lazy"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <img 
+                                        data-src="{{ Storage::url($product->images->first()->image_url) }}"
+                                        src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                                        alt="{{ $product->name }}" 
+                                        class="lazyload w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
                                         <span class="text-gray-400">Chưa có ảnh</span>
@@ -1384,7 +1421,7 @@
                                 <!-- Fallback: Nếu không có YouTube, dùng ảnh với animation -->
                                 @if($product->images->first())
                                     <div class="absolute inset-0 hidden fallback-video">
-                                        <img src="{{ asset('storage/' . $product->images->first()->image_url) }}"
+                                        <img data-src="{{ Storage::url($product->images->first()->image_url) }}"
                                             alt="{{ $product->name }}" class="w-full h-full object-cover animate-pulse">
                                     </div>
                                 @endif
@@ -1417,9 +1454,9 @@
                         <div class="px-4 pb-4 pt-0 border-t border-gray-100">
                             <div class="flex items-center gap-3 mt-3">
                                 @if($product->images->first())
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}"
-                                        alt="{{ $product->name }}" class="w-16 h-16 object-cover rounded border border-gray-200"
-                                        onerror="this.onerror=null; this.src='https://via.placeholder.com/64x64/f3f4f6/9ca3af?text=No+Image';">
+                                    <img data-src="{{ Storage::url($product->images->first()->image_url) }}"
+                                        alt="{{ $product->name }}" class="lazyload w-16 h-16 object-cover rounded border border-gray-200"
+                                        src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==">
                                 @else
                                     <div
                                         class="w-16 h-16 bg-gray-200 rounded border border-gray-200 flex items-center justify-center flex-shrink-0">
@@ -2165,7 +2202,7 @@
                     <div class="relative h-32 mb-3 bg-gray-50 rounded overflow-hidden mx-auto">
                         <img src="${item.image}" alt="${item.name}" 
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                             onerror="this.src='{{ asset('images/no-placehoder.jpg') }}'">
+                             onerror="this.src='{{ asset('images/no-placeholder.jpg') }}'">
                     </div>
                     <h4 class="text-sm font-semibold text-gray-900 group-hover:text-indigo-600 transition line-clamp-2 mb-1">
                         ${item.name}

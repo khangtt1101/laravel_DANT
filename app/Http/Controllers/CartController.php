@@ -74,38 +74,53 @@ class CartController extends Controller
 
         // Tính lại tổng số lượng
         $newCartCount = 0;
-        foreach($cart as $id => $details) {
+        foreach ($cart as $id => $details) {
             $newCartCount += $details['quantity'];
         }
-        
+
         // Trả về JSON thành công
         return response()->json([
             'success' => true,
             'message' => 'Đã thêm sản phẩm!',
-            'cartCount' => $newCartCount 
+            'cartCount' => $newCartCount
         ]);
     }
 
-    /**
-     * Cập nhật số lượng sản phẩm trong giỏ hàng.
-     */
     public function update(Request $request, $productId)
     {
-        $request->validate(['quantity' => 'required|integer|min:1']);
+        // Dùng Validator thủ công
+        $validator = Validator::make($request->all(), [
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => 'Số lượng không hợp lệ.'], 422);
+        }
 
         $cart = session()->get('cart', []);
 
         if (isset($cart[$productId])) {
             $cart[$productId]['quantity'] = $request->quantity;
             session()->put('cart', $cart);
-            return back()->with('success', 'Cập nhật giỏ hàng thành công!');
+
+            // Tính lại tổng số lượng
+            $newCartCount = 0;
+            foreach ($cart as $id => $details) {
+                $newCartCount += $details['quantity'];
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cập nhật giỏ hàng thành công!',
+                'cartCount' => $newCartCount
+            ]);
         }
 
-        return back()->with('error', 'Sản phẩm không có trong giỏ!');
+        return response()->json(['success' => false, 'message' => 'Sản phẩm không có trong giỏ!'], 404);
     }
 
     /**
-     * Xóa sản phẩm khỏi giỏ hàng.
+     * Xóa sản phẩm khỏi giỏ hàng (HỖ TRỢ AJAX).
      */
     public function remove($productId)
     {
@@ -114,9 +129,62 @@ class CartController extends Controller
         if (isset($cart[$productId])) {
             unset($cart[$productId]); // Xóa sản phẩm
             session()->put('cart', $cart);
-            return back()->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng!');
+
+            // Tính lại tổng số lượng
+            $newCartCount = 0;
+            foreach ($cart as $id => $details) {
+                $newCartCount += $details['quantity'];
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã xóa sản phẩm!',
+                'cartCount' => $newCartCount
+            ]);
         }
 
-        return back()->with('error', 'Sản phẩm không có trong giỏ!');
+        return response()->json(['success' => false, 'message' => 'Sản phẩm không có trong giỏ!'], 404);
+    }
+    /**
+     * Xử lý và chuyển hướng đến trang thanh toán.
+     */
+    public function checkout(Request $request)
+    {
+        // 1. Validate dữ liệu gửi lên (mảng các ID sản phẩm được chọn)
+        $validated = $request->validate([
+            'selected_products' => 'required|array',
+            'selected_products.*' => 'integer|exists:products,id' // Đảm bảo mọi ID đều tồn tại
+        ]);
+
+        $cart = session()->get('cart', []);
+        $selectedProductIds = $validated['selected_products'];
+        $checkoutItems = [];
+        $totalPrice = 0;
+
+        // 2. Lọc giỏ hàng, chỉ giữ lại những sản phẩm được chọn
+        foreach ($selectedProductIds as $id) {
+            if (isset($cart[$id])) {
+                $checkoutItems[$id] = $cart[$id];
+                $totalPrice += $cart[$id]['price'] * $cart[$id]['quantity'];
+            }
+        }
+
+        // 3. Nếu không có sản phẩm nào hợp lệ, quay lại
+        if (count($checkoutItems) === 0) {
+            return back()->with('error', 'Vui lòng chọn ít nhất một sản phẩm để thanh toán.');
+        }
+
+        // 4. Lưu giỏ hàng SẼ THANH TOÁN vào một session riêng
+        session()->put('checkout_cart', $checkoutItems);
+        session()->put('checkout_total', $totalPrice);
+
+        foreach ($selectedProductIds as $id) {
+            unset($cart[$id]);
+        }
+        session()->put('cart', $cart);
+        
+        return redirect()->route('checkout.index');
+
+        
     }
 }
