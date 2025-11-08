@@ -288,9 +288,9 @@
                         <a href="{{ $product->category && $product->category->slug ? route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]) : '#' }}" class="block">
                             <div class="relative h-56 bg-gray-50 overflow-hidden product-image-container">
                                 @if($product->images->first())
-                                    <img src="{{ Storage::url($product->images->first()->image_url) }}" 
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
                                          alt="{{ $product->name }}"
-                                         
+                                         loading="lazy"
                                          class="w-full h-full object-cover product-image-zoom">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
@@ -302,14 +302,14 @@
                                     Hot
                                 </div>
                                 
-                                <!-- Social Proof Badge -->
-                                <div class="absolute top-3 left-16 bg-blue-500 text-white px-2 py-1 rounded text-xs font-semibold z-10 social-proof-badge">
+                                <!-- Social Proof Badge - Tracking thật -->
+                                <div class="absolute top-3 left-16 bg-blue-500 text-white px-2 py-1 rounded text-xs font-semibold z-10 social-proof-badge" data-product-id="{{ $product->id }}">
                                     <span class="inline-flex items-center gap-1">
                                         <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                         </svg>
-                                        {{ rand(5, 25) }} đang xem
+                                        <span class="viewing-count-{{ $product->id }}">0</span> đang xem
                                     </span>
                                 </div>
                                 
@@ -499,47 +499,50 @@
     </section>
 
     <!-- Flash Sale Section - Nổi bật với timer riêng -->
-    <section class="bg-gradient-to-br from-red-600 via-pink-600 to-orange-600 py-16 relative overflow-hidden">
+    <section class="bg-gradient-to-br from-red-600 via-pink-600 to-orange-600 py-8 relative overflow-hidden" id="flash-sale-section">
         <!-- Background Pattern -->
         <div class="absolute inset-0 opacity-10">
             <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%221%22%3E%3Cpath d=%22M36 34v-4h-4v-4h-4v4h-4v4h4v4h4v-4h4zm0-30V0h-4v4h-4v4h4v4h4V8h4V4h4V0h-4z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
         </div>
         
+        <!-- Floating Icons Container - Chỉ trong khu vực Flash Sale -->
+        <div id="floating-icons-container" class="absolute inset-0 pointer-events-none z-0"></div>
+        
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-12">
-                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
-                    <svg class="w-5 h-5 text-yellow-300 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full mb-3">
+                    <svg class="w-4 h-4 text-yellow-300 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                     </svg>
-                    <span class="text-white font-bold text-sm">FLASH SALE</span>
+                    <span class="text-white font-bold text-xs">FLASH SALE</span>
                 </div>
-                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">Siêu khuyến mãi</h2>
-                <p class="text-white/90 text-lg mb-6">Giảm giá cực sốc - Chỉ còn hôm nay!</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-2 drop-shadow-lg">Siêu khuyến mãi</h2>
+                <p class="text-white/90 text-base mb-4">Giảm giá cực sốc - Chỉ còn hôm nay!</p>
                 
                 <!-- Flash Sale Countdown -->
-                <div class="flex items-center justify-center gap-3 mb-8">
-                    <div class="bg-white/20 backdrop-blur-md rounded-xl px-6 py-4 text-center min-w-[80px] border border-white/30">
-                        <div class="text-3xl font-bold text-white" id="flash-hours">00</div>
-                        <div class="text-xs text-white/80 mt-1">Giờ</div>
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <div class="bg-white/20 backdrop-blur-md rounded-lg px-4 py-2.5 text-center min-w-[70px] border border-white/30">
+                        <div class="text-2xl font-bold text-white" id="flash-hours">00</div>
+                        <div class="text-xs text-white/80 mt-0.5">Giờ</div>
                     </div>
-                    <span class="text-white text-2xl font-bold">:</span>
-                    <div class="bg-white/20 backdrop-blur-md rounded-xl px-6 py-4 text-center min-w-[80px] border border-white/30">
-                        <div class="text-3xl font-bold text-white" id="flash-minutes">00</div>
-                        <div class="text-xs text-white/80 mt-1">Phút</div>
+                    <span class="text-white text-xl font-bold">:</span>
+                    <div class="bg-white/20 backdrop-blur-md rounded-lg px-4 py-2.5 text-center min-w-[70px] border border-white/30">
+                        <div class="text-2xl font-bold text-white" id="flash-minutes">00</div>
+                        <div class="text-xs text-white/80 mt-0.5">Phút</div>
                     </div>
-                    <span class="text-white text-2xl font-bold">:</span>
-                    <div class="bg-white/20 backdrop-blur-md rounded-xl px-6 py-4 text-center min-w-[80px] border border-white/30">
-                        <div class="text-3xl font-bold text-white" id="flash-seconds">00</div>
-                        <div class="text-xs text-white/80 mt-1">Giây</div>
+                    <span class="text-white text-xl font-bold">:</span>
+                    <div class="bg-white/20 backdrop-blur-md rounded-lg px-4 py-2.5 text-center min-w-[70px] border border-white/30">
+                        <div class="text-2xl font-bold text-white" id="flash-seconds">00</div>
+                        <div class="text-xs text-white/80 mt-0.5">Giây</div>
                     </div>
                 </div>
             </div>
             
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                @foreach($hotDeals->take(6) as $index => $product)
-                    <div class="bg-white rounded-xl shadow-2xl overflow-hidden hover:scale-105 transition-transform duration-300 group">
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3">
+                @foreach($hotDeals->take(4) as $index => $product)
+                    <div class="bg-white rounded-lg shadow-xl overflow-hidden hover:scale-105 transition-transform duration-300 group">
                         <a href="{{ $product->category && $product->category->slug ? route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]) : '#' }}" class="block">
-                            <div class="relative h-40 bg-gray-50 overflow-hidden">
+                            <div class="relative h-32 bg-gray-50 overflow-hidden">
                                 @if($product->images->first())
                                     <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
                                          alt="{{ $product->name }}"
@@ -550,14 +553,14 @@
                                         <span class="text-gray-400 text-xs">No image</span>
                                     </div>
                                 @endif
-                                <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold">
+                                <div class="absolute top-1.5 right-1.5 bg-red-600 text-white px-1.5 py-0.5 rounded-full text-xs font-bold">
                                     -{{ rand(20, 50) }}%
                                 </div>
                             </div>
-                            <div class="p-3">
-                                <h4 class="text-xs font-semibold text-gray-900 line-clamp-2 mb-2 min-h-[2.5rem]">{{ $product->name }}</h4>
-                                <div class="flex items-center gap-2">
-                                    <p class="text-sm font-bold text-red-600">
+                            <div class="p-2.5">
+                                <h4 class="text-xs font-semibold text-gray-900 line-clamp-2 mb-1.5 min-h-[2rem]">{{ $product->name }}</h4>
+                                <div class="flex items-center gap-1.5">
+                                    <p class="text-xs font-bold text-red-600">
                                         {{ number_format($product->price * 0.7, 0, ',', '.') }}đ
                                     </p>
                                     <p class="text-xs text-gray-400 line-through">
@@ -570,10 +573,10 @@
                 @endforeach
             </div>
             
-            <div class="text-center mt-8">
-                <a href="#hot-deals" class="inline-flex items-center gap-2 bg-white text-red-600 font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-gray-100 transition hover:scale-105">
+            <div class="text-center mt-4">
+                <a href="#hot-deals" class="inline-flex items-center gap-2 bg-white text-red-600 font-semibold px-6 py-2 rounded-lg shadow-lg hover:bg-gray-100 transition hover:scale-105 text-sm">
                     Xem tất cả deal sốc
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                     </svg>
                 </a>
@@ -1029,7 +1032,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Blog Post 1 -->
                 <article class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-                    <a href="#" class="block">
+                    <a href="{{ route('blog.show', 'top-10-san-pham-cong-nghe-hot-nhat-nam-2024') }}" class="block">
                         <div class="relative h-48 bg-gradient-to-br from-indigo-400 to-purple-500 overflow-hidden">
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <svg class="w-16 h-16 text-white/30" fill="currentColor" viewBox="0 0 20 20">
@@ -1065,7 +1068,7 @@
 
                 <!-- Blog Post 2 -->
                 <article class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-                    <a href="#" class="block">
+                    <a href="{{ route('blog.show', 'cach-chon-mua-dien-thoai-phu-hop-voi-nhu-cau') }}" class="block">
                         <div class="relative h-48 bg-gradient-to-br from-green-400 to-blue-500 overflow-hidden">
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <svg class="w-16 h-16 text-white/30" fill="currentColor" viewBox="0 0 20 20">
@@ -1102,7 +1105,7 @@
 
                 <!-- Blog Post 3 -->
                 <article class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-                    <a href="#" class="block">
+                    <a href="{{ route('blog.show', 'review-chi-tiet-laptop-moi-nhat-2024') }}" class="block">
                         <div class="relative h-48 bg-gradient-to-br from-orange-400 to-red-500 overflow-hidden">
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <svg class="w-16 h-16 text-white/30" fill="currentColor" viewBox="0 0 20 20">
@@ -1138,7 +1141,7 @@
     </div>
 
             <div class="text-center mt-8">
-                <a href="#" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
+                <a href="{{ route('blog.index') }}" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
                     Xem tất cả tin tức
                     <span>→</span>
                 </a>
@@ -1217,7 +1220,12 @@
                                     <img src="{{ asset('storage/' . $product->images->first()->image_url) }}" 
                                          alt="{{ $product->name }}"
                                          class="w-16 h-16 object-cover rounded border border-gray-200"
-                                         onerror="this.onerror=null; this.src='https://via.placeholder.com/64x64/f3f4f6/9ca3af?text=No+Image';">
+                                         onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-16 h-16 bg-gray-200 rounded border border-gray-200 flex items-center justify-center flex-shrink-0" style="display:none;">
+                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
                                 @else
                                     <div class="w-16 h-16 bg-gray-200 rounded border border-gray-200 flex items-center justify-center flex-shrink-0">
                                         <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1679,58 +1687,132 @@
         // Auto slide every 5 seconds
         setInterval(nextSlide, 5000);
 
-        // Countdown Timer
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const endTime = now + (24 * 60 * 60 * 1000); // 24 hours from now
-            const distance = endTime - now;
-
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                document.getElementById('countdown').innerHTML = '<div class="text-red-600 font-bold">Đã kết thúc</div>';
+        // Hot Deals Countdown Timer - Chạy đến cuối ngày hôm nay (23:59:59)
+        (function() {
+            // Tính thời gian kết thúc: cuối ngày hôm nay (23:59:59)
+            const now = new Date();
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999); // 23:59:59.999
+            
+            // Nếu đã qua 23:59:59, set cho ngày mai
+            if (now.getTime() >= endOfDay.getTime()) {
+                endOfDay.setDate(endOfDay.getDate() + 1);
             }
-        }
+            
+            const endTime = endOfDay.getTime();
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = endTime - now;
 
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        updateCountdown();
+                if (distance < 0) {
+                    // Đã hết thời gian
+                    const countdownEl = document.getElementById('countdown');
+                    if (countdownEl) {
+                        countdownEl.innerHTML = '<div class="text-red-600 font-bold">Đã kết thúc</div>';
+                    }
+                    clearInterval(countdownInterval);
+                    return;
+                }
+
+                // Tính giờ, phút, giây còn lại
+                const hours = Math.floor(distance / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                const hoursEl = document.getElementById('hours');
+                const minutesEl = document.getElementById('minutes');
+                const secondsEl = document.getElementById('seconds');
+
+                if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+                if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+                if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+            }
+
+            // Cập nhật ngay lập tức
+            updateCountdown();
+            
+            // Cập nhật mỗi giây
+            const countdownInterval = setInterval(updateCountdown, 1000);
+            
+            // Cleanup khi trang đóng
+            window.addEventListener('beforeunload', () => {
+                clearInterval(countdownInterval);
+            });
+        })();
 
         // Add to Cart
         function addToCart(productId) {
+            // Validate productId
+            productId = parseInt(productId);
+            if (!productId || productId <= 0) {
+                alert('Sản phẩm không hợp lệ!');
+                return;
+            }
+
             const btn = event.target;
             const originalText = btn.textContent;
             btn.textContent = 'Đang thêm...';
             btn.disabled = true;
 
-            fetch('/cart/add', {
+            // Tạo timeout để tránh loading mãi
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 giây
+
+            fetch('{{ route("cart.add") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({
                     product_id: productId,
                     quantity: 1
-                })
+                }),
+                signal: controller.signal
             })
-            .then(response => response.json())
+            .then(response => {
+                clearTimeout(timeoutId);
+                
+                // Kiểm tra status code
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Có lỗi xảy ra');
+                    });
+                }
+                
+                // Kiểm tra content type
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json();
+                } else {
+                    throw new Error('Response không phải JSON');
+                }
+            })
             .then(data => {
                 if (data.success) {
                     btn.textContent = '✓ Đã thêm';
                     btn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
                     btn.classList.add('bg-green-600', 'hover:bg-green-700');
                     
-                    // Update cart count if exists
-                    const cartCount = document.querySelector('[data-cart-count]');
-                    if (cartCount) {
-                        cartCount.textContent = data.cart_count || 0;
+                    // Update cart count badge trong header với animation
+                    const cartCountBadge = document.getElementById('cart-count-badge');
+                    if (cartCountBadge) {
+                        const newCount = data.cart_count || 0;
+                        if (newCount > 0) {
+                            cartCountBadge.textContent = newCount;
+                            cartCountBadge.classList.remove('hidden');
+                            // Animation: scale up rồi về bình thường
+                            cartCountBadge.style.transform = 'scale(1.3)';
+                            cartCountBadge.style.transition = 'transform 0.3s ease';
+                            setTimeout(() => {
+                                cartCountBadge.style.transform = 'scale(1)';
+                            }, 300);
+                        } else {
+                            cartCountBadge.classList.add('hidden');
+                        }
                     }
                     
                     setTimeout(() => {
@@ -1746,8 +1828,17 @@
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                clearTimeout(timeoutId);
+                
+                // Xử lý lỗi cụ thể
+                if (error.name === 'AbortError') {
+                    alert('Request quá lâu. Vui lòng thử lại.');
+                } else if (error.message) {
+                    alert(error.message);
+                } else {
+                    alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                }
+                
                 btn.textContent = originalText;
                 btn.disabled = false;
             });
@@ -1757,33 +1848,54 @@
         function openQuickView(productId) {
             const modal = document.getElementById('quickViewModal');
             const content = document.getElementById('quickViewContent');
+            
+            if (!modal || !content) {
+                console.error('Quick view modal not found');
+                return;
+            }
+            
             modal.classList.remove('hidden');
             
-            // Fetch product details
-            fetch(`/api/products/${productId}`)
-                .then(response => response.json())
-                .then(data => {
-                    // You can customize this based on your API response
-                    content.innerHTML = `
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <img src="${data.image || '/placeholder.jpg'}" alt="${data.name}" class="w-full rounded-lg">
-                            </div>
-                            <div>
-                                <h2 class="text-2xl font-bold mb-4">${data.name}</h2>
-                                <p class="text-3xl font-bold text-indigo-600 mb-4">${new Intl.NumberFormat('vi-VN').format(data.price)} đ</p>
-                                <p class="text-gray-600 mb-4">${data.description || ''}</p>
-                                <button onclick="addToCart(${productId})" class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-medium">
-                                    Thêm vào giỏ
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    content.innerHTML = '<p class="text-red-600">Không thể tải thông tin sản phẩm</p>';
-                });
+            // Hiển thị loading
+            content.innerHTML = `
+                <div class="text-center py-12">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+                    <p class="mt-4 text-gray-600">Đang tải...</p>
+                </div>
+            `;
+            
+            // Tạo timeout để tránh loading mãi
+            const timeoutId = setTimeout(() => {
+                content.innerHTML = `
+                    <div class="text-center py-12">
+                        <p class="text-red-600 mb-4">Không thể tải thông tin sản phẩm</p>
+                        <button onclick="closeQuickView()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                            Đóng
+                        </button>
+                    </div>
+                `;
+            }, 10000); // Timeout sau 10 giây
+            
+            // Fetch product details - Redirect đến trang chi tiết thay vì fetch API
+            // Vì API /api/products/{id} có thể chưa có
+            const productCard = document.querySelector(`[data-product-id="${productId}"]`);
+            if (productCard) {
+                const productLink = productCard.querySelector('a[href]');
+                if (productLink) {
+                    // Đóng modal và redirect đến trang chi tiết
+                    clearTimeout(timeoutId);
+                    closeQuickView();
+                    window.location.href = productLink.href;
+                    return;
+                }
+            }
+            
+            // Nếu không tìm thấy link, đóng modal
+            clearTimeout(timeoutId);
+            setTimeout(() => {
+                closeQuickView();
+                alert('Vui lòng chọn sản phẩm để xem chi tiết');
+            }, 1000);
         }
 
         function closeQuickView() {
@@ -1840,34 +1952,160 @@
             }
         }, 10000);
 
-        // Flash Sale Countdown Timer
-        function updateFlashSaleCountdown() {
-            const now = new Date().getTime();
-            const endTime = now + (12 * 60 * 60 * 1000); // 12 hours from now
-            const distance = endTime - now;
-
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            const flashHoursEl = document.getElementById('flash-hours');
-            const flashMinutesEl = document.getElementById('flash-minutes');
-            const flashSecondsEl = document.getElementById('flash-seconds');
-
-            if (flashHoursEl) flashHoursEl.textContent = String(hours).padStart(2, '0');
-            if (flashMinutesEl) flashMinutesEl.textContent = String(minutes).padStart(2, '0');
-            if (flashSecondsEl) flashSecondsEl.textContent = String(seconds).padStart(2, '0');
-
-            if (distance < 0) {
-                clearInterval(flashSaleInterval);
-                if (flashHoursEl) flashHoursEl.textContent = '00';
-                if (flashMinutesEl) flashMinutesEl.textContent = '00';
-                if (flashSecondsEl) flashSecondsEl.textContent = '00';
+        // Flash Sale Countdown Timer - Chạy đến cuối ngày hôm nay (23:59:59)
+        (function() {
+            // Tính thời gian kết thúc: cuối ngày hôm nay (23:59:59)
+            const now = new Date();
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999); // 23:59:59.999
+            
+            // Nếu đã qua 23:59:59, set cho ngày mai
+            if (now.getTime() >= endOfDay.getTime()) {
+                endOfDay.setDate(endOfDay.getDate() + 1);
             }
-        }
+            
+            const endTime = endOfDay.getTime();
+            
+            function updateFlashSaleCountdown() {
+                const now = new Date().getTime();
+                const distance = endTime - now;
 
-        const flashSaleInterval = setInterval(updateFlashSaleCountdown, 1000);
-        updateFlashSaleCountdown();
+                if (distance < 0) {
+                    // Đã hết thời gian, reset về 00:00:00
+                    const flashHoursEl = document.getElementById('flash-hours');
+                    const flashMinutesEl = document.getElementById('flash-minutes');
+                    const flashSecondsEl = document.getElementById('flash-seconds');
+                    
+                    if (flashHoursEl) flashHoursEl.textContent = '00';
+                    if (flashMinutesEl) flashMinutesEl.textContent = '00';
+                    if (flashSecondsEl) flashSecondsEl.textContent = '00';
+                    
+                    // Có thể reload lại để set thời gian mới cho ngày mai
+                    return;
+                }
+
+                // Tính giờ, phút, giây còn lại
+                const hours = Math.floor(distance / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                const flashHoursEl = document.getElementById('flash-hours');
+                const flashMinutesEl = document.getElementById('flash-minutes');
+                const flashSecondsEl = document.getElementById('flash-seconds');
+
+                if (flashHoursEl) flashHoursEl.textContent = String(hours).padStart(2, '0');
+                if (flashMinutesEl) flashMinutesEl.textContent = String(minutes).padStart(2, '0');
+                if (flashSecondsEl) flashSecondsEl.textContent = String(seconds).padStart(2, '0');
+            }
+
+            // Cập nhật ngay lập tức
+            updateFlashSaleCountdown();
+            
+            // Cập nhật mỗi giây
+            const flashSaleInterval = setInterval(updateFlashSaleCountdown, 1000);
+            
+            // Cleanup khi trang đóng
+            window.addEventListener('beforeunload', () => {
+                clearInterval(flashSaleInterval);
+            });
+        })();
+
+        // Floating Icons Animation - Hiệu ứng tuyết rơi cho Flash Sale
+        (function() {
+            const flashSaleSection = document.getElementById('flash-sale-section');
+            const container = document.getElementById('floating-icons-container');
+            
+            if (!flashSaleSection || !container) return;
+            
+            // Danh sách các icon đẹp để rơi
+            const icons = ['⭐', '❤️', '💎', '🎁', '✨', '🔥', '💫', '🌟', '🎉', '💝', '🎊', '💖'];
+            
+            // Tốc độ, kích thước và pattern drift
+            const speeds = ['slow', 'medium', 'fast'];
+            // Phân bố đều hơn giữa các kích thước
+            const sizes = ['small', 'small', 'medium-size', 'medium-size', 'medium-size', 'large', 'large'];
+            const patterns = ['pattern-1', 'pattern-2', 'pattern-3'];
+            
+            function createFloatingIcon() {
+                // Chỉ tạo icon nếu section Flash Sale đang visible
+                const rect = flashSaleSection.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                
+                if (!isVisible) return;
+                
+                const icon = document.createElement('div');
+                icon.className = 'floating-icon';
+                
+                // Chọn icon ngẫu nhiên
+                const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+                icon.textContent = randomIcon;
+                
+                // Vị trí ngẫu nhiên theo chiều ngang (trong phạm vi section)
+                const leftPosition = Math.random() * 100; // 0-100%
+                icon.style.left = leftPosition + '%';
+                
+                // Delay ngẫu nhiên để không rơi cùng lúc
+                const delay = Math.random() * 2; // 0-2 giây
+                icon.style.animationDelay = delay + 's';
+                
+                // Tốc độ rơi ngẫu nhiên
+                const speed = speeds[Math.floor(Math.random() * speeds.length)];
+                icon.classList.add(speed);
+                
+                // Kích thước ngẫu nhiên
+                const size = sizes[Math.floor(Math.random() * sizes.length)];
+                icon.classList.add(size);
+                
+                // Pattern drift ngẫu nhiên
+                const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+                icon.classList.add(pattern);
+                
+                // Thêm vào container
+                container.appendChild(icon);
+                
+                // Xóa icon sau khi animation kết thúc
+                const duration = speed === 'slow' ? 8000 : speed === 'medium' ? 6000 : 4000;
+                setTimeout(() => {
+                    if (icon.parentNode) {
+                        icon.remove();
+                    }
+                }, duration + delay * 1000);
+            }
+            
+            // Tạo icon mới mỗi 0.6 giây (tăng tần suất để nhiều icon hơn)
+            let iconInterval = setInterval(createFloatingIcon, 600);
+            
+            // Tạo nhiều icon ngay khi load (tăng từ 3 lên 8)
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => createFloatingIcon(), i * 150);
+            }
+            
+            // Dừng khi scroll ra khỏi section để tiết kiệm performance
+            let isInView = true;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    isInView = entry.isIntersecting;
+                    if (isInView) {
+                        if (!iconInterval) {
+                            iconInterval = setInterval(createFloatingIcon, 800);
+                        }
+                    } else {
+                        if (iconInterval) {
+                            clearInterval(iconInterval);
+                            iconInterval = null;
+                        }
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            observer.observe(flashSaleSection);
+            
+            // Cleanup khi trang đóng
+            window.addEventListener('beforeunload', () => {
+                if (iconInterval) clearInterval(iconInterval);
+                observer.disconnect();
+            });
+        })();
 
         // Wishlist Toggle
         function toggleWishlist(productId) {
@@ -1955,7 +2193,12 @@
                     <div class="relative h-32 mb-3 bg-gray-50 rounded overflow-hidden mx-auto">
                         <img src="${item.image}" alt="${item.name}" 
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                             onerror="this.src='{{ asset('images/no-placehoder.jpg') }}'">
+                             onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="w-full h-full bg-gray-200 rounded flex items-center justify-center" style="display:none;">
+                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
                     </div>
                     <h4 class="text-sm font-semibold text-gray-900 group-hover:text-indigo-600 transition line-clamp-2 mb-1">
                         ${item.name}
@@ -1970,6 +2213,24 @@
         // Load recently viewed on page load
         document.addEventListener('DOMContentLoaded', () => {
             loadRecentlyViewed();
+            
+            // Fix lazy loading images - add 'loaded' class when image loads
+            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+            lazyImages.forEach(img => {
+                if (img.complete) {
+                    // Image already loaded
+                    img.classList.add('loaded');
+                } else {
+                    // Wait for image to load
+                    img.addEventListener('load', function() {
+                        this.classList.add('loaded');
+                    });
+                    img.addEventListener('error', function() {
+                        // Even on error, show the image (or placeholder)
+                        this.classList.add('loaded');
+                    });
+                }
+            });
         });
 
         // Lazy Loading Animation on Scroll
@@ -2009,6 +2270,199 @@
                 });
             }
         });
+
+        // Social Proof - Tracking thật số người đang xem
+        (function() {
+            'use strict';
+            
+            // Track các intervals để cleanup sau
+            let updateInterval = null;
+            let trackInterval = null;
+            const trackedProducts = new Set(); // Tránh track nhiều lần
+            const trackingDebounce = new Map(); // Debounce tracking
+            
+            function trackProductViewing(productId) {
+                // Validate productId
+                productId = parseInt(productId);
+                if (!productId || productId <= 0) {
+                    return;
+                }
+
+                // Debounce: chỉ track mỗi 5 giây cho mỗi sản phẩm
+                const now = Date.now();
+                const lastTrack = trackingDebounce.get(productId) || 0;
+                if (now - lastTrack < 5000) {
+                    return; // Quá sớm, bỏ qua
+                }
+                trackingDebounce.set(productId, now);
+
+                // Tạo AbortController để timeout sau 3 giây
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+                fetch(`/api/products/${productId}/track-view`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    signal: controller.signal
+                })
+                .then(response => {
+                    clearTimeout(timeoutId);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success && data.viewing_count !== undefined) {
+                        updateViewingCount(productId, data.viewing_count);
+                    }
+                })
+                .catch(error => {
+                    clearTimeout(timeoutId);
+                    // Silent fail - không log để tránh spam console
+                    // Nếu lỗi, hiển thị số mặc định
+                    updateViewingCount(productId, 0);
+                });
+            }
+
+            function updateViewingCount(productId, count) {
+                const countEl = document.querySelector(`.viewing-count-${productId}`);
+                if (countEl) {
+                    countEl.textContent = Math.max(0, parseInt(count) || 0);
+                }
+            }
+
+            function updateAllViewingCounts() {
+                const productIds = [];
+                document.querySelectorAll('.social-proof-badge').forEach(badge => {
+                    const productId = parseInt(badge.dataset.productId);
+                    if (productId && productId > 0) {
+                        productIds.push(productId);
+                    }
+                });
+
+                if (productIds.length === 0) {
+                    return;
+                }
+
+                // Tạo AbortController để timeout sau 5 giây
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+                fetch('/api/products/viewing-counts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ product_ids: productIds }),
+                    signal: controller.signal
+                })
+                .then(response => {
+                    clearTimeout(timeoutId);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.counts) {
+                        Object.keys(data.counts).forEach(productId => {
+                            updateViewingCount(parseInt(productId), data.counts[productId]);
+                        });
+                    }
+                })
+                .catch(error => {
+                    clearTimeout(timeoutId);
+                    // Silent fail - nếu lỗi, hiển thị số mặc định
+                    productIds.forEach(productId => {
+                        updateViewingCount(productId, 0);
+                    });
+                });
+            }
+
+            // Track khi sản phẩm hiển thị trên màn hình
+            // Chỉ chạy khi DOM đã sẵn sàng
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initTracking);
+            } else {
+                // DOM đã sẵn sàng, chạy ngay
+                initTracking();
+            }
+
+            function initTracking() {
+                try {
+                    const productObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const productId = parseInt(entry.target.dataset.productId);
+                                if (productId && productId > 0 && !trackedProducts.has(productId)) {
+                                    trackedProducts.add(productId);
+                                    // Track ngay khi sản phẩm hiển thị
+                                    trackProductViewing(productId);
+                                }
+                            }
+                        });
+                    }, {
+                        threshold: 0.3, // Khi 30% sản phẩm hiển thị
+                        rootMargin: '50px' // Trigger sớm hơn 50px
+                    });
+
+                    // Observe tất cả product cards
+                    const productCards = document.querySelectorAll('.product-card');
+                    if (productCards.length > 0) {
+                        productCards.forEach(card => {
+                            const productId = parseInt(card.dataset.productId);
+                            if (productId && productId > 0) {
+                                productObserver.observe(card);
+                            }
+                        });
+                    }
+
+                    // Update số đang xem ngay khi load trang (sau 2 giây để đảm bảo DOM đã sẵn sàng)
+                    setTimeout(() => {
+                        // Kiểm tra xem có product cards không trước khi update
+                        if (document.querySelectorAll('.product-card').length > 0) {
+                            updateAllViewingCounts();
+                        }
+                    }, 2000);
+
+                    // Update số đang xem mỗi 10 giây
+                    updateInterval = setInterval(() => {
+                        updateAllViewingCounts();
+                    }, 10000);
+
+                    // Track lại mỗi 30 giây để giữ session active (chỉ sản phẩm đang hiển thị)
+                    trackInterval = setInterval(() => {
+                        document.querySelectorAll('.product-card').forEach(card => {
+                            const productId = parseInt(card.dataset.productId);
+                            if (productId && productId > 0) {
+                                const rect = card.getBoundingClientRect();
+                                // Chỉ track nếu sản phẩm đang trong viewport
+                                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                                    trackProductViewing(productId);
+                                }
+                            }
+                        });
+                    }, 30000);
+                } catch (error) {
+                    console.error('Error initializing tracking:', error);
+                }
+            }
+
+            // Cleanup khi rời trang
+            window.addEventListener('beforeunload', () => {
+                if (updateInterval) {
+                    clearInterval(updateInterval);
+                }
+                if (trackInterval) {
+                    clearInterval(trackInterval);
+                }
+            });
+        })();
 
         // FAQ Toggle Function
         function toggleFAQ(button) {
