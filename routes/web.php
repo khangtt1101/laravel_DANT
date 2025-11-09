@@ -13,6 +13,7 @@ use App\Http\Controllers\CartController;
 use App\Models\Product;
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\BlogController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -25,6 +26,11 @@ Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
 Route::get('/products/{category:slug}/{product:slug}', [ShopController::class, 'show'])
      ->name('products.show')
      ->scopeBindings();
+
+// ===== BẮT ĐẦU CÁC ROUTE BLOG =====
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+// ===== KẾT THÚC CÁC ROUTE BLOG =====
 
 // ===== BẮT ĐẦU CÁC ROUTE GIỎ HÀNG =====
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
