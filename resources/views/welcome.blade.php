@@ -2012,10 +2012,21 @@
 
         // Floating Icons Animation - Hiệu ứng tuyết rơi cho Flash Sale
         (function() {
-            const flashSaleSection = document.getElementById('flash-sale-section');
-            const container = document.getElementById('floating-icons-container');
+            // Đợi DOM load xong
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initFloatingIcons);
+            } else {
+                initFloatingIcons();
+            }
             
-            if (!flashSaleSection || !container) return;
+            function initFloatingIcons() {
+                const flashSaleSection = document.getElementById('flash-sale-section');
+                const container = document.getElementById('floating-icons-container');
+                
+                if (!flashSaleSection || !container) {
+                    console.warn('Flash Sale section or container not found');
+                    return;
+                }
             
             // Danh sách các icon đẹp để rơi
             const icons = ['⭐', '❤️', '💎', '🎁', '✨', '🔥', '💫', '🌟', '🎉', '💝', '🎊', '💖'];
@@ -2105,6 +2116,7 @@
                 if (iconInterval) clearInterval(iconInterval);
                 observer.disconnect();
             });
+            } // Đóng function initFloatingIcons
         })();
 
         // Wishlist Toggle
