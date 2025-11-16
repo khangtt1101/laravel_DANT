@@ -22,3 +22,11 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Backup files
+header_main.blade.php
+header_master.blade.php
+welcome_main.txt
+welcome_master.txt
+laravel_datn*.sql
+products/

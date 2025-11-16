@@ -11,8 +11,40 @@ class ShopController extends Controller
     /**
      * Hiển thị trang sản phẩm chính.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $categoryId = $request->input('category');
+        $categorySlug = $request->input('category_slug');
+        
+        // Nếu có category được chọn
+        if ($categoryId || $categorySlug) {
+            $category = null;
+            
+            if ($categorySlug) {
+                $category = Category::where('slug', $categorySlug)->first();
+            } elseif ($categoryId) {
+                $category = Category::find($categoryId);
+            }
+            
+            if ($category) {
+                // Lấy tất cả sản phẩm của category và các category con
+                $categoryIds = [$category->id];
+                $categoryIds = array_merge($categoryIds, $category->children->pluck('id')->toArray());
+                
+                $products = Product::with(['category', 'images'])
+                    ->whereIn('category_id', $categoryIds)
+                    ->latest()
+                    ->paginate(12);
+                
+                $categories = Category::whereNull('parent_id')->get();
+                $query = null;
+                $featuredProducts = collect();
+                $categoriesWithProducts = collect();
+                
+                return view('shop', compact('products', 'categories', 'query', 'featuredProducts', 'categoriesWithProducts', 'category'));
+            }
+        }
+        
         // 1. Lấy 4 sản phẩm nổi bật (ví dụ: mới nhất)
         $featuredProducts = Product::with(['category', 'images'])
                                     ->latest()
@@ -66,7 +98,11 @@ class ShopController extends Controller
 
         // Lấy các danh mục để hiển thị filter
         $categories = Category::whereNull('parent_id')->get();
+        
+        // Thêm các biến cần thiết cho view (để tránh lỗi khi view không có $query)
+        $featuredProducts = collect(); // Empty collection
+        $categoriesWithProducts = collect(); // Empty collection
 
-        return view('shop', compact('products', 'categories', 'query'));
+        return view('shop', compact('products', 'categories', 'query', 'featuredProducts', 'categoriesWithProducts'));
     }
 }
