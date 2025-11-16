@@ -221,7 +221,7 @@
                                     Trang Quản Trị
                                 </a>
                             @else
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <a href="{{ route('account.orders') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Lịch sử đơn hàng
                                 </a>
                             @endif

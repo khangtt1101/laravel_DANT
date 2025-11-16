@@ -25,7 +25,7 @@ document.addEventListener('alpine:initializing', () => {
 
         // 5. HÀM LOGIC: Định nghĩa addToCart MỘT LẦN DUY NHẤT
         addToCart(productId) {
-            // 5a. Cập nhật UI ngay lập tức (thêm ID vào bộ nhớ)
+            // 5a. Cập nhật UI ngay lập tức
             if (!this.isInCart(productId)) {
                 this.items.push(productId);
             }
@@ -36,7 +36,6 @@ document.addEventListener('alpine:initializing', () => {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
-                    // Lấy CSRF token từ thẻ <meta> trên trang
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: JSON.stringify({
@@ -44,7 +43,24 @@ document.addEventListener('alpine:initializing', () => {
                     quantity: 1
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                // ===== BẮT ĐẦU SỬA LỖI =====
+                // Kiểm tra xem server có trả về lỗi 401 (Chưa đăng nhập) không
+                if (response.status === 401) { 
+                    // Nếu đúng, chuyển hướng người dùng đến trang đăng nhập
+                    window.location.href = '/login';
+                    // Ném lỗi để dừng tiến trình
+                    throw new Error('Chưa đăng nhập, đang chuyển hướng...');
+                }
+                // ===== KẾT THÚC SỬA LỖI =====
+
+                if (!response.ok) {
+                    // Ném các lỗi khác (như 422, 500)
+                    throw new Error('Server response not OK');
+                }
+
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     // 5c. Phát sự kiện cho Header
@@ -57,10 +73,15 @@ document.addEventListener('alpine:initializing', () => {
                     alert(data.message || 'Lỗi thêm vào giỏ.');
                 }
             })
-            .catch(() => {
-                // 5e. Nếu lỗi mạng: Xóa sản phẩm khỏi UI
+            .catch(error => {
+                // 5e. Nếu lỗi mạng hoặc lỗi 401: Xóa sản phẩm khỏi UI
                 this.items = this.items.filter(id => id !== productId);
-                alert('Lỗi kết nối.');
+                
+                // Không 'alert' nếu là lỗi 401 (vì đã chuyển hướng)
+                if (error.message !== 'Chưa đăng nhập, đang chuyển hướng...') {
+                     console.error('Lỗi khi thêm vào giỏ:', error);
+                     alert(error.message || 'Lỗi kết nối.');
+                }
             });
         }
     });
