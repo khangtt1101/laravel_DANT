@@ -148,9 +148,9 @@
             <div x-show="Object.keys(cart).length > 0"
                  style="display: none;" {{-- Tránh FOUC --}}
             >
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="md:col-span-2">
-                        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="md:col-span-2">
+                    <div class="bg-white shadow rounded-lg overflow-hidden">
                             
                             <div class="p-4 sm:p-6 border-b border-gray-200">
                                 <label class="flex items-center">
@@ -164,7 +164,7 @@
                                 </label>
                             </div>
 
-                            <ul role="list" class="divide-y divide-gray-200">
+                        <ul role="list" class="divide-y divide-gray-200">
                                 {{-- 
                                     BƯỚC 3: Dùng template để lặp qua 'cart' của Alpine
                                     Điều này cho phép xóa sản phẩm khỏi UI mà không cần tải lại trang
@@ -182,39 +182,39 @@
 
                                         <div class="flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 border border-gray-200 rounded-md overflow-hidden ml-4">
                                             <img :src="'/storage/' + cart[id].image_url" :alt="cart[id].name" class="w-full h-full object-cover" onerror="this.src='{{ asset('images/no-placeholder.jpg') }}'">
-                                        </div>
+                                    </div>
 
-                                        <div class="ml-4 flex-1 flex flex-col">
-                                            <div>
-                                                <div class="flex justify-between text-base font-medium text-gray-900">
+                                    <div class="ml-4 flex-1 flex flex-col">
+                                        <div>
+                                            <div class="flex justify-between text-base font-medium text-gray-900">
                                                     <h3 x-text="cart[id].name"></h3>
                                                     <p class="ml-4" x-text="new Intl.NumberFormat('vi-VN').format(cart[id].price * cart[id].quantity) + ' đ'"></p>
-                                                </div>
-                                                <p class="mt-1 text-sm text-gray-500" x-text="new Intl.NumberFormat('vi-VN').format(cart[id].price) + ' đ / cái'"></p>
                                             </div>
-                                            <div class="flex-1 flex items-end justify-between text-sm">
-                                                
+                                                <p class="mt-1 text-sm text-gray-500" x-text="new Intl.NumberFormat('vi-VN').format(cart[id].price) + ' đ / cái'"></p>
+                                        </div>
+                                        <div class="flex-1 flex items-end justify-between text-sm">
+
                                                 {{-- 
                                                     BƯỚC 4: Khối Tăng/Giảm (VIẾT ĐẦY ĐỦ)
                                                     Không còn là <form> nữa, chỉ là <div>
                                                 --}}
                                                 <div class="flex items-center">
                                                     <label :for="'quantity-' + id" class="mr-2 text-gray-500">Số lượng:</label>
-                                                    <div class="flex items-center border border-gray-300 rounded-md shadow-sm">
+                                                <div class="flex items-center border border-gray-300 rounded-md shadow-sm">
                                                         <button type="button" 
                                                                 @click="updateQuantity(id, cart[id].quantity - 1)"
-                                                                class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-md focus:outline-none">
-                                                            -
-                                                        </button>
+                                                        class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-md focus:outline-none">
+                                                        -
+                                                    </button>
                                                         <input type="number" :name="'quantity-' + id" :id="'quantity-' + id" min="1"
                                                                x-model="cart[id].quantity"
                                                                readonly
-                                                               class="w-10 text-right border-y-0 border-x border-gray-300 focus:ring-0 p-0 py-1 sm:text-sm">
+                                                        class="w-10 text-right border-y-0 border-x border-gray-300 focus:ring-0 p-0 py-1 sm:text-sm">
                                                         <button type="button" 
                                                                 @click="updateQuantity(id, cart[id].quantity + 1)"
-                                                                class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-md focus:outline-none">
-                                                            +
-                                                        </button>
+                                                        class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-md focus:outline-none">
+                                                        +
+                                                    </button>
                                                     </div>
                                                 </div>
 
@@ -226,26 +226,26 @@
                                                         @click="removeItem(id)"
                                                         class="font-medium text-red-600 hover:text-red-800">Xóa
                                                 </button>
-                                            </div>
                                         </div>
-                                    </li>
+                                    </div>
+                                </li>
                                 </template>
-                            </ul>
-                        </div>
+                        </ul>
                     </div>
+                </div>
 
-                    <div class="md:col-span-1">
+                <div class="md:col-span-1">
                         <div class="bg-white shadow rounded-lg p-6 sticky top-8">
-                            <h2 class="text-lg font-medium text-gray-900">Tóm tắt đơn hàng</h2>
-                            <dl class="mt-6 space-y-4">
-                                <div class="flex items-center justify-between border-t border-gray-200 pt-4">
-                                    <dt class="text-base font-medium text-gray-900">Tổng tiền</dt>
-                                    <dd class="text-base font-medium text-gray-900">
+                        <h2 class="text-lg font-medium text-gray-900">Tóm tắt đơn hàng</h2>
+                        <dl class="mt-6 space-y-4">
+                            <div class="flex items-center justify-between border-t border-gray-200 pt-4">
+                                <dt class="text-base font-medium text-gray-900">Tổng tiền</dt>
+                                <dd class="text-base font-medium text-gray-900">
                                         <span x-text="new Intl.NumberFormat('vi-VN').format(total)">0</span> đ
-                                    </dd>
-                                </div>
-                            </dl>
-                            <div class="mt-6">
+                                </dd>
+                            </div>
+                        </dl>
+                        <div class="mt-6">
                                 <button type="submit"
                                         :disabled="selected.length === 0"
                                         class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
@@ -265,7 +265,7 @@
                  class="text-center py-12 bg-white shadow rounded-lg">
                 <p class="text-xl text-gray-700">Giỏ hàng của bạn đang trống.</p>
                 <a href="{{ route('shop.index') }}"
-                   class="mt-6 inline-block bg-indigo-600 text-white font-medium py-3 px-8 rounded-md shadow-md hover:bg-indigo-700">
+                    class="mt-6 inline-block bg-indigo-600 text-white font-medium py-3 px-8 rounded-md shadow-md hover:bg-indigo-700">
                     Tiếp tục mua sắm
                 </a>
             </div>

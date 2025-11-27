@@ -55,6 +55,16 @@
     background: #555;
 }
 
+/* Hide scrollbar for category filter */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
 /* Smooth scroll */
 html {
     scroll-behavior: smooth;
@@ -347,4 +357,97 @@ img[loading="lazy"].loaded {
 
 .faq-icon.open {
     transform: rotate(180deg);
+}
+
+/* Floating Icons Animation - Icon rơi cho Flash Sale */
+.floating-icon {
+    position: absolute;
+    top: -50px;
+    color: white;
+    font-size: 1.5rem;
+    opacity: 0.8;
+    pointer-events: none;
+    user-select: none;
+    z-index: 1;
+    animation: falling linear forwards;
+}
+
+.floating-icon.small {
+    font-size: 1rem;
+}
+
+.floating-icon.medium-size {
+    font-size: 1.5rem;
+}
+
+.floating-icon.large {
+    font-size: 2rem;
+}
+
+.floating-icon.slow {
+    animation-duration: 8s;
+}
+
+.floating-icon.medium {
+    animation-duration: 6s;
+}
+
+.floating-icon.fast {
+    animation-duration: 4s;
+}
+
+.floating-icon.pattern-1 {
+    animation-name: falling-left;
+}
+
+.floating-icon.pattern-2 {
+    animation-name: falling-straight;
+}
+
+.floating-icon.pattern-3 {
+    animation-name: falling-right;
+}
+
+@keyframes falling {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes falling-left {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) translateX(-50px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes falling-straight {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes falling-right {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) translateX(50px) rotate(360deg);
+        opacity: 0;
+    }
 }

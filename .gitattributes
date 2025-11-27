@@ -1,10 +1,15 @@
 * text=auto eol=lf
+*.* text eol=lf
 
-*.blade.php diff=html
-*.css diff=css
-*.html diff=html
-*.md diff=markdown
-*.php diff=php
+# Ensure UTF-8 encoding for text files
+*.php text encoding=utf-8
+*.blade.php text encoding=utf-8 diff=html
+*.css text encoding=utf-8 diff=css
+*.html text encoding=utf-8 diff=html
+*.js text encoding=utf-8
+*.json text encoding=utf-8
+*.md text encoding=utf-8 diff=markdown
+*.txt text encoding=utf-8
 
 /.github export-ignore
 CHANGELOG.md export-ignore

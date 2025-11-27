@@ -36,7 +36,6 @@ document.addEventListener('alpine:initializing', () => {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
-                    // Lấy CSRF token từ thẻ <meta> trên trang
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: JSON.stringify({
