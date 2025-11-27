@@ -1,110 +1,225 @@
 <x-main-layout>
-    <div class="bg-white py-12">
+    <div class="bg-gray-50 py-8 sm:py-12">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            
+            {{-- Breadcrumbs --}}
+            <nav class="flex mb-8 text-sm text-gray-500" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="{{ route('home') }}" class="inline-flex items-center hover:text-indigo-600 transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                            Trang chủ
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                            <a href="{{ route('shop.index') }}" class="ml-1 md:ml-2 hover:text-indigo-600 transition-colors">Cửa hàng</a>
+                        </div>
+                    </li>
+                    @if($product->category)
+                    <li>
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                            <span class="ml-1 md:ml-2 text-gray-700 font-medium">{{ $product->category->name }}</span>
+                        </div>
+                    </li>
+                    @endif
+                </ol>
+            </nav>
 
-                <div
-                    x-data="{ mainImage: '{{ $product->images->isEmpty() ? '' : Storage::url($product->images->first()->image_url) }}' }">
-                    <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden aspect-square">
-                        <img x-show="mainImage" :src="mainImage" alt="{{ $product->name }}"
-                            class="w-full h-full object-cover transition-opacity duration-300">
-                        @if($product->images->isEmpty())
-                            <div class="w-full h-full flex items-center justify-center text-gray-500">(Không có ảnh)</div>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-12">
+                    
+                    {{-- Product Gallery --}}
+                    <div class="p-6 lg:p-10 bg-white" x-data="{ 
+                        activeImage: '{{ $product->images->isEmpty() ? '' : Storage::url($product->images->first()->image_url) }}',
+                        images: [
+                            @foreach($product->images as $image)
+                                '{{ Storage::url($image->image_url) }}',
+                            @endforeach
+                        ]
+                    }">
+                        <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-6 group">
+                            <template x-if="activeImage">
+                                <img :src="activeImage" alt="{{ $product->name }}" class="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-105">
+                            </template>
+                            <template x-if="!activeImage">
+                                <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                </div>
+                            </template>
+                            
+                            {{-- Image Badge (Optional - e.g. New, Sale) --}}
+                            <div class="absolute top-4 left-4">
+                                <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow-sm">Mới</span>
+                            </div>
+                        </div>
+
+                        @if($product->images->count() > 1)
+                            <div class="grid grid-cols-5 gap-4">
+                                @foreach($product->images as $image)
+                                    <button 
+                                        @click="activeImage = '{{ Storage::url($image->image_url) }}'" 
+                                        class="aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 focus:outline-none"
+                                        :class="activeImage === '{{ Storage::url($image->image_url) }}' ? 'border-indigo-600 ring-2 ring-indigo-100' : 'border-transparent hover:border-gray-300'"
+                                    >
+                                        <img src="{{ Storage::url($image->image_url) }}" alt="Thumbnail" class="w-full h-full object-cover">
+                                    </button>
+                                @endforeach
+                            </div>
                         @endif
                     </div>
 
-                    @if($product->images->count() > 1)
-                        <div class="mt-4 overflow-x-auto pb-2">
-                            <div class="flex space-x-4">
-                                @foreach($product->images as $image)
-                                    <div @click="mainImage = '{{ Storage::url($image->image_url) }}'"
-                                        class="flex-shrink-0 w-24 h-24 rounded-md overflow-hidden cursor-pointer border-2"
-                                        :class="{'border-indigo-500': mainImage === '{{ Storage::url($image->image_url) }}'}">
-                                        <img src="{{ Storage::url($image->image_url) }}" alt="Thumbnail"
-                                            class="w-full h-full object-cover">
-                                    </div>
-                                @endforeach
-                            </div>
+                    {{-- Product Info --}}
+                    <div class="p-6 lg:p-10 lg:pl-0 flex flex-col justify-center">
+                        <div class="mb-2">
+                            <span class="text-indigo-600 font-semibold tracking-wide uppercase text-sm">
+                                {{ $product->category->name ?? 'Sản phẩm' }}
+                            </span>
                         </div>
-                    @endif
-                </div>
+                        
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4 leading-tight">
+                            {{ $product->name }}
+                        </h1>
 
-                <div>
-                    <p class="text-sm font-medium text-indigo-600">
-                        {{ $product->category->name ?? 'Chưa phân loại' }}
-                    </p>
+                        <div class="flex items-center mb-6">
+                            <div class="flex text-yellow-400 text-sm">
+                                {{-- Placeholder Stars --}}
+                                @for($i = 0; $i < 5; $i++)
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                @endfor
+                            </div>
+                            <span class="ml-2 text-gray-500 text-sm">(0 đánh giá)</span>
+                        </div>
 
-                    <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900">
-                        {{ $product->name }}
-                    </h1>
+                        <div class="text-3xl font-bold text-gray-900 mb-8">
+                            {{ number_format($product->price, 0, ',', '.') }} <span class="text-xl align-top">₫</span>
+                        </div>
 
-                    <div class="mt-4">
-                        <p class="text-3xl font-bold text-gray-900">
-                            {{ number_format($product->price, 0, ',', '.') }} đ
-                        </p>
-                    </div>
+                        <div class="prose text-gray-600 mb-8 line-clamp-3">
+                            {{ Str::limit($product->description, 150) }}
+                        </div>
 
-                    <div class="mt-8">
+                        {{-- Alerts --}}
                         @if(session('success'))
-                            <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-                                role="alert">
-                                {{ session('success') }}
+                            <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-md shadow-sm flex items-start">
+                                <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>{{ session('success') }}</span>
                             </div>
                         @endif
                         @if(session('error'))
-                            <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                                role="alert">
-                                {{ session('error') }}
+                            <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-md shadow-sm flex items-start">
+                                <svg class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>{{ session('error') }}</span>
                             </div>
                         @endif
 
-                        <form action="{{ route('cart.add') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-
-                            <div class="flex items-center space-x-4 mb-6" x-data="{ quantity: 1 }">
-                                <label for="quantity" class="font-medium text-gray-700">Số lượng:</label>
-                                <div class="flex items-center border border-gray-300 rounded-md">
-                                    <button type="button" @click="quantity = Math.max(1, quantity - 1)"
-                                        class="px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-l-md">
-                                        -
-                                    </button>
-                                    <input type="text" name="quantity" id="quantity" x-model="quantity"
-                                        class="w-12 text-center border-0 focus:ring-0" readonly>
-                                    <button type="button" @click="quantity++"
-                                        class="px-3 py-2 text-gray-600 hover:bg-gray-100 rounded-r-md">
-                                        +
-                                    </button>
+                        <div class="mt-auto" x-data="{ quantity: 1 }">
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <div class="w-fit">
+                                    <label for="quantity" class="sr-only">Số lượng</label>
+                                    <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden h-12">
+                                        <button type="button" @click="if(quantity > 1) quantity--" class="w-10 h-full flex-shrink-0 flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-gray-600 transition-colors focus:outline-none">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                                        </button>
+                                        <input type="number" id="quantity" x-model.number="quantity" class="w-12 h-full text-center border-0 focus:ring-0 text-gray-900 font-medium appearance-none" min="1" readonly>
+                                        <button type="button" @click="quantity++" class="w-10 h-full flex-shrink-0 flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-gray-600 transition-colors focus:outline-none">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                        </button>
+                                    </div>
                                 </div>
+
+                                <button type="button" 
+                                    @click="$store.cart.addToCart({{ $product->id }}, quantity, true)"
+                                    class="flex-1 bg-indigo-600 text-white font-bold h-12 rounded-lg shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-xl transition-all duration-200 flex items-center justify-center group">
+                                    <svg class="w-5 h-5 mr-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    Thêm vào giỏ hàng
+                                </button>
                             </div>
-
-                            <button type="submit"
-                                class="w-full bg-indigo-600 text-white font-medium py-3 px-8 rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                Thêm vào giỏ hàng
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="mt-8 prose lg:prose-lg max-w-none">
-                        <h4 class="text-lg font-medium text-gray-900">Mô tả sản phẩm</h4>
-                        <p class="text-gray-600">
-                            {!! nl2br(e($product->description)) !!}
-                        </p>
-                    </div>
-
-                    @if($product->specifications)
-                        <div class="mt-8 prose lg:prose-lg max-w-none">
-                            <h4 class="text-lg font-medium text-gray-900">Thông số kỹ thuật</h4>
-                            <ul class="list-disc list-inside space-y-2 mt-2 text-gray-600">
-                                @foreach($product->specifications as $key => $value)
-                                    <li><strong>{{ $key }}:</strong> {{ $value }}</li>
-                                @endforeach
-                            </ul>
                         </div>
-                    @endif
-
+                        
+                        {{-- Trust Badges --}}
+                        <div class="mt-8 grid grid-cols-2 gap-4 text-sm text-gray-500">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                Chính hãng 100%
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                Bảo hành 12 tháng
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                Giao hàng toàn quốc
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                Hỗ trợ 24/7
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            {{-- Tabs Section --}}
+            <div class="mt-12 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden" x-data="{ activeTab: 'description' }">
+                <div class="border-b border-gray-200">
+                    <nav class="flex -mb-px">
+                        <button @click="activeTab = 'description'" 
+                            class="w-1/2 sm:w-auto py-4 px-8 text-center border-b-2 font-medium text-sm sm:text-base transition-colors duration-200 focus:outline-none"
+                            :class="activeTab === 'description' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'">
+                            Mô tả sản phẩm
+                        </button>
+                        <button @click="activeTab = 'specs'" 
+                            class="w-1/2 sm:w-auto py-4 px-8 text-center border-b-2 font-medium text-sm sm:text-base transition-colors duration-200 focus:outline-none"
+                            :class="activeTab === 'specs' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'">
+                            Thông số kỹ thuật
+                        </button>
+                    </nav>
+                </div>
+
+                <div class="p-6 sm:p-10">
+                    <div x-show="activeTab === 'description'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
+                        <div class="prose lg:prose-lg max-w-none text-gray-600">
+                            {!! nl2br(e($product->description)) !!}
+                        </div>
+                    </div>
+
+                    <div x-show="activeTab === 'specs'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
+                        @if($product->specifications)
+                            <div class="overflow-hidden border border-gray-200 rounded-lg">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @foreach($product->specifications as $key => $value)
+                                            <tr class="{{ $loop->even ? 'bg-gray-50' : 'bg-white' }}">
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-1/3">
+                                                    {{ $key }}
+                                                </td>
+                                                <td class="px-6 py-4 text-sm text-gray-500">
+                                                    {{ $value }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <p class="text-gray-500 italic text-center py-8">Chưa có thông số kỹ thuật cho sản phẩm này.</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            {{-- Related Products (Placeholder structure) --}}
+            <div class="mt-16">
+                <h2 class="text-2xl font-bold text-gray-900 mb-8">Sản phẩm liên quan</h2>
+                {{-- This would typically be a loop over related products --}}
+                <div class="bg-gray-50 rounded-xl p-8 text-center border border-dashed border-gray-300">
+                    <p class="text-gray-500">Các sản phẩm cùng danh mục sẽ hiển thị ở đây.</p>
+                </div>
+            </div>
+
         </div>
     </div>
 </x-main-layout>
