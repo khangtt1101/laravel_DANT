@@ -115,4 +115,14 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Contact receiver
+    |--------------------------------------------------------------------------
+    |
+    | Email đích nhận form liên hệ. Có thể chỉnh bằng env CONTACT_RECEIVER_EMAIL.
+    |
+    */
+    'contact_receiver' => env('CONTACT_RECEIVER_EMAIL', 'care@polytech.vn'),
+
 ];

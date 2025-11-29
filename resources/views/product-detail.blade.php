@@ -44,6 +44,25 @@
                         </p>
                     </div>
 
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <div class="flex text-yellow-400">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <svg class="h-5 w-5 {{ ($averageRating ?? 0) >= $i ? 'text-yellow-400' : 'text-gray-300' }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.98 8.72c-.783-.57-.38-1.81.588-1.81H8.03a1 1 0 00.95-.69l1.07-3.292z" />
+                                    </svg>
+                                @endfor
+                            </div>
+                            <p class="ml-2 text-sm text-gray-600">
+                                @if($reviewsCount > 0)
+                                    {{ $averageRating }}/5 · {{ $reviewsCount }} đánh giá
+                                @else
+                                    Chưa có đánh giá
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+
                     <div class="mt-8">
                         @if(session('success'))
                             <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
@@ -103,6 +122,125 @@
                         </div>
                     @endif
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white py-12 border-t border-gray-100">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-6">Đánh giá sản phẩm</h3>
+
+                @if($canReview)
+                    <div class="mb-10 bg-gray-50 border border-gray-200 rounded-xl p-6">
+                        <h4 class="text-lg font-medium text-gray-900 mb-4">Chia sẻ trải nghiệm của bạn</h4>
+                        <form action="{{ route('products.reviews.store', $product) }}" method="POST" class="space-y-4">
+                            @csrf
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Mức độ hài lòng</label>
+                                <div class="flex space-x-2">
+                                    @php $selectedRating = old('rating', 5); @endphp
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="rating" value="{{ $i }}" class="hidden" @checked($selectedRating == $i)>
+                                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full border {{ $selectedRating == $i ? 'bg-yellow-400 text-white border-yellow-400' : 'border-gray-300 text-gray-500' }}">
+                                                {{ $i }}
+                                            </span>
+                                        </label>
+                                    @endfor
+                                </div>
+                                @error('rating')
+                                    <p class="text-sm text-red-500 mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div>
+                                <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">Nhận xét</label>
+                                <textarea name="comment" id="comment" rows="4" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Sản phẩm có tốt không? Bạn thích điều gì nhất?">{{ old('comment') }}</textarea>
+                                @error('comment')
+                                    <p class="text-sm text-red-500 mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                Gửi đánh giá
+                            </button>
+                        </form>
+                    </div>
+                @elseif(Auth::guest())
+                    <div class="mb-10 bg-gray-50 border border-gray-200 rounded-xl p-6 text-sm text-gray-600">
+                        Vui lòng <a href="{{ route('login') }}" class="text-indigo-600 font-medium">đăng nhập</a> để đánh giá sản phẩm.
+                    </div>
+                @elseif($userReview)
+                    <div class="mb-10 bg-white border border-gray-200 rounded-xl p-6">
+                        <h4 class="text-lg font-medium text-gray-900 mb-4">Chỉnh sửa đánh giá của bạn</h4>
+                        <form action="{{ route('products.reviews.update', [$product, $userReview]) }}" method="POST" class="space-y-4">
+                            @csrf
+                            @method('PUT')
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Mức độ hài lòng</label>
+                                <div class="flex space-x-2">
+                                    @php $editRating = old('rating', $userReview->rating); @endphp
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="rating" value="{{ $i }}" class="hidden" @checked($editRating == $i)>
+                                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full border {{ $editRating == $i ? 'bg-yellow-400 text-white border-yellow-400' : 'border-gray-300 text-gray-500' }}">
+                                                {{ $i }}
+                                            </span>
+                                        </label>
+                                    @endfor
+                                </div>
+                                @error('rating')
+                                    <p class="text-sm text-red-500 mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div>
+                                <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">Nhận xét</label>
+                                <textarea name="comment" id="comment" rows="4" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Chia sẻ thêm về trải nghiệm của bạn">{{ old('comment', $userReview->comment) }}</textarea>
+                                @error('comment')
+                                    <p class="text-sm text-red-500 mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div>
+                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    Cập nhật đánh giá
+                                </button>
+                            </div>
+                        </form>
+                        <form action="{{ route('products.reviews.destroy', [$product, $userReview]) }}" method="POST" class="mt-4" onsubmit="return confirm('Bạn chắc chắn muốn xoá đánh giá này?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-100 text-red-600 rounded-lg font-medium hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-200">
+                                Xoá đánh giá
+                            </button>
+                        </form>
+                    </div>
+                @endif
+
+                <div class="space-y-6">
+                    @forelse($reviews as $review)
+                        <div class="border border-gray-200 rounded-xl p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-base font-semibold text-gray-900">{{ $review->user->full_name ?? 'Người dùng' }}</p>
+                                    <div class="flex text-yellow-400 mt-1">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <svg class="h-4 w-4 {{ $review->rating >= $i ? 'text-yellow-400' : 'text-gray-300' }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.98 8.72c-.783-.57-.38-1.81.588-1.81H8.03a1 1 0 00.95-.69l1.07-3.292z" />
+                                            </svg>
+                                        @endfor
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-500">{{ $review->created_at->format('d/m/Y') }}</p>
+                            </div>
+                            @if($review->comment)
+                                <p class="mt-4 text-gray-700 whitespace-pre-line">{{ $review->comment }}</p>
+                            @endif
+                        </div>
+                    @empty
+                        <div class="text-center text-gray-500 border border-dashed border-gray-300 rounded-xl py-8">
+                            Chưa có đánh giá nào. Hãy là người đầu tiên!
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </div>

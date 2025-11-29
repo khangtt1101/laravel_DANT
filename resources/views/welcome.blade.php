@@ -1,4 +1,17 @@
 <x-main-layout>
+    @php
+        $globalRating = 5.0;
+        $globalReviewCount = 0;
+        if (isset($featuredProducts) && $featuredProducts->count()) {
+            $averageRating = $featuredProducts->avg(function ($product) {
+                return $product->reviews_avg_rating;
+            });
+            if ($averageRating) {
+                $globalRating = round($averageRating, 1);
+            }
+            $globalReviewCount = $featuredProducts->sum('reviews_count');
+        }
+    @endphp
     <!-- Hero Banner Slider - Carousel với ảnh đẹp -->
     <section class="relative overflow-hidden">
         <div class="hero-slider relative h-[500px] md:h-[650px]">
@@ -65,8 +78,14 @@
                                             <div class="text-sm text-white/80">Khách hàng</div>
                                         </div>
                                         <div class="text-center">
-                                            <div class="text-2xl font-bold text-yellow-300">4.8★</div>
-                                            <div class="text-sm text-white/80">Đánh giá</div>
+                                            <div class="text-2xl font-bold text-yellow-300">{{ number_format($globalRating, 1) }}★</div>
+                                            <div class="text-sm text-white/80">
+                                                @if($globalReviewCount > 0)
+                                                    {{ $globalReviewCount }}+ đánh giá
+                                                @else
+                                                    Đang được yêu thích
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -283,7 +302,7 @@
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 @forelse($categories as $category)
-                    <a href="#"
+                    <a href="{{ route('shop.index', ['category' => $category->id]) }}"
                         class="group bg-white rounded-lg p-6 text-center hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-indigo-200">
                         <div class="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">
                             @if($category->name === 'Điện thoại')
@@ -417,14 +436,25 @@
                                                     {{ number_format($product->price, 0, ',', '.') }} đ
                                                 </p>
                                             </div>
-                                            <div class="flex items-center text-yellow-400">
-                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path
-                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-
-                                                    </path>
-                                                </svg>
-                                                <span class="ml-1 text-xs text-gray-600">4.8</span>
+                                            @php
+                                                $ratingValue = $product->reviews_avg_rating ? round($product->reviews_avg_rating, 1) : null;
+                                                $ratingCount = $product->reviews_count ?? 0;
+                                            @endphp
+                                            <div class="flex items-center gap-1">
+                                                <div class="flex">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        <svg class="w-4 h-4 {{ $ratingValue !== null && $ratingValue >= $i ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.98 8.72c-.783-.57-.38-1.81.588-1.81H8.03a1 1 0 00.95-.69l1.07-3.292z"></path>
+                                                        </svg>
+                                                    @endfor
+                                                </div>
+                                                <span class="text-xs text-gray-600">
+                                                    @if($ratingCount > 0)
+                                                        {{ number_format($ratingValue, 1) }}/5 · {{ $ratingCount }}
+                                                    @else
+                                                        Chưa có
+                                                    @endif
+                                                </span>
                                             </div>
                                         </div>
 
@@ -930,7 +960,7 @@
                             d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
                         </path>
                     </svg>
-                    <span>Đánh giá 4.8/5</span>
+                    <span>Đánh giá {{ number_format($globalRating, 1) }}/5</span>
                 </div>
             </div>
         </div>

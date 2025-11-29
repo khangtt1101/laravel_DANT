@@ -18,8 +18,13 @@ use App\Http\Controllers\AccountController;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductViewController;
+use App\Http\Controllers\ProductReviewController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::view('/promotions', 'pages.promotions')->name('promotions');
+Route::view('/contact', 'pages.contact')->name('contact');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 // ROUTE CHO USER THÔNG THƯỜNG (của Breeze)
 Route::get('/home', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -87,6 +92,13 @@ Route::middleware('auth')->group(function () {
     // Trang cảm ơn (GET)
     Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
     // ===== KẾT THÚC ROUTE THANH TOÁN =====
+
+    Route::post('/products/{product}/reviews', [ProductReviewController::class, 'store'])
+        ->name('products.reviews.store');
+    Route::put('/products/{product}/reviews/{review}', [ProductReviewController::class, 'update'])
+        ->name('products.reviews.update');
+    Route::delete('/products/{product}/reviews/{review}', [ProductReviewController::class, 'destroy'])
+        ->name('products.reviews.destroy');
 });
 
 require __DIR__ . '/auth.php';

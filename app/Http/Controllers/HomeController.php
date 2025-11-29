@@ -15,6 +15,8 @@ class HomeController extends Controller
     {
         // Lấy sản phẩm nổi bật (8 sản phẩm đầu tiên)
         $featuredProducts = Product::with(['category', 'images'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->latest()
             ->take(8)
             ->get();
@@ -26,18 +28,24 @@ class HomeController extends Controller
 
         // Lấy sản phẩm mới nhất
         $newProducts = Product::with(['category', 'images'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->latest()
             ->take(12)
             ->get();
 
         // Lấy sản phẩm bán chạy (best seller) - giả sử là sản phẩm có nhiều đơn hàng nhất
         $bestSellers = Product::with(['category', 'images'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->inRandomOrder() // Tạm thời random, sau có thể sort theo số lượng bán
             ->take(8)
             ->get();
 
         // Lấy sản phẩm giảm giá (deal sốc)
         $hotDeals = Product::with(['category', 'images'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->where('price', '>', 5000000) // Giả sử sản phẩm giá cao sẽ có discount
             ->latest()
             ->take(6)
@@ -52,6 +60,8 @@ class HomeController extends Controller
         // Lấy sản phẩm có review để hiển thị như video reviews
         // Đảm bảo luôn có đủ 4 sản phẩm (có thể lặp lại nếu không đủ)
         $allProducts = Product::with(['category', 'images', 'reviews'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->latest()
             ->get();
         
@@ -94,13 +104,19 @@ class HomeController extends Controller
 
         // Lấy sản phẩm đã qua sử dụng (có thể thêm field is_used vào Product sau)
         $usedProducts = Product::with(['category', 'images'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->inRandomOrder() // Tạm thời random, sau có thể filter theo is_used = true
             ->take(12)
             ->get();
 
         // Lấy các danh mục lớn để hiển thị trong Category Showcase (3 cột)
         $mainCategories = Category::with(['products' => function($query) {
-            $query->with('images')->latest()->take(6);
+            $query->with('images')
+                ->withAvg('reviews', 'rating')
+                ->withCount('reviews')
+                ->latest()
+                ->take(6);
         }])
             ->whereNull('parent_id')
             ->take(3)
