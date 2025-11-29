@@ -6,9 +6,17 @@
                     <h3 class="text-lg leading-6 font-medium text-gray-900">
                         Chi tiết đơn hàng #{{ $order->id }}
                     </h3>
-                    <a href="{{ route('admin.orders.index') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                        &larr; Quay lại danh sách
-                    </a>
+                    <div class="flex space-x-3">
+                        <a href="{{ route('admin.orders.exportPdf', $order) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Xuất hóa đơn PDF
+                        </a>
+                        <a href="{{ route('admin.orders.index') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 self-center">
+                            &larr; Quay lại danh sách
+                        </a>
+                    </div>
                 </div>
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">
                     Đặt lúc: {{ $order->created_at->format('d/m/Y H:i') }}

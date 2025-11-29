@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -49,6 +50,13 @@ class OrderController extends Controller
     {
         $order->items()->delete();
         $order->delete();
-        return redirect()->route('admin.orders.index')->with('success', 'Đơn hàng đã được xóa.'); // <-- Cập nhật
+        return redirect()->route('admin.orders.index')->with('success', 'Đơn hàng đã được xóa.');
+    }
+
+    public function exportPdf(Order $order)
+    {
+        $order->load(['items.product', 'user']);
+        $pdf = Pdf::loadView('admin.orders.pdf', compact('order'));
+        return $pdf->download('invoice-' . $order->order_code . '.pdf');
     }
 }
