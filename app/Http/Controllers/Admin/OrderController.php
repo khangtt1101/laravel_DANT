@@ -27,6 +27,10 @@ class OrderController extends Controller
             });
         }
 
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
         // Lấy kết quả và phân trang (giữ lại query string)
         $orders = $query->paginate(10)->withQueryString();
 
