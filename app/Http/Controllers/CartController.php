@@ -22,7 +22,20 @@ class CartController extends Controller
             $totalPrice += $item['price'] * $item['quantity'];
         }
 
-        return view('cart.index', compact('cart', 'totalPrice'));
+        // Lấy voucher đã áp dụng (nếu có)
+        $appliedVoucher = session()->get('applied_voucher');
+        $discountAmount = 0;
+        $finalPrice = $totalPrice;
+
+        if ($appliedVoucher) {
+            $voucher = \App\Models\Voucher::where('code', $appliedVoucher['code'])->first();
+            if ($voucher) {
+                $discountAmount = $voucher->calculateDiscount($totalPrice);
+                $finalPrice = max(0, $totalPrice - $discountAmount);
+            }
+        }
+
+        return view('cart.index', compact('cart', 'totalPrice', 'discountAmount', 'finalPrice', 'appliedVoucher'));
     }
 
     /**
@@ -177,6 +190,14 @@ class CartController extends Controller
         // 4. Lưu giỏ hàng SẼ THANH TOÁN vào một session riêng
         session()->put('checkout_cart', $checkoutItems);
         session()->put('checkout_total', $totalPrice);
+        
+        // Lưu voucher vào session checkout (nếu có)
+        $appliedVoucher = session('applied_voucher');
+        $voucherDiscount = session('voucher_discount', 0);
+        if ($appliedVoucher) {
+            session()->put('checkout_voucher', $appliedVoucher);
+            session()->put('checkout_voucher_discount', $voucherDiscount);
+        }
 
         foreach ($selectedProductIds as $id) {
             unset($cart[$id]);

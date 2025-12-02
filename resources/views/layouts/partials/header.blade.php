@@ -143,6 +143,9 @@
             <!-- Logo -->
             <div class="flex-shrink-0">
                 <a href="/" class="flex items-center">
+                    <img class="h-16 w-auto mr-2" 
+                        src="{{ asset('images/logo.png') }}" 
+                        alt="PolyTech Store Logo">
                     <span class="text-2xl font-bold text-indigo-600">
                         PolyTech Store
                     </span>

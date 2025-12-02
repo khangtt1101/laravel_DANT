@@ -1,7 +1,7 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
-import 'lazysizes'; 
+import 'lazysizes';
 import 'lazysizes/plugins/parent-fit/ls.parent-fit';
 
 // ===== BẮT ĐẦU THÊM CODE MỚI =====
@@ -9,10 +9,10 @@ import 'lazysizes/plugins/parent-fit/ls.parent-fit';
 // 1. Định nghĩa "Kho chứa" (Store)
 document.addEventListener('alpine:initializing', () => {
     Alpine.store('cart', {
-        
+
         // 2. Bộ nhớ (State): Lưu danh sách ID các sản phẩm trong giỏ
-        items: [], 
-        
+        items: [],
+
         // 3. Hàm khởi tạo: Nhận dữ liệu giỏ hàng từ PHP (sẽ làm ở Bước 2)
         init(initialItemIds) {
             this.items = initialItemIds;
@@ -24,12 +24,12 @@ document.addEventListener('alpine:initializing', () => {
         },
 
         // 5. HÀM LOGIC: Định nghĩa addToCart MỘT LẦN DUY NHẤT
-        addToCart(productId) {
-            // 5a. Cập nhật UI ngay lập tức
+        addToCart(productId, quantity = 1, redirectToCart = false) {
+            // 5a. Cập nhật UI ngay lập tức (thêm ID vào bộ nhớ)
             if (!this.isInCart(productId)) {
                 this.items.push(productId);
             }
-            
+
             // 5b. Gửi request AJAX (Fetch)
             fetch('/cart/add', {
                 method: 'POST',
@@ -40,49 +40,32 @@ document.addEventListener('alpine:initializing', () => {
                 },
                 body: JSON.stringify({
                     product_id: productId,
-                    quantity: 1
+                    quantity: quantity
                 })
             })
-            .then(response => {
-                // ===== BẮT ĐẦU SỬA LỖI =====
-                // Kiểm tra xem server có trả về lỗi 401 (Chưa đăng nhập) không
-                if (response.status === 401) { 
-                    // Nếu đúng, chuyển hướng người dùng đến trang đăng nhập
-                    window.location.href = '/login';
-                    // Ném lỗi để dừng tiến trình
-                    throw new Error('Chưa đăng nhập, đang chuyển hướng...');
-                }
-                // ===== KẾT THÚC SỬA LỖI =====
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 5c. Phát sự kiện cho Header
+                        window.dispatchEvent(new CustomEvent('cart-updated', {
+                            detail: { cartCount: data.cartCount }
+                        }));
 
-                if (!response.ok) {
-                    // Ném các lỗi khác (như 422, 500)
-                    throw new Error('Server response not OK');
-                }
-
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // 5c. Phát sự kiện cho Header
-                    window.dispatchEvent(new CustomEvent('cart-updated', {
-                        detail: { cartCount: data.cartCount }
-                    }));
-                } else {
-                    // 5d. Nếu lỗi: Xóa sản phẩm khỏi UI
+                        // 5d. Chuyển hướng nếu cần
+                        if (redirectToCart) {
+                            window.location.href = '/cart';
+                        }
+                    } else {
+                        // 5e. Nếu lỗi: Xóa sản phẩm khỏi UI
+                        this.items = this.items.filter(id => id !== productId);
+                        alert(data.message || 'Lỗi thêm vào giỏ.');
+                    }
+                })
+                .catch(() => {
+                    // 5f. Nếu lỗi mạng: Xóa sản phẩm khỏi UI
                     this.items = this.items.filter(id => id !== productId);
-                    alert(data.message || 'Lỗi thêm vào giỏ.');
-                }
-            })
-            .catch(error => {
-                // 5e. Nếu lỗi mạng hoặc lỗi 401: Xóa sản phẩm khỏi UI
-                this.items = this.items.filter(id => id !== productId);
-                
-                // Không 'alert' nếu là lỗi 401 (vì đã chuyển hướng)
-                if (error.message !== 'Chưa đăng nhập, đang chuyển hướng...') {
-                     console.error('Lỗi khi thêm vào giỏ:', error);
-                     alert(error.message || 'Lỗi kết nối.');
-                }
-            });
+                    alert('Lỗi kết nối.');
+                });
         }
     });
 });

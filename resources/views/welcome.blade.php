@@ -512,7 +512,15 @@
                                 <h3 class="text-xl font-bold text-gray-900 mb-4">{{ $mainCategory->name }}</h3>
                                 <div class="grid grid-cols-2 gap-3">
                                     @foreach($mainCategory->products->take(6) as $product)
-                                        <a href="#"
+                                        @php
+                                            $productUrl = '#';
+                                            if ($product->category && $product->category->slug) {
+                                                $productUrl = route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]);
+                                            } elseif ($product->category) {
+                                                $productUrl = route('products.show', ['category' => $product->category->id, 'product' => $product->slug ?? $product->id]);
+                                            }
+                                        @endphp
+                                        <a href="{{ $productUrl }}"
                                             class="group bg-white rounded-lg p-3 hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-indigo-300">
                                             <div class="relative h-32 mb-2 bg-gray-50 rounded overflow-hidden">
                                                 @if($product->images->first())
@@ -864,7 +872,15 @@
             <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     @foreach($usedProducts->take(12) as $product)
-                        <a href="#"
+                        @php
+                            $productUrl = '#';
+                            if ($product->category && $product->category->slug) {
+                                $productUrl = route('products.show', ['category' => $product->category->slug, 'product' => $product->slug]);
+                            } elseif ($product->category) {
+                                $productUrl = route('products.show', ['category' => $product->category->id, 'product' => $product->slug ?? $product->id]);
+                            }
+                        @endphp
+                        <a href="{{ $productUrl }}"
                             class="group text-center p-4 rounded-lg hover:bg-gray-50 transition-all duration-300 border border-gray-100 hover:border-indigo-200">
                             <div class="relative h-32 mb-3 bg-gray-50 rounded overflow-hidden mx-auto">
                                 @if($product->images->first())

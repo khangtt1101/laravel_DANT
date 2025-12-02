@@ -92,7 +92,7 @@
                 </div>
 
                 <!-- Products Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8 items-stretch">
                     @php
                         $cart = session('cart', []);
                     @endphp
@@ -100,7 +100,7 @@
                         @php
                             $inCart = array_key_exists($product->id, $cart);
                         @endphp
-                        <div class="bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group product-card transform hover:-translate-y-1">
+                        <div class="bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group product-card transform hover:-translate-y-1 flex flex-col h-full">
                             <a href="{{ route('products.show', ['category' => $product->category->slug ?? $product->category->id, 'product' => $product->slug ?? $product->id]) }}">
                                 <div class="relative h-64 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
                                     @if($product->images->isNotEmpty())
@@ -131,24 +131,30 @@
                                 </div>
                             </a>
 
-                            <div class="p-5">
+                            <div class="p-5 product-card-content">
                                 <div class="mb-2">
                                     <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full">
                                         {{ $product->category->name ?? 'N/A' }}
                                     </span>
                                 </div>
                                 <a href="{{ route('products.show', ['category' => $product->category->slug ?? $product->category->id, 'product' => $product->slug ?? $product->id]) }}">
-                                    <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition min-h-[3.5rem]" title="{{ $product->name }}">
+                                    <h3 class="text-lg font-bold text-gray-900 mb-2 product-card-title group-hover:text-indigo-600 transition" title="{{ $product->name }}">
                                         {{ $product->name }}
                                     </h3>
                                 </a>
+
+                                @if($product->specifications && isset($product->specifications['RAM']))
+                                    <p class="text-xs text-gray-600 mb-2 product-card-specs">{{ $product->specifications['RAM'] }}</p>
+                                @else
+                                    <p class="text-xs text-gray-600 mb-2 product-card-specs">&nbsp;</p>
+                                @endif
 
                                 <!-- Rating -->
                                 @php
                                     $ratingValue = $product->reviews_avg_rating ? round($product->reviews_avg_rating, 1) : null;
                                     $ratingCount = $product->reviews_count ?? 0;
                                 @endphp
-                                <div class="flex items-center gap-2 mb-3">
+                                <div class="flex items-center gap-2 mb-3 product-card-rating">
                                     <div class="flex">
                                         @for($i = 1; $i <= 5; $i++)
                                             <svg class="w-4 h-4 {{ $ratingValue !== null && $ratingValue >= $i ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
@@ -165,7 +171,7 @@
                                     </span>
                                 </div>
 
-                                <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center justify-between mb-4 product-card-price">
                                     <div>
                                         <p class="text-2xl font-bold text-indigo-600">
                                         {{ number_format($product->price, 0, ',', '.') }} đ
@@ -173,13 +179,19 @@
                                     </div>
                                 </div>
 
+                                @if($product->stock_quantity > 0)
+                                    <p class="text-xs text-green-600 mb-3 font-semibold product-card-stock">✓ Còn hàng</p>
+                                @else
+                                    <p class="text-xs text-red-600 mb-3 font-semibold product-card-stock">✗ Hết hàng</p>
+                                @endif
+
                                 <!-- Add to Cart Button -->
-                                <div x-data="{ added: {{ $inCart ? 'true' : 'false' }}, loading: false }" class="relative">
+                                <div x-data="{ added: {{ $inCart ? 'true' : 'false' }}, loading: false }" class="relative h-12 product-card-button">
                                     <button x-show="!added" 
                                         @click="loading = true; fetch('{{ route('cart.add') }}', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content }, body: JSON.stringify({ product_id: {{ $product->id }}, quantity: 1 }) }).then(r => r.json()).then(data => { if(data.success) { added = true; loading = false; window.dispatchEvent(new CustomEvent('cart-updated', { detail: { cartCount: data.cartCount } })); } else { loading = false; alert(data.message || 'Có lỗi xảy ra'); } }).catch(err => { loading = false; alert('Có lỗi xảy ra'); console.error(err); });"
                                         :disabled="loading"
                                         x-transition
-                                        class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed">
+                                        class="absolute inset-0 w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
                                         <span class="flex items-center justify-center gap-2">
                                             <svg x-show="!loading" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15"></path>
@@ -192,7 +204,7 @@
                                         </span>
                                     </button>
                                     <a x-show="added" x-transition href="{{ route('cart.index') }}"
-                                        class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] flex items-center justify-center gap-2"
+                                        class="absolute inset-0 w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] flex items-center justify-center gap-2"
                                         style="display: none;">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path>
@@ -320,7 +332,7 @@
                     </div>
 
                     <!-- Products Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8 items-stretch">
                         @php
                             $cart = session('cart', []);
                         @endphp
@@ -328,7 +340,7 @@
                             @php
                                 $inCart = array_key_exists($product->id, $cart);
                             @endphp
-                            <div class="bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group product-card transform hover:-translate-y-1">
+                            <div class="bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group product-card transform hover:-translate-y-1 flex flex-col h-full">
                                 <a href="{{ route('products.show', ['category' => $product->category->slug ?? $product->category->id, 'product' => $product->slug ?? $product->id]) }}">
                                     <div class="relative h-64 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
                                         @if($product->images->isNotEmpty())
@@ -359,24 +371,30 @@
                                     </div>
                                 </a>
 
-                                <div class="p-5">
+                                <div class="p-5 product-card-content">
                                     <div class="mb-2">
                                         <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full">
                                             {{ $product->category->name ?? 'N/A' }}
                                         </span>
                                     </div>
                                     <a href="{{ route('products.show', ['category' => $product->category->slug ?? $product->category->id, 'product' => $product->slug ?? $product->id]) }}">
-                                        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition min-h-[3.5rem]" title="{{ $product->name }}">
+                                        <h3 class="text-lg font-bold text-gray-900 mb-2 product-card-title group-hover:text-indigo-600 transition" title="{{ $product->name }}">
                                             {{ $product->name }}
                                         </h3>
                                     </a>
+
+                                    @if($product->specifications && isset($product->specifications['RAM']))
+                                        <p class="text-xs text-gray-600 mb-2 product-card-specs">{{ $product->specifications['RAM'] }}</p>
+                                    @else
+                                        <p class="text-xs text-gray-600 mb-2 product-card-specs">&nbsp;</p>
+                                    @endif
 
                                     <!-- Rating -->
                                     @php
                                         $ratingValue = $product->reviews_avg_rating ? round($product->reviews_avg_rating, 1) : null;
                                         $ratingCount = $product->reviews_count ?? 0;
                                     @endphp
-                                    <div class="flex items-center gap-2 mb-3">
+                                    <div class="flex items-center gap-2 mb-3 product-card-rating">
                                         <div class="flex">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <svg class="w-4 h-4 {{ $ratingValue !== null && $ratingValue >= $i ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
@@ -393,7 +411,7 @@
                                         </span>
                                     </div>
 
-                                    <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center justify-between mb-4 product-card-price">
                                         <div>
                                             <p class="text-2xl font-bold text-indigo-600">
                                                 {{ number_format($product->price, 0, ',', '.') }} đ
@@ -401,13 +419,19 @@
                                         </div>
                                     </div>
 
+                                    @if($product->stock_quantity > 0)
+                                        <p class="text-xs text-green-600 mb-3 font-semibold product-card-stock">✓ Còn hàng</p>
+                                    @else
+                                        <p class="text-xs text-red-600 mb-3 font-semibold product-card-stock">✗ Hết hàng</p>
+                                    @endif
+
                                     <!-- Add to Cart Button -->
-                                    <div x-data="{ added: {{ $inCart ? 'true' : 'false' }}, loading: false }" class="relative">
+                                    <div x-data="{ added: {{ $inCart ? 'true' : 'false' }}, loading: false }" class="relative h-12 product-card-button">
                                         <button x-show="!added" 
                                             @click="loading = true; fetch('{{ route('cart.add') }}', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content }, body: JSON.stringify({ product_id: {{ $product->id }}, quantity: 1 }) }).then(r => r.json()).then(data => { if(data.success) { added = true; loading = false; window.dispatchEvent(new CustomEvent('cart-updated', { detail: { cartCount: data.cartCount } })); } else { loading = false; alert(data.message || 'Có lỗi xảy ra'); } }).catch(err => { loading = false; alert('Có lỗi xảy ra'); console.error(err); });"
                                             :disabled="loading"
                                             x-transition
-                                            class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed">
+                                            class="absolute inset-0 w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
                                             <span class="flex items-center justify-center gap-2">
                                                 <svg x-show="!loading" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15"></path>
@@ -420,7 +444,7 @@
                                             </span>
                                         </button>
                                         <a x-show="added" x-transition href="{{ route('cart.index') }}"
-                                            class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] flex items-center justify-center gap-2"
+                                            class="absolute inset-0 w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] flex items-center justify-center gap-2"
                                             style="display: none;">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path>
@@ -525,7 +549,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch">
                         @php
                             $cart = session('cart', []);
                         @endphp
@@ -535,7 +559,7 @@
                                 $inCart = array_key_exists($product->id, $cart);
                             @endphp
 
-                            <div class="bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group product-card transform hover:-translate-y-1"
+                            <div class="bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group product-card transform hover:-translate-y-1 flex flex-col"
                                 data-product-id="{{ $product->id }}">
 
                                 @php
@@ -575,7 +599,7 @@
                                     </div>
                                 </a>
 
-                                <div class="p-5">
+                                <div class="p-5 flex flex-col h-full">
                                     <div class="mb-2">
                                         <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full">
                                             {{ $product->category->name ?? 'Chưa phân loại' }}
@@ -589,7 +613,9 @@
                                     </a>
 
                                     @if($product->specifications && isset($product->specifications['RAM']))
-                                        <p class="text-xs text-gray-600 mb-2">{{ $product->specifications['RAM'] }}</p>
+                                        <p class="text-xs text-gray-600 mb-2 min-h-[1.25rem]">{{ $product->specifications['RAM'] }}</p>
+                                    @else
+                                        <p class="text-xs text-gray-600 mb-2 min-h-[1.25rem]">&nbsp;</p>
                                     @endif
 
                                     @php
@@ -628,12 +654,12 @@
                                     @endif
 
                                     <!-- Add to Cart Button -->
-                                    <div x-data="{ added: {{ $inCart ? 'true' : 'false' }}, loading: false }" class="relative">
+                                    <div x-data="{ added: {{ $inCart ? 'true' : 'false' }}, loading: false }" class="relative h-12 mt-auto">
                                         <button x-show="!added" 
                                             @click="loading = true; fetch('{{ route('cart.add') }}', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content }, body: JSON.stringify({ product_id: {{ $product->id }}, quantity: 1 }) }).then(r => r.json()).then(data => { if(data.success) { added = true; loading = false; window.dispatchEvent(new CustomEvent('cart-updated', { detail: { cartCount: data.cartCount } })); } else { loading = false; alert(data.message || 'Có lỗi xảy ra'); } }).catch(err => { loading = false; alert('Có lỗi xảy ra'); console.error(err); });"
                                             :disabled="loading"
                                             x-transition
-                                            class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed">
+                                            class="absolute inset-0 w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
                                             <span class="flex items-center justify-center gap-2">
                                                 <svg x-show="!loading" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15"></path>
@@ -646,7 +672,7 @@
                                             </span>
                                         </button>
                                         <a x-show="added" x-transition href="{{ route('cart.index') }}"
-                                            class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] flex items-center justify-center gap-2"
+                                            class="absolute inset-0 w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] flex items-center justify-center gap-2"
                                             style="display: none;">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path>
@@ -684,13 +710,13 @@
                                     </a>
                                 </div>
 
-                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch">
                                     @foreach ($category->products as $product)
                                         @php
                                             $inCart = array_key_exists($product->id, $cart);
                                         @endphp
                                         
-                                        <div class="bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group transform hover:-translate-y-1">
+                                        <div class="bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group transform hover:-translate-y-1 flex flex-col">
                                             @php
                                                 $productUrl = '#';
                                                 if ($product->category && $product->category->slug) {
@@ -719,7 +745,7 @@
                                                 </div>
                                             </a>
 
-                                            <div class="p-5">
+                                            <div class="p-5 flex flex-col h-full">
                                                 <div class="mb-2">
                                                     <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full">
                                                         {{ $category->name }}
@@ -766,12 +792,12 @@
                                                 @endif
                                                 
                                                 <!-- Add to Cart Button -->
-                                                <div x-data="{ added: {{ $inCart ? 'true' : 'false' }}, loading: false }" class="relative">
+                                                <div x-data="{ added: {{ $inCart ? 'true' : 'false' }}, loading: false }" class="relative h-12 mt-auto">
                                                     <button x-show="!added" 
                                                         @click="loading = true; fetch('{{ route('cart.add') }}', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content }, body: JSON.stringify({ product_id: {{ $product->id }}, quantity: 1 }) }).then(r => r.json()).then(data => { if(data.success) { added = true; loading = false; window.dispatchEvent(new CustomEvent('cart-updated', { detail: { cartCount: data.cartCount } })); } else { loading = false; alert(data.message || 'Có lỗi xảy ra'); } }).catch(err => { loading = false; alert('Có lỗi xảy ra'); console.error(err); });"
                                                         :disabled="loading"
                                                         x-transition
-                                                        class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed">
+                                                        class="absolute inset-0 w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center">
                                                         <span class="flex items-center justify-center gap-2">
                                                             <svg x-show="!loading" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15"></path>
@@ -784,7 +810,7 @@
                                                         </span>
                                                     </button>
                                                     <a x-show="added" x-transition href="{{ route('cart.index') }}"
-                                                        class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] flex items-center justify-center gap-2"
+                                                        class="absolute inset-0 w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] flex items-center justify-center gap-2"
                                                         style="display: none;">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path>

@@ -1,0 +1,146 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Voucher;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+
+class VoucherController extends Controller
+{
+    /**
+     * Hiển thị danh sách voucher
+     */
+    public function index(Request $request)
+    {
+        $query = Voucher::query();
+
+        // Tìm kiếm theo mã hoặc tên
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('code', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('name', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        // Lọc theo trạng thái
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true)
+                      ->where('start_date', '<=', now())
+                      ->where('end_date', '>=', now());
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            } elseif ($request->status === 'expired') {
+                $query->where('end_date', '<', now());
+            }
+        }
+
+        $vouchers = $query->latest()->paginate(15)->withQueryString();
+
+        return view('admin.vouchers.index', compact('vouchers'));
+    }
+
+    /**
+     * Hiển thị form tạo voucher mới
+     */
+    public function create()
+    {
+        return view('admin.vouchers.create');
+    }
+
+    /**
+     * Lưu voucher mới
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'code' => ['required', 'string', 'max:50', 'unique:vouchers,code'],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'type' => ['required', 'in:percentage,fixed'],
+            'value' => ['required', 'numeric', 'min:0'],
+            'min_order_amount' => ['required', 'numeric', 'min:0'],
+            'max_discount_amount' => ['nullable', 'numeric', 'min:0'],
+            'usage_limit' => ['nullable', 'integer', 'min:0'],
+            'usage_limit_per_user' => ['nullable', 'integer', 'min:0'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date', 'after:start_date'],
+            'is_active' => ['boolean'],
+        ], [
+            'code.unique' => 'Mã voucher này đã tồn tại.',
+            'end_date.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
+        ]);
+
+        // Chuyển code thành chữ hoa
+        $validated['code'] = strtoupper(trim($validated['code']));
+        $validated['used_count'] = 0;
+        $validated['is_active'] = $request->has('is_active');
+
+        Voucher::create($validated);
+
+        return redirect()->route('admin.vouchers.index')
+            ->with('success', 'Tạo voucher thành công!');
+    }
+
+    /**
+     * Hiển thị form chỉnh sửa voucher
+     */
+    public function edit(Voucher $voucher)
+    {
+        return view('admin.vouchers.edit', compact('voucher'));
+    }
+
+    /**
+     * Cập nhật voucher
+     */
+    public function update(Request $request, Voucher $voucher)
+    {
+        $validated = $request->validate([
+            'code' => ['required', 'string', 'max:50', 'unique:vouchers,code,' . $voucher->id],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'type' => ['required', 'in:percentage,fixed'],
+            'value' => ['required', 'numeric', 'min:0'],
+            'min_order_amount' => ['required', 'numeric', 'min:0'],
+            'max_discount_amount' => ['nullable', 'numeric', 'min:0'],
+            'usage_limit' => ['nullable', 'integer', 'min:0'],
+            'usage_limit_per_user' => ['nullable', 'integer', 'min:0'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date', 'after:start_date'],
+            'is_active' => ['boolean'],
+        ], [
+            'code.unique' => 'Mã voucher này đã tồn tại.',
+            'end_date.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
+        ]);
+
+        // Chuyển code thành chữ hoa
+        $validated['code'] = strtoupper(trim($validated['code']));
+        $validated['is_active'] = $request->has('is_active');
+
+        $voucher->update($validated);
+
+        return redirect()->route('admin.vouchers.index')
+            ->with('success', 'Cập nhật voucher thành công!');
+    }
+
+    /**
+     * Xóa voucher
+     */
+    public function destroy(Voucher $voucher)
+    {
+        // Kiểm tra xem voucher đã được sử dụng chưa
+        if ($voucher->used_count > 0) {
+            return redirect()->route('admin.vouchers.index')
+                ->with('error', 'Không thể xóa voucher đã được sử dụng.');
+        }
+
+        $voucher->delete();
+
+        return redirect()->route('admin.vouchers.index')
+            ->with('success', 'Xóa voucher thành công!');
+    }
+}
+
