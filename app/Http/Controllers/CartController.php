@@ -80,6 +80,7 @@ class CartController extends Controller
                 'quantity' => $quantity,
                 'price' => $product->price,
                 'image_url' => $product->images->isEmpty() ? '' : $product->images->first()->image_url,
+                'category_id' => $product->category_id, // Lưu category_id để kiểm tra voucher
             ];
         }
 
@@ -170,7 +171,7 @@ class CartController extends Controller
         ]);
 
         $cart = session()->get('cart', []);
-        $selectedProductIds = $validated['selected_products'];
+        $selectedProductIds = array_unique($validated['selected_products']);
         $checkoutItems = [];
         $totalPrice = 0;
 

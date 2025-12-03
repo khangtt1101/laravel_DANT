@@ -40,8 +40,9 @@ class Voucher extends Model
 
     /**
      * Kiểm tra voucher có hợp lệ không
+     * @param array $productCategories Mảng ID các category của sản phẩm trong giỏ hàng
      */
-    public function isValid($user = null, $orderAmount = 0)
+    public function isValid($user = null, $orderAmount = 0, $productCategories = [])
     {
         // Kiểm tra trạng thái kích hoạt
         if (!$this->is_active) {
@@ -65,6 +66,33 @@ class Voucher extends Model
         // Kiểm tra giá trị đơn hàng tối thiểu
         if ($orderAmount < $this->min_order_amount) {
             return ['valid' => false, 'message' => 'Đơn hàng tối thiểu ' . number_format($this->min_order_amount, 0, ',', '.') . ' đ để áp dụng voucher này.'];
+        }
+
+        // Kiểm tra category: Nếu voucher có category được chọn, phải kiểm tra sản phẩm có thuộc category đó không
+        try {
+            if ($this->relationLoaded('categories') || \Illuminate\Support\Facades\Schema::hasTable('voucher_categories')) {
+                if (!$this->relationLoaded('categories')) {
+                    $this->load('categories');
+                }
+                
+                if ($this->categories->isNotEmpty() && !empty($productCategories)) {
+                    $hasValidCategory = false;
+                    foreach ($productCategories as $categoryId) {
+                        if ($this->appliesToCategory($categoryId)) {
+                            $hasValidCategory = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!$hasValidCategory) {
+                        $categoryNames = $this->categories->pluck('name')->join(', ');
+                        return ['valid' => false, 'message' => 'Voucher này chỉ áp dụng cho danh mục: ' . $categoryNames];
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            // Nếu bảng voucher_categories chưa tồn tại, bỏ qua kiểm tra category
+            // Voucher sẽ áp dụng cho tất cả sản phẩm
         }
 
         // Kiểm tra số lần sử dụng của user
@@ -107,6 +135,29 @@ class Voucher extends Model
     public function usages()
     {
         return $this->hasMany(\App\Models\VoucherUsage::class);
+    }
+
+    /**
+     * Một voucher có thể áp dụng cho nhiều danh mục (many-to-many)
+     * Nếu không có category nào được chọn, voucher áp dụng cho tất cả sản phẩm
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'voucher_categories');
+    }
+
+    /**
+     * Kiểm tra voucher có áp dụng cho category không
+     */
+    public function appliesToCategory($categoryId)
+    {
+        // Nếu voucher không có category nào được chọn, áp dụng cho tất cả
+        if ($this->categories->isEmpty()) {
+            return true;
+        }
+        
+        // Kiểm tra category có trong danh sách không
+        return $this->categories->contains('id', $categoryId);
     }
 }
 

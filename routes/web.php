@@ -22,9 +22,10 @@ use App\Http\Controllers\ProductViewController;
 use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\VoucherController;
+use App\Http\Controllers\PromotionController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::view('/promotions', 'pages.promotions')->name('promotions');
+Route::get('/promotions', [PromotionController::class, 'index'])->name('promotions');
 Route::view('/contact', 'pages.contact')->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
@@ -76,6 +77,7 @@ Route::middleware(['auth', 'verified', 'admin'])
 Route::middleware(['auth', 'verified'])->prefix('account')->name('account.')->group(function () {
     Route::get('/orders', [AccountController::class, 'orderHistory'])->name('orders');
     Route::get('/orders/{order}', [AccountController::class, 'showOrder'])->name('orders.show');
+    Route::post('/orders/{order}/cancel', [AccountController::class, 'cancelOrder'])->name('orders.cancel');
     Route::get('/support', [AccountController::class, 'support'])->name('support');
 });
 

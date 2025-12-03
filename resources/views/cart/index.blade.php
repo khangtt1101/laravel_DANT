@@ -81,7 +81,8 @@
                         },
                         body: JSON.stringify({
                             code: this.voucherCode.trim(),
-                            total_amount: this.total // Gửi tổng tiền của các sản phẩm đã chọn
+                            total_amount: this.total, // Gửi tổng tiền của các sản phẩm đã chọn
+                            selected_products: this.selected // Gửi danh sách sản phẩm đã chọn để kiểm tra category
                         })
                     });
 
@@ -239,14 +240,6 @@
             @csrf
             
             {{-- 
-                Bí mật: Gửi mảng 'selected' đi
-                Chúng ta tạo các input[type=hidden] bằng Alpine.js
-            --}}
-            <template x-for="id in selected" :key="id">
-                <input type="hidden" name="selected_products[]" :value="id">
-            </template>
-            
-            {{-- 
                 BƯỚC 2: Dùng x-show để hiển thị giỏ hàng hoặc thông báo "trống"
                 thay vì dùng @if
             --}}
@@ -345,7 +338,12 @@
                         
                         <!-- Phần nhập mã voucher -->
                         <div class="mt-6 border-t border-gray-200 pt-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Mã giảm giá</label>
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="block text-sm font-medium text-gray-700">Mã giảm giá</label>
+                                <a href="{{ route('promotions') }}" class="text-xs text-indigo-600 hover:text-indigo-800 hover:underline">
+                                    Xem tất cả voucher →
+                                </a>
+                            </div>
                             <div class="flex gap-2">
                                 <input type="text" 
                                        x-model="voucherCode"

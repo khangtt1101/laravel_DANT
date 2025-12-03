@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Voucher;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -48,7 +49,8 @@ class VoucherController extends Controller
      */
     public function create()
     {
-        return view('admin.vouchers.create');
+        $categories = Category::whereNull('parent_id')->with('children')->get();
+        return view('admin.vouchers.create', compact('categories'));
     }
 
     /**
@@ -79,7 +81,15 @@ class VoucherController extends Controller
         $validated['used_count'] = 0;
         $validated['is_active'] = $request->has('is_active');
 
-        Voucher::create($validated);
+        $voucher = Voucher::create($validated);
+
+        // Lưu categories (nếu có)
+        if ($request->has('categories')) {
+            $voucher->categories()->sync($request->categories);
+        } else {
+            // Nếu không chọn category nào, voucher áp dụng cho tất cả
+            $voucher->categories()->sync([]);
+        }
 
         return redirect()->route('admin.vouchers.index')
             ->with('success', 'Tạo voucher thành công!');
@@ -90,7 +100,9 @@ class VoucherController extends Controller
      */
     public function edit(Voucher $voucher)
     {
-        return view('admin.vouchers.edit', compact('voucher'));
+        $voucher->load('categories');
+        $categories = Category::whereNull('parent_id')->with('children')->get();
+        return view('admin.vouchers.edit', compact('voucher', 'categories'));
     }
 
     /**
@@ -121,6 +133,14 @@ class VoucherController extends Controller
         $validated['is_active'] = $request->has('is_active');
 
         $voucher->update($validated);
+
+        // Cập nhật categories
+        if ($request->has('categories')) {
+            $voucher->categories()->sync($request->categories);
+        } else {
+            // Nếu không chọn category nào, voucher áp dụng cho tất cả
+            $voucher->categories()->sync([]);
+        }
 
         return redirect()->route('admin.vouchers.index')
             ->with('success', 'Cập nhật voucher thành công!');

@@ -400,6 +400,10 @@ img[loading="lazy"].loaded {
     animation-name: falling-left;
 }
 
+.filter-chip--active {
+    @apply bg-gray-900 text-white border-gray-900;
+}
+
 .floating-icon.pattern-2 {
     animation-name: falling-straight;
 }

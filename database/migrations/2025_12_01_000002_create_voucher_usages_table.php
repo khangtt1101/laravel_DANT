@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('voucher_usages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('voucher_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade'); // nullable để cho phép guest
-            $table->foreignId('order_id')->nullable()->constrained()->onDelete('cascade');
-            $table->decimal('discount_amount', 15, 2);
+            $table->foreignId('voucher_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('order_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->decimal('discount_amount', 12, 2)->default(0);
+            $table->timestamp('used_at')->nullable();
             $table->timestamps();
-            
-            // Đảm bảo mỗi user chỉ dùng voucher một số lần nhất định
+
             $table->index(['voucher_id', 'user_id']);
         });
     }
@@ -32,5 +32,4 @@ return new class extends Migration
         Schema::dropIfExists('voucher_usages');
     }
 };
-
 

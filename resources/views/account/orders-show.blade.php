@@ -5,6 +5,17 @@
         </a>
     </div>
 
+    @if(session('success'))
+        <div class="mb-4 rounded-lg bg-green-50 border border-green-200 text-green-700 px-4 py-3">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="mb-4 rounded-lg bg-red-50 border border-red-200 text-red-600 px-4 py-3">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <h2 class="text-2xl font-semibold text-gray-900 mb-2">
         Chi tiết đơn hàng
     </h2>
@@ -19,9 +30,31 @@
                 <p class="text-sm text-gray-600">{{ Auth::user()->full_name }}</p>
                 <p class="text-sm text-gray-600">{{ $order->shipping_address }}</p>
             </div>
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <h3 class="font-medium text-gray-900 mb-2">Trạng thái</h3>
-                <p class="text-sm font-semibold text-indigo-600">{{ ucfirst($order->status) }}</p>
+            <div class="bg-gray-50 p-4 rounded-lg space-y-3">
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-2">Trạng thái</h3>
+                    <p class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
+                        @class([
+                            'bg-yellow-100 text-yellow-800' => $order->status === 'pending',
+                            'bg-blue-100 text-blue-700' => $order->status === 'processing',
+                            'bg-green-100 text-green-700' => $order->status === 'completed',
+                            'bg-red-100 text-red-700' => $order->status === 'cancelled',
+                            'bg-gray-100 text-gray-700' => !in_array($order->status, ['pending','processing','completed','cancelled']),
+                        ])">
+                        {{ ucfirst($order->status) }}
+                    </p>
+                </div>
+
+                @if(in_array($order->status, ['pending', 'processing']))
+                    <form action="{{ route('account.orders.cancel', $order) }}" method="POST"
+                        onsubmit="return confirm('Bạn chắc chắn muốn huỷ đơn hàng này?');">
+                        @csrf
+                        <button type="submit"
+                            class="w-full px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition">
+                            Huỷ đơn hàng
+                        </button>
+                    </form>
+                @endif
             </div>
             <div class="bg-gray-50 p-4 rounded-lg">
                 <h3 class="font-medium text-gray-900 mb-2">Thanh toán</h3>

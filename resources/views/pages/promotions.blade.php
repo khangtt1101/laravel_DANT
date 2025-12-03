@@ -46,59 +46,6 @@
         </div>
     </section>
 
-    @php
-        $hotDeals = [
-            [
-                'title' => 'Laptop gaming RTX 4060',
-                'tag' => 'Giảm 5.000.000đ',
-                'desc' => 'Nhập mã GAMEKING dành cho đơn từ 25 triệu',
-                'time' => 'Hết hạn: 31/12',
-                'bg' => 'from-indigo-500/10 to-indigo-100',
-            ],
-            [
-                'title' => 'Combo phụ kiện Apple',
-                'tag' => 'Mua 2 tặng 1',
-                'desc' => 'Áp dụng AirPods + Watch + phụ kiện chính hãng',
-                'time' => 'Hết hạn: 10/12',
-                'bg' => 'from-pink-500/10 to-pink-100',
-            ],
-            [
-                'title' => 'Ưu đãi doanh nghiệp',
-                'tag' => 'Giảm thêm 8%',
-                'desc' => 'Hóa đơn VAT trên 50 triệu, hỗ trợ giao nhanh toàn quốc',
-                'time' => 'Hết hạn: 30/12',
-                'bg' => 'from-amber-500/10 to-amber-100',
-            ],
-        ];
-
-        $voucherGroups = [
-            [
-                'label' => 'Voucher thanh toán',
-                'color' => 'indigo',
-                'codes' => [
-                    ['code' => 'POLY-VNPAY150K', 'detail' => 'Giảm 150K khi thanh toán VNPay từ 2.5 triệu'],
-                    ['code' => 'POLY-MOMO200K', 'detail' => 'Giảm 200K cho đơn 5 triệu, ví MoMo'],
-                ],
-            ],
-            [
-                'label' => 'Voucher thành viên',
-                'color' => 'emerald',
-                'codes' => [
-                    ['code' => 'MEMBER-SILVER', 'detail' => 'Giảm 5% tối đa 300K cho hạng Silver'],
-                    ['code' => 'MEMBER-GOLD', 'detail' => 'Giảm 8% tối đa 500K cho hạng Gold/Platinum'],
-                ],
-            ],
-            [
-                'label' => 'Miễn phí vận chuyển',
-                'color' => 'pink',
-                'codes' => [
-                    ['code' => 'SHIP0K-HN', 'detail' => 'Miễn phí giao nhanh nội thành HN/HCM'],
-                    ['code' => 'SHIP0K-TOANQUOC', 'detail' => 'Đơn từ 2 triệu áp dụng toàn quốc'],
-                ],
-            ],
-        ];
-    @endphp
-
     <section class="bg-white py-16">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap items-center justify-between gap-4 mb-10">
@@ -107,36 +54,71 @@
                     <h2 class="text-3xl font-bold text-gray-900">Ưu đãi nổi bật</h2>
                     <p class="text-gray-600 mt-2">Các chương trình hot nhất hiện tại – số lượng có hạn.</p>
                 </div>
-                <div class="flex flex-wrap gap-2">
-                    <button class="px-4 py-2 rounded-full text-sm font-medium bg-gray-100 hover:bg-gray-200 transition">Tất cả</button>
-                    <button class="px-4 py-2 rounded-full text-sm font-medium border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition">Laptop</button>
-                    <button class="px-4 py-2 rounded-full text-sm font-medium border border-pink-200 text-pink-500 hover:bg-pink-50 transition">Phụ kiện</button>
-                    <button class="px-4 py-2 rounded-full text-sm font-medium border border-emerald-200 text-emerald-600 hover:bg-emerald-50 transition">Doanh nghiệp</button>
+                <div class="flex flex-wrap gap-2" data-flash-filters>
+                    @foreach($flashFilters as $filter)
+                        <button
+                            class="filter-chip px-4 py-2 rounded-full text-sm font-medium border border-gray-200 text-gray-600 hover:bg-gray-100 transition"
+                            data-filter-button
+                            data-filter="{{ $filter['slug'] }}"
+                            @if($loop->first) data-active="true" @endif
+                        >
+                            {{ $filter['label'] }}
+                        </button>
+                    @endforeach
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-6">
-                @foreach($hotDeals as $deal)
-                    <div class="bg-gradient-to-br {{ $deal['bg'] }} rounded-2xl p-6 border border-white shadow-sm hover:shadow-xl transition">
-                        <div class="flex items-center justify-between mb-6">
-                            <span class="px-4 py-1 text-xs font-semibold rounded-full bg-white text-indigo-600">
-                                {{ $deal['tag'] }}
-                            </span>
-                            <span class="text-sm text-gray-600">{{ $deal['time'] }}</span>
+            @if(count($flashDeals))
+                <div class="grid md:grid-cols-3 gap-6">
+                    @foreach($flashDeals as $deal)
+                        @php
+                            $categorySlugs = collect($deal['categories'])->pluck('slug')->implode(',');
+                            $pillClass = $deal['colors']['pill'] ?? 'bg-slate-100 text-slate-600';
+                            $cardClass = $deal['colors']['card'] ?? 'from-slate-500/10 to-slate-100';
+                            $buttonClass = $deal['colors']['button'] ?? 'bg-indigo-600 text-white hover:bg-indigo-700';
+                        @endphp
+                        <div
+                            class="flash-deal-card bg-gradient-to-br {{ $cardClass }} rounded-2xl p-6 border border-white shadow-sm hover:shadow-xl transition"
+                            data-deal-categories="{{ $categorySlugs ?: 'all' }}">
+                            <div class="flex items-center justify-between mb-6">
+                                <span class="px-4 py-1 text-xs font-semibold rounded-full {{ $pillClass }}">
+                                    {{ $deal['tag'] }}
+                                </span>
+                                <span class="text-sm text-gray-600">
+                                    @if($deal['expires'])
+                                        Hết hạn: {{ $deal['expires'] }}
+                                    @else
+                                        Đang diễn ra
+                                    @endif
+                                </span>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-3">{{ $deal['title'] }}</h3>
+                            <p class="text-gray-600 mb-6">{{ $deal['description'] }}</p>
+                            <div class="flex items-center justify-between">
+                                <a href="{{ route('shop.index') }}" class="text-indigo-600 font-semibold hover:text-indigo-800 transition">
+                                    Xem chi tiết
+                                </a>
+                                <button
+                                    class="px-4 py-2 text-sm font-medium rounded-full shadow hover:-translate-y-0.5 transition {{ $buttonClass }}"
+                                    onclick="copyVoucherCode('{{ $deal['code'] }}', this)">
+                                    <span class="copy-text">Sao chép mã</span>
+                                </button>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                @foreach($deal['categories'] as $category)
+                                    <span class="text-xs px-2 py-1 bg-white/80 text-gray-700 rounded-full">
+                                        {{ $category['name'] }}
+                                    </span>
+                                @endforeach
+                            </div>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3">{{ $deal['title'] }}</h3>
-                        <p class="text-gray-600 mb-6">{{ $deal['desc'] }}</p>
-                        <div class="flex items-center justify-between">
-                            <a href="{{ route('shop.index') }}" class="text-indigo-600 font-semibold hover:text-indigo-800 transition">
-                                Xem chi tiết
-                            </a>
-                            <button class="px-4 py-2 text-sm font-medium bg-white rounded-full shadow hover:-translate-y-0.5 transition">
-                                Sao chép mã
-                            </button>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center py-12 text-gray-600">
+                    Hiện chưa có voucher nào để hiển thị trong mục này.
+                </div>
+            @endif
         </div>
     </section>
 
@@ -150,25 +132,56 @@
 
             <div class="grid md:grid-cols-3 gap-6">
                 @foreach($voucherGroups as $group)
-                    <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg transition">
-                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-{{ $group['color'] }}-50 text-{{ $group['color'] }}-600 mb-4">
-                            {{ $group['label'] }}
-                        </span>
-                        <div class="space-y-4">
-                            @foreach($group['codes'] as $item)
-                                <div class="p-4 border border-dashed border-gray-200 rounded-xl flex flex-col gap-2">
-                                    <div class="flex items-center justify-between">
-                                        <h4 class="font-semibold text-gray-900 text-lg">{{ $item['code'] }}</h4>
-                                        <button class="text-sm text-{{ $group['color'] }}-600 font-medium hover:text-{{ $group['color'] }}-700">Sao chép</button>
+                    @if($group['vouchers']->count() > 0)
+                        @php
+                            $bgColorClass = $group['color'] === 'indigo' ? 'bg-indigo-50' : ($group['color'] === 'emerald' ? 'bg-emerald-50' : 'bg-pink-50');
+                            $textColorClass = $group['color'] === 'indigo' ? 'text-indigo-600' : ($group['color'] === 'emerald' ? 'text-emerald-600' : 'text-pink-600');
+                            $hoverColorClass = $group['color'] === 'indigo' ? 'hover:text-indigo-700' : ($group['color'] === 'emerald' ? 'hover:text-emerald-700' : 'hover:text-pink-700');
+                        @endphp
+                        <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-lg transition">
+                            <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full {{ $bgColorClass }} {{ $textColorClass }} mb-4">
+                                {{ $group['label'] }}
+                            </span>
+                            <div class="space-y-4">
+                                @foreach($group['vouchers'] as $voucher)
+                                    <div class="p-4 border border-dashed border-gray-200 rounded-xl flex flex-col gap-2">
+                                        <div class="flex items-center justify-between">
+                                            <h4 class="font-semibold text-gray-900 text-lg">{{ $voucher->code }}</h4>
+                                            <button 
+                                                onclick="copyVoucherCode('{{ $voucher->code }}', this)"
+                                                class="text-sm {{ $textColorClass }} font-medium {{ $hoverColorClass }} transition">
+                                                <span class="copy-text">Sao chép</span>
+                                            </button>
+                                        </div>
+                                        <p class="text-sm font-medium text-gray-900">{{ $voucher->name }}</p>
+                                        @if($voucher->description)
+                                            <p class="text-sm text-gray-600">{{ $voucher->description }}</p>
+                                        @endif
+                                        <div class="flex flex-wrap gap-2 mt-2">
+                                            @if($voucher->type === 'percentage')
+                                                <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded">Giảm {{ $voucher->value }}%</span>
+                                            @else
+                                                <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded">Giảm {{ number_format($voucher->value, 0, ',', '.') }} đ</span>
+                                            @endif
+                                            @if($voucher->min_order_amount > 0)
+                                                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">Đơn tối thiểu {{ number_format($voucher->min_order_amount, 0, ',', '.') }} đ</span>
+                                            @endif
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">Hết hạn: {{ $voucher->end_date->format('d/m/Y') }}</p>
                                     </div>
-                                    <p class="text-sm text-gray-600">{{ $item['detail'] }}</p>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
+                            <p class="text-xs text-gray-400 mt-4">* Mỗi mã sử dụng tối đa 1 lần/khách. Không áp dụng đồng thời.</p>
                         </div>
-                        <p class="text-xs text-gray-400 mt-4">* Mỗi mã sử dụng tối đa 1 lần/khách. Không áp dụng đồng thời.</p>
-                    </div>
+                    @endif
                 @endforeach
             </div>
+            
+            @if($activeVouchers->count() === 0)
+                <div class="text-center py-12">
+                    <p class="text-gray-600">Hiện tại chưa có voucher nào đang hoạt động.</p>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -272,6 +285,64 @@
         </div>
     </section>
 </x-main-layout>
+
+<script>
+function copyVoucherCode(code, button) {
+    // Copy mã vào clipboard
+    navigator.clipboard.writeText(code).then(function() {
+        // Thay đổi text của button
+        const copyText = button.querySelector('.copy-text');
+        const originalText = copyText.textContent;
+        copyText.textContent = 'Đã sao chép!';
+        button.classList.add('text-green-600');
+        button.classList.remove('text-indigo-600', 'text-emerald-600', 'text-pink-600');
+        
+        // Hiển thị thông báo (optional)
+        // Có thể thêm toast notification ở đây nếu muốn
+        
+        // Đổi lại sau 2 giây
+        setTimeout(function() {
+            copyText.textContent = originalText;
+            button.classList.remove('text-green-600');
+            // Khôi phục màu gốc dựa trên group color (cần xử lý thêm nếu muốn)
+        }, 2000);
+    }).catch(function(err) {
+        console.error('Lỗi khi sao chép:', err);
+        alert('Không thể sao chép mã. Vui lòng sao chép thủ công: ' + code);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('[data-filter-button]');
+    const dealCards = document.querySelectorAll('[data-deal-categories]');
+
+    if (!filterButtons.length) {
+        return;
+    }
+
+    const setActiveButton = (activeButton) => {
+        filterButtons.forEach(btn => btn.classList.remove('filter-chip--active'));
+        activeButton.classList.add('filter-chip--active');
+    };
+
+    filterButtons.forEach(button => {
+        if (button.dataset.filter === 'all' && button.dataset.active === 'true') {
+            setActiveButton(button);
+        }
+
+        button.addEventListener('click', () => {
+            const filter = button.dataset.filter;
+            setActiveButton(button);
+
+            dealCards.forEach(card => {
+                const categories = card.dataset.dealCategories.split(',');
+                const shouldShow = filter === 'all' || categories.includes(filter);
+                card.classList.toggle('hidden', !shouldShow);
+            });
+        });
+    });
+});
+</script>
 
 
 

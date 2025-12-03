@@ -129,6 +129,42 @@
                     @enderror
                 </div>
 
+                <!-- Danh mục áp dụng -->
+                <div class="sm:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Danh mục áp dụng</label>
+                    <p class="text-xs text-gray-500 mb-3">Chọn danh mục để voucher chỉ áp dụng cho sản phẩm thuộc danh mục đó. Để trống nếu áp dụng cho tất cả sản phẩm.</p>
+                    <div class="border border-gray-300 rounded-md p-4 max-h-60 overflow-y-auto">
+                        @php
+                            $selectedCategories = old('categories', $voucher->categories->pluck('id')->toArray());
+                        @endphp
+                        @foreach($categories as $category)
+                            <div class="mb-3">
+                                <label class="flex items-center">
+                                    <input type="checkbox" name="categories[]" value="{{ $category->id }}" 
+                                           {{ in_array($category->id, $selectedCategories) ? 'checked' : '' }}
+                                           class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                    <span class="ml-2 text-sm font-medium text-gray-900">{{ $category->name }}</span>
+                                </label>
+                                @if($category->children->isNotEmpty())
+                                    <div class="ml-6 mt-1 space-y-1">
+                                        @foreach($category->children as $child)
+                                            <label class="flex items-center">
+                                                <input type="checkbox" name="categories[]" value="{{ $child->id }}"
+                                                       {{ in_array($child->id, $selectedCategories) ? 'checked' : '' }}
+                                                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                                <span class="ml-2 text-sm text-gray-700">{{ $child->name }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                    @error('categories')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Trạng thái -->
                 <div class="sm:col-span-2">
                     <div class="flex items-center">
