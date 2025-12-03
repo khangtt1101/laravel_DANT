@@ -12,3 +12,4 @@ CREATE TABLE IF NOT EXISTS `voucher_categories` (
     CONSTRAINT `voucher_categories_category_id_foreign`
         FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
