@@ -1,0 +1,27 @@
+✅ ĐÃ CẤU HÌNH XONG MAIL TRONG .ENV
+
+📝 BƯỚC TIẾP THEO (CHỈ CẦN 2 PHÚT):
+
+1. MỞ FILE .env VÀ THAY THẾ:
+   - your-email@gmail.com → Email Gmail của bạn
+   - your-app-password-here → App Password từ Gmail
+
+2. LẤY APP PASSWORD GMAIL:
+   → Vào: https://myaccount.google.com/apppasswords
+   → Tạo App Password:
+      • Select app: Mail
+      • Select device: Other → Nhập "Laravel"
+      • Generate → Copy password (16 ký tự)
+   → Dán vào .env (bỏ khoảng trắng)
+
+3. TEST:
+   → Vào /forgot-password
+   → Nhập email
+   → Submit
+   → Kiểm tra email inbox
+
+⚠️ LƯU Ý:
+- Nếu chưa bật 2-Step Verification, cần bật trước
+- App Password là 16 ký tự, không có khoảng trắng
+- Email sẽ được gửi từ địa chỉ bạn cấu hình
+

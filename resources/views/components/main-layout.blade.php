@@ -29,6 +29,8 @@
 
         @include('layouts.partials.footer')
 
+        @include('components.chat-widget')
+
     </div>
 </body>
 </html>

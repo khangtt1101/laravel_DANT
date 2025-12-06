@@ -248,18 +248,19 @@
                 <h3 class="text-2xl font-semibold text-gray-900 mb-6">Đánh giá sản phẩm</h3>
 
                 @if($canReview)
-                    <div class="mb-10 bg-gray-50 border border-gray-200 rounded-xl p-6">
+                    <div class="mb-10 bg-gray-50 border border-gray-200 rounded-xl p-6" x-data="{ selectedRating: {{ old('rating', 5) }} }">
                         <h4 class="text-lg font-medium text-gray-900 mb-4">Chia sẻ trải nghiệm của bạn</h4>
                         <form action="{{ route('products.reviews.store', $product) }}" method="POST" class="space-y-4">
                             @csrf
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Mức độ hài lòng</label>
                                 <div class="flex space-x-2">
-                                    @php $selectedRating = old('rating', 5); @endphp
                                     @for ($i = 1; $i <= 5; $i++)
                                         <label class="cursor-pointer">
-                                            <input type="radio" name="rating" value="{{ $i }}" class="hidden" @checked($selectedRating == $i)>
-                                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full border {{ $selectedRating == $i ? 'bg-yellow-400 text-white border-yellow-400' : 'border-gray-300 text-gray-500' }}">
+                                            <input type="radio" name="rating" value="{{ $i }}" class="hidden" :checked="selectedRating == {{ $i }}" x-model="selectedRating">
+                                            <span @click="selectedRating = {{ $i }}" 
+                                                  class="inline-flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-200"
+                                                  :class="selectedRating == {{ $i }} ? 'bg-yellow-400 text-white border-yellow-400 shadow-md scale-110' : 'border-gray-300 text-gray-500 hover:border-yellow-300 hover:bg-yellow-50'">
                                                 {{ $i }}
                                             </span>
                                         </label>
@@ -286,7 +287,7 @@
                         Vui lòng <a href="{{ route('login') }}" class="text-indigo-600 font-medium">đăng nhập</a> để đánh giá sản phẩm.
                     </div>
                 @elseif($userReview)
-                    <div class="mb-10 bg-white border border-gray-200 rounded-xl p-6">
+                    <div class="mb-10 bg-white border border-gray-200 rounded-xl p-6" x-data="{ selectedRating: {{ old('rating', $userReview->rating) }} }">
                         <h4 class="text-lg font-medium text-gray-900 mb-4">Chỉnh sửa đánh giá của bạn</h4>
                         <form action="{{ route('products.reviews.update', [$product, $userReview]) }}" method="POST" class="space-y-4">
                             @csrf
@@ -294,11 +295,12 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Mức độ hài lòng</label>
                                 <div class="flex space-x-2">
-                                    @php $editRating = old('rating', $userReview->rating); @endphp
                                     @for ($i = 1; $i <= 5; $i++)
                                         <label class="cursor-pointer">
-                                            <input type="radio" name="rating" value="{{ $i }}" class="hidden" @checked($editRating == $i)>
-                                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full border {{ $editRating == $i ? 'bg-yellow-400 text-white border-yellow-400' : 'border-gray-300 text-gray-500' }}">
+                                            <input type="radio" name="rating" value="{{ $i }}" class="hidden" :checked="selectedRating == {{ $i }}" x-model="selectedRating">
+                                            <span @click="selectedRating = {{ $i }}" 
+                                                  class="inline-flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-200"
+                                                  :class="selectedRating == {{ $i }} ? 'bg-yellow-400 text-white border-yellow-400 shadow-md scale-110' : 'border-gray-300 text-gray-500 hover:border-yellow-300 hover:bg-yellow-50'">
                                                 {{ $i }}
                                             </span>
                                         </label>

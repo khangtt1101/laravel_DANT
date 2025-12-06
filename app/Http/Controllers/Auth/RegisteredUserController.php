@@ -45,6 +45,8 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Redirect đến trang chủ thay vì dashboard vì dashboard yêu cầu verify email
+        // Nếu user đã verify email, họ có thể vào dashboard sau
+        return redirect()->route('home')->with('status', 'Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.');
     }
 }

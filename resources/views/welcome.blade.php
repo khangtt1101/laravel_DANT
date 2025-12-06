@@ -1835,7 +1835,7 @@
     </section>
 
     <!-- Floating Action Buttons - Nhẹ nhàng, chuyên nghiệp -->
-    <div class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 flex flex-col gap-3">
+    <div class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40 flex flex-col gap-3">
         <!-- Scroll to Top Button -->
         <button id="scrollToTop"
             class="hidden bg-indigo-600 text-white p-3 md:p-3.5 rounded-full shadow-lg hover:bg-indigo-700 transition-all duration-300 hover:shadow-xl hover:scale-110 active:scale-95 group animate-float-delay-1"
