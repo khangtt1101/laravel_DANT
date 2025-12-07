@@ -1,8 +1,12 @@
-<header class="bg-white shadow-md sticky top-0 z-50">
+<header class="bg-white shadow-md sticky top-0 z-50 transition-all duration-300" x-data="{ isScrolled: false }"
+    @scroll.window="isScrolled = (window.pageYOffset > 20)">
     <!-- Top Bar với Marquee -->
-    <div class="bg-gradient-to-r from-pink-600 to-purple-600 text-white py-2 text-sm overflow-hidden relative">
+    <div class="bg-gradient-to-r from-pink-600 to-purple-600 text-white overflow-hidden relative transition-all duration-300"
+        :class="isScrolled ? 'h-0 py-0' : 'h-10 py-2'">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between" x-show="!isScrolled"
+                x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0">
                 <!-- Marquee Section - Chạy chữ tự động -->
                 <div class="flex-1 overflow-hidden relative">
                     <div class="marquee-container flex items-center gap-6 whitespace-nowrap">
@@ -139,14 +143,15 @@
 
     <!-- Main Header -->
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20 gap-4">
+        <div class="flex items-center justify-between gap-4 transition-all duration-300"
+            :class="isScrolled ? 'h-16' : 'h-20'">
             <!-- Logo -->
             <div class="flex-shrink-0">
                 <a href="/" class="flex items-center">
-                    <img class="h-16 w-auto mr-2" 
-                        src="{{ asset('images/logo.png') }}" 
-                        alt="PolyTech Store Logo">
-                    <span class="text-2xl font-bold text-indigo-600">
+                    <img class="w-auto mr-2 transition-all duration-300" :class="isScrolled ? 'h-10' : 'h-16'"
+                        src="{{ asset('images/logo.png') }}" alt="PolyTech Store Logo">
+                    <span class="text-2xl font-bold text-indigo-600 transition-all duration-300"
+                        :class="isScrolled ? 'text-xl' : 'text-2xl'">
                         PolyTech Store
                     </span>
                 </a>
@@ -224,7 +229,8 @@
                                     Trang Quản Trị
                                 </a>
                             @else
-                                <a href="{{ route('account.orders') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <a href="{{ route('account.orders') }}"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Lịch sử đơn hàng
                                 </a>
                             @endif
@@ -264,8 +270,8 @@
                         stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                     <path :class="{'inline-flex': mobileMenuOpen, 'hidden': !mobileMenuOpen }" stroke-linecap="round"
                         stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -285,18 +291,14 @@
                     </button>
 
                     <!-- Click outside to close -->
-                    <div x-show="categoryMenuOpen" @click="categoryMenuOpen = false" 
-                        class="fixed inset-0 z-10 w-full h-full"
-                        style="display: none;"></div>
+                    <div x-show="categoryMenuOpen" @click="categoryMenuOpen = false"
+                        class="fixed inset-0 z-10 w-full h-full" style="display: none;"></div>
 
                     <!-- Dropdown Menu -->
-                    <div x-show="categoryMenuOpen"
-                        x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 scale-95"
-                        x-transition:enter-end="opacity-100 scale-100"
+                    <div x-show="categoryMenuOpen" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                         x-transition:leave="transition ease-in duration-75"
-                        x-transition:leave-start="opacity-100 scale-100"
-                        x-transition:leave-end="opacity-0 scale-95"
+                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
                         class="absolute left-0 top-full w-56 bg-white text-gray-900 shadow-xl z-50 rounded-lg mt-1"
                         style="display: none;">
                         <div class="py-2">

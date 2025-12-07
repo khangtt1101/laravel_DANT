@@ -16,14 +16,14 @@ class OrderController extends Controller
         // Xử lý logic tìm kiếm
         if ($request->filled('search')) {
             $searchTerm = $request->input('search');
-            
-            $query->where(function($q) use ($searchTerm) {
+
+            $query->where(function ($q) use ($searchTerm) {
                 // 1. Tìm theo Mã đơn hàng
                 $q->where('order_code', 'like', '%' . $searchTerm . '%')
-                  // 2. Hoặc tìm theo tên sản phẩm (thông qua quan hệ)
-                  ->orWhereHas('items.product', function ($subQuery) use ($searchTerm) {
-                      $subQuery->where('name', 'like', '%' . $searchTerm . '%');
-                  });
+                    // 2. Hoặc tìm theo tên sản phẩm (thông qua quan hệ)
+                    ->orWhereHas('items.product', function ($subQuery) use ($searchTerm) {
+                        $subQuery->where('name', 'like', '%' . $searchTerm . '%');
+                    });
             });
         }
 
@@ -45,6 +45,10 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
+        if ($order->status == 'delivered') {
+            return redirect()->back()->with('error', 'Đơn hàng đã giao không thể thay đổi trạng thái.');
+        }
+
         $request->validate(['status' => 'required|in:pending,processing,shipped,delivered,cancelled']);
         $order->update(['status' => $request->status]);
         return redirect()->route('admin.orders.index', $order)->with('success', 'Trạng thái đơn hàng đã được cập nhật.'); // <-- Cập nhật
