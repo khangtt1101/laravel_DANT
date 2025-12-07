@@ -31,20 +31,27 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'full_name' => $request->name,
+        $otp = (string) rand(100000, 999999);
+
+        $registrationData = [
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ]);
+            'otp' => $otp,
+            'otp_expires_at' => now()->addMinutes(10),
+        ];
 
-        event(new Registered($user));
+        // Store data in session
+        $request->session()->put('registration_data', $registrationData);
 
-        Auth::login($user);
+        // Send OTP Email
+        \Illuminate\Support\Facades\Mail::to($request->email)->send(new \App\Mail\OtpMail($otp));
 
-        return redirect(route('dashboard', absolute: false));
+        // Store email in session for verify page to display (optional, but good for UX)
+        return redirect()->route('otp.verify')->with('email', $request->email);
     }
 }
