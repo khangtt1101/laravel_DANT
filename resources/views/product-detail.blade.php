@@ -230,13 +230,38 @@
                 </div>
             </div>
 
-            {{-- Related Products (Placeholder structure) --}}
+            {{-- Related Products --}}
             <div class="mt-16">
                 <h2 class="text-2xl font-bold text-gray-900 mb-8">Sản phẩm liên quan</h2>
-                {{-- This would typically be a loop over related products --}}
-                <div class="bg-gray-50 rounded-xl p-8 text-center border border-dashed border-gray-300">
-                    <p class="text-gray-500">Các sản phẩm cùng danh mục sẽ hiển thị ở đây.</p>
-                </div>
+                @if(isset($relatedProducts) && $relatedProducts->count())
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        @foreach($relatedProducts as $item)
+                            <a href="{{ route('products.show', ['category' => $item->category->slug ?? $item->category->id, 'product' => $item->slug ?? $item->id]) }}"
+                               class="group block bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition">
+                                <div class="relative h-48 bg-gray-50">
+                                    @if($item->images->isNotEmpty())
+                                        <img src="{{ Storage::url($item->images->first()->image_url) }}" alt="{{ $item->name }}"
+                                             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center text-gray-400 text-sm">Chưa có ảnh</div>
+                                    @endif
+                                    <div class="absolute top-3 left-3">
+                                        <span class="bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full">HOT</span>
+                                    </div>
+                                </div>
+                                <div class="p-4 space-y-2">
+                                    <p class="text-xs font-medium text-indigo-600">{{ $item->category->name ?? 'Danh mục' }}</p>
+                                    <h3 class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">{{ $item->name }}</h3>
+                                    <p class="text-base font-bold text-indigo-700">{{ number_format($item->price, 0, ',', '.') }} đ</p>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="bg-gray-50 rounded-xl p-8 text-center border border-dashed border-gray-300">
+                        <p class="text-gray-500">Chưa có sản phẩm liên quan.</p>
+                    </div>
+                @endif
             </div>
 
         </div>

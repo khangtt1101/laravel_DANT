@@ -88,6 +88,14 @@ class ShopController extends Controller
         $averageRating = $averageRatingRaw ? round($averageRatingRaw, 1) : null;
         $reviewsCount = $product->reviews()->count();
 
+        // Sản phẩm liên quan (cùng danh mục, loại trừ sản phẩm hiện tại)
+        $relatedProducts = Product::with(['category', 'images'])
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->latest()
+            ->take(4)
+            ->get();
+
         $canReview = false;
         $userReview = null;
 
@@ -111,7 +119,8 @@ class ShopController extends Controller
             'averageRating',
             'reviewsCount',
             'canReview',
-            'userReview'
+            'userReview',
+            'relatedProducts'
         ));
     }
 
