@@ -66,6 +66,7 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::resource('reviews', ReviewController::class)->only(['index', 'destroy']);
         Route::resource('categories', CategoryController::class);
         Route::resource('users', UserController::class)->except(['create', 'store', 'show']);
+        Route::resource('vouchers', AdminVoucherController::class);
     });
 
 Route::middleware(['auth', 'verified'])->prefix('account')->name('account.')->group(function () {
