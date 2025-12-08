@@ -93,7 +93,7 @@ php artisan storage:seed-images
 - Start **Apache** và **MySQL**
 
 ## Bước 2: Chạy Frontend (Terminal 1)
-```powershell
+```powershellimage.png
 cd C:\Users\Admin\Downloads\laravel_DANT-main
 npm run dev
 ```
