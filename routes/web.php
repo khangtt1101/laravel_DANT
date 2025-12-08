@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
 use App\Models\Product;
@@ -20,14 +19,12 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductViewController;
 use App\Http\Controllers\ProductReviewController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/promotions', [PromotionController::class, 'index'])->name('promotions');
 Route::view('/contact', 'pages.contact')->name('contact');
-Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 // ROUTE CHO USER THÔNG THƯỜNG (của Breeze)
 Route::get('/home', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -44,11 +41,6 @@ Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name
 Route::post('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
 // ===== KẾT THÚC CÁC ROUTE GIỎ HÀNG =====
 
-// ===== ROUTE VOUCHER (KHÔNG CẦN ĐĂNG NHẬP) =====
-Route::post('/voucher/validate', [VoucherController::class, 'validate'])->name('voucher.validate');
-Route::post('/voucher/remove', [VoucherController::class, 'remove'])->name('voucher.remove');
-// ===== KẾT THÚC ROUTE VOUCHER =====
-
 // ===== ROUTE TRACKING SỐ NGƯỜI ĐANG XEM SẢN PHẨM =====
 Route::post('/api/products/{productId}/track-view', [ProductViewController::class, 'track'])->name('products.track-view');
 Route::get('/api/products/{productId}/viewers', [ProductViewController::class, 'getViewers'])->name('products.viewers');
@@ -60,26 +52,23 @@ Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.') // <-- THÊM DÒNG NÀY ĐỂ TẠO TIỀN TỐ TÊN
     ->group(function () {
-    
-    // Route cho trang dashboard admin
+
+        // Route cho trang dashboard admin
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // Các resource route khác
         Route::resource('products', ProductController::class);
-        Route::get('orders/{order}/export-pdf', [OrderController::class, 'exportPdf'])->name('orders.exportPdf');
         Route::resource('orders', OrderController::class)->only(['index', 'show', 'update', 'destroy']);
         Route::resource('reviews', ReviewController::class)->only(['index', 'destroy']);
         Route::resource('categories', CategoryController::class);
-        Route::resource('users', UserController::class)->except(['store', 'show']);
-        Route::resource('vouchers', AdminVoucherController::class);
+        Route::resource('users', UserController::class)->except(['create', 'store', 'show']);
     });
 
 Route::middleware(['auth', 'verified'])->prefix('account')->name('account.')->group(function () {
     Route::get('/orders', [AccountController::class, 'orderHistory'])->name('orders');
     Route::get('/orders/{order}', [AccountController::class, 'showOrder'])->name('orders.show');
-    Route::post('/orders/{order}/cancel', [AccountController::class, 'cancelOrder'])->name('orders.cancel');
     Route::get('/support', [AccountController::class, 'support'])->name('support');
-});
+});    
 
 // ROUTE PROFILE (của Breeze)
 Route::middleware('auth')->group(function () {
