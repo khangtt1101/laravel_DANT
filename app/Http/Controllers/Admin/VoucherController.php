@@ -80,6 +80,8 @@ class VoucherController extends Controller
         $validated['code'] = strtoupper(trim($validated['code']));
         $validated['used_count'] = 0;
         $validated['is_active'] = $request->has('is_active');
+        // Tránh null cho cột not-null
+        $validated['usage_limit_per_user'] = $validated['usage_limit_per_user'] ?? 1;
 
         $voucher = Voucher::create($validated);
 
@@ -131,6 +133,7 @@ class VoucherController extends Controller
         // Chuyển code thành chữ hoa
         $validated['code'] = strtoupper(trim($validated['code']));
         $validated['is_active'] = $request->has('is_active');
+        $validated['usage_limit_per_user'] = $validated['usage_limit_per_user'] ?? 1;
 
         $voucher->update($validated);
 
