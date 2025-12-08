@@ -25,6 +25,7 @@ use App\Http\Controllers\ContactController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/promotions', [PromotionController::class, 'index'])->name('promotions');
 Route::view('/contact', 'pages.contact')->name('contact');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 // ROUTE CHO USER THÔNG THƯỜNG (của Breeze)
 Route::get('/home', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -39,6 +40,9 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+// Voucher apply/remove
+Route::post('/voucher/validate', [\App\Http\Controllers\VoucherController::class, 'validate'])->name('voucher.validate');
+Route::post('/voucher/remove', [\App\Http\Controllers\VoucherController::class, 'remove'])->name('voucher.remove');
 // ===== KẾT THÚC CÁC ROUTE GIỎ HÀNG =====
 
 // ===== ROUTE TRACKING SỐ NGƯỜI ĐANG XEM SẢN PHẨM =====

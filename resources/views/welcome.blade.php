@@ -1296,7 +1296,7 @@
                 <!-- Blog Post 1 -->
                 <article
                     class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-                    <a href="#" class="block">
+                    <a href="javascript:void(0)" class="block" title="Đang cập nhật">
                         <div class="relative h-48 bg-gradient-to-br from-indigo-400 to-purple-500 overflow-hidden">
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <svg class="w-16 h-16 text-white/30" fill="currentColor" viewBox="0 0 20 20">
@@ -1341,7 +1341,7 @@
                 <!-- Blog Post 2 -->
                 <article
                     class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-                    <a href="#" class="block">
+                    <a href="javascript:void(0)" class="block" title="Đang cập nhật">
                         <div class="relative h-48 bg-gradient-to-br from-green-400 to-blue-500 overflow-hidden">
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <svg class="w-16 h-16 text-white/30" fill="currentColor" viewBox="0 0 20 20">
@@ -1387,7 +1387,7 @@
                 <!-- Blog Post 3 -->
                 <article
                     class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-                    <a href="#" class="block">
+                    <a href="javascript:void(0)" class="block" title="Đang cập nhật">
                         <div class="relative h-48 bg-gradient-to-br from-orange-400 to-red-500 overflow-hidden">
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <svg class="w-16 h-16 text-white/30" fill="currentColor" viewBox="0 0 20 20">
@@ -1431,7 +1431,7 @@
     </div>
 
             <div class="text-center mt-8">
-                <a href="#" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
+                <a href="javascript:void(0)" title="Đang cập nhật" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold cursor-not-allowed">
                     Xem tất cả tin tức
                     <span>→</span>
                 </a>
