@@ -23,7 +23,6 @@ use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\PromotionController;
-use App\Http\Controllers\ChatController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/promotions', [PromotionController::class, 'index'])->name('promotions');
@@ -49,11 +48,6 @@ Route::post('/cart/remove/{productId}', [CartController::class, 'remove'])->name
 Route::post('/voucher/validate', [VoucherController::class, 'validate'])->name('voucher.validate');
 Route::post('/voucher/remove', [VoucherController::class, 'remove'])->name('voucher.remove');
 // ===== KẾT THÚC ROUTE VOUCHER =====
-
-// ===== ROUTE CHATBOT (KHÔNG CẦN ĐĂNG NHẬP) =====
-Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
-Route::get('/chat/history', [ChatController::class, 'getHistory'])->name('chat.history');
-// ===== KẾT THÚC ROUTE CHATBOT =====
 
 // ===== ROUTE TRACKING SỐ NGƯỜI ĐANG XEM SẢN PHẨM =====
 Route::post('/api/products/{productId}/track-view', [ProductViewController::class, 'track'])->name('products.track-view');
