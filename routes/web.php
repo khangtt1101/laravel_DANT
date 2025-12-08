@@ -71,6 +71,7 @@ Route::middleware(['auth', 'verified', 'admin'])
 Route::middleware(['auth', 'verified'])->prefix('account')->name('account.')->group(function () {
     Route::get('/orders', [AccountController::class, 'orderHistory'])->name('orders');
     Route::get('/orders/{order}', [AccountController::class, 'showOrder'])->name('orders.show');
+    Route::post('/orders/{order}/cancel', [AccountController::class, 'cancelOrder'])->name('orders.cancel');
     Route::get('/support', [AccountController::class, 'support'])->name('support');
 });    
 
