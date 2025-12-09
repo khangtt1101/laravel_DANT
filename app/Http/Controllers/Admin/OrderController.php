@@ -45,8 +45,8 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
-        if ($order->status == 'delivered') {
-            return redirect()->back()->with('error', 'Đơn hàng đã giao không thể thay đổi trạng thái.');
+        if ($order->status == 'delivered' || $order->status == 'cancelled') {
+            return redirect()->back()->with('error', 'Đơn hàng đã giao hoặc đã hủy không thể thay đổi trạng thái.');
         }
 
         $request->validate(['status' => 'required|in:pending,processing,shipped,delivered,cancelled']);

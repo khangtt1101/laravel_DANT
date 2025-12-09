@@ -95,7 +95,8 @@
                                             {{ substr($order->user->full_name ?? 'K', 0, 1) }}
                                         </div>
                                         <div class="text-sm font-medium text-slate-900">
-                                            {{ $order->user->full_name ?? 'Khách vãng lai' }}</div>
+                                            {{ $order->user->full_name ?? 'Khách vãng lai' }}
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-700">
@@ -123,11 +124,11 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="relative"
-                                            title="{{ $order->status == 'delivered' ? 'Đơn hàng đã giao, không thể thay đổi trạng thái' : '' }}">
+                                            title="{{ in_array($order->status, ['delivered', 'cancelled']) ? 'Đơn hàng đã hoàn tất/hủy, không thể thay đổi' : '' }}">
                                             <select name="status"
                                                 onchange="if(confirm('Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng #{{ $order->order_code }}?')) { this.form.submit() } else { this.value = '{{ $order->status }}' }"
-                                                {{ $order->status == 'delivered' ? 'disabled' : '' }}
-                                                class="appearance-none {{ $order->status == 'delivered' ? 'cursor-not-allowed opacity-75' : 'cursor-pointer' }} pl-3 pr-8 py-1 rounded-full text-xs font-medium border-0 ring-1 ring-inset focus:ring-2 focus:ring-indigo-600 {{ $statusClasses[$order->status] ?? 'bg-slate-50 text-slate-700 ring-slate-200' }}">
+                                                {{ in_array($order->status, ['delivered', 'cancelled']) ? 'disabled' : '' }}
+                                                class="appearance-none {{ in_array($order->status, ['delivered', 'cancelled']) ? 'cursor-not-allowed opacity-75' : 'cursor-pointer' }} pl-3 pr-8 py-1 rounded-full text-xs font-medium border-0 ring-1 ring-inset focus:ring-2 focus:ring-indigo-600 {{ $statusClasses[$order->status] ?? 'bg-slate-50 text-slate-700 ring-slate-200' }}">
                                                 @foreach($statusLabels as $key => $label)
                                                     <option value="{{ $key }}" {{ $order->status == $key ? 'selected' : '' }}
                                                         class="bg-white text-slate-900">
@@ -135,7 +136,7 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            @if($order->status != 'delivered')
+                                            @if(!in_array($order->status, ['delivered', 'cancelled']))
                                                 <div
                                                     class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
                                                     <svg class="h-3 w-3 opacity-60" fill="none" stroke="currentColor"

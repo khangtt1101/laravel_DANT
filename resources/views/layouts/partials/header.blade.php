@@ -1,10 +1,13 @@
-<header class="bg-white shadow-md sticky top-0 z-50 transition-all duration-300" x-data="{ isScrolled: false }"
-    @scroll.window="isScrolled = (window.pageYOffset > 20)">
+<header class="bg-white shadow-md sticky top-0 z-50 transition-all duration-300" @php
+    $isAuthPage = request()->routeIs('login', 'register', 'password.*', 'verification.*');
+@endphp
+    x-data="{ isScrolled: false, isAuth: {{ $isAuthPage ? 'true' : 'false' }} }"
+    @scroll.window="if(!isAuth) isScrolled = (window.pageYOffset > 20)">
     <!-- Top Bar với Marquee -->
     <div class="bg-gradient-to-r from-pink-600 to-purple-600 text-white overflow-hidden relative transition-all duration-300"
-        :class="isScrolled ? 'h-0 py-0' : 'h-10 py-2'">
+        :class="isScrolled || isAuth ? 'h-0 py-0' : 'h-10 py-2'">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between" x-show="!isScrolled"
+            <div class="flex items-center justify-between" x-show="!isScrolled && !isAuth"
                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0">
                 <!-- Marquee Section - Chạy chữ tự động -->
