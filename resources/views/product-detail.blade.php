@@ -24,7 +24,7 @@
                             <span class="ml-1 md:ml-2 text-gray-700 font-medium">{{ $product->category->name }}</span>
                         </div>
                     </li>
-                    @endif
+                        @endif
                 </ol>
             </nav>
 
@@ -54,9 +54,9 @@
                             <div class="absolute top-4 left-4">
                                 <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow-sm">Mới</span>
                             </div>
-                        </div>
+                    </div>
 
-                        @if($product->images->count() > 1)
+                    @if($product->images->count() > 1)
                             <div class="grid grid-cols-5 gap-4">
                                 @foreach($product->images as $image)
                                     <button 
@@ -67,9 +67,9 @@
                                         <img src="{{ Storage::url($image->image_url) }}" alt="Thumbnail" class="w-full h-full object-cover">
                                     </button>
                                 @endforeach
-                            </div>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
+                </div>
 
                     {{-- Product Info --}}
                     <div class="p-6 lg:p-10 lg:pl-0 flex flex-col justify-center">
@@ -80,8 +80,8 @@
                         </div>
                         
                         <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4 leading-tight">
-                            {{ $product->name }}
-                        </h1>
+                        {{ $product->name }}
+                    </h1>
 
                         <div class="flex items-center mb-6">
                             <div class="flex text-yellow-400 text-sm">
@@ -101,24 +101,24 @@
                             {{ Str::limit($product->description, 150) }}
                         </div>
 
-                        <div class="mt-4">
-                            <div class="flex items-center">
-                                <div class="flex text-yellow-400">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <svg class="h-5 w-5 {{ ($averageRating ?? 0) >= $i ? 'text-yellow-400' : 'text-gray-300' }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.98 8.72c-.783-.57-.38-1.81.588-1.81H8.03a1 1 0 00.95-.69l1.07-3.292z" />
-                                        </svg>
-                                    @endfor
-                                </div>
-                                <p class="ml-2 text-sm text-gray-600">
-                                    @if($reviewsCount > 0)
-                                        {{ $averageRating }}/5 · {{ $reviewsCount }} đánh giá
-                                    @else
-                                        Chưa có đánh giá
-                                    @endif
-                                </p>
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <div class="flex text-yellow-400">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <svg class="h-5 w-5 {{ ($averageRating ?? 0) >= $i ? 'text-yellow-400' : 'text-gray-300' }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.98 8.72c-.783-.57-.38-1.81.588-1.81H8.03a1 1 0 00.95-.69l1.07-3.292z" />
+                                    </svg>
+                                @endfor
                             </div>
+                            <p class="ml-2 text-sm text-gray-600">
+                                @if($reviewsCount > 0)
+                                    {{ $averageRating }}/5 · {{ $reviewsCount }} đánh giá
+                                @else
+                                    Chưa có đánh giá
+                                @endif
+                            </p>
                         </div>
+                    </div>
 
                         {{-- Alerts --}}
                         @if(session('success'))
@@ -230,13 +230,38 @@
                 </div>
             </div>
 
-            {{-- Related Products (Placeholder structure) --}}
+            {{-- Related Products --}}
             <div class="mt-16">
                 <h2 class="text-2xl font-bold text-gray-900 mb-8">Sản phẩm liên quan</h2>
-                {{-- This would typically be a loop over related products --}}
+                @if(isset($relatedProducts) && $relatedProducts->count())
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        @foreach($relatedProducts as $item)
+                            <a href="{{ route('products.show', ['category' => $item->category->slug ?? $item->category->id, 'product' => $item->slug ?? $item->id]) }}"
+                               class="group block bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-lg transition">
+                                <div class="relative h-48 bg-gray-50">
+                                    @if($item->images->isNotEmpty())
+                                        <img src="{{ Storage::url($item->images->first()->image_url) }}" alt="{{ $item->name }}"
+                                             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center text-gray-400 text-sm">Chưa có ảnh</div>
+                                    @endif
+                                    <div class="absolute top-3 left-3">
+                                        <span class="bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full">HOT</span>
+                                    </div>
+                                </div>
+                                <div class="p-4 space-y-2">
+                                    <p class="text-xs font-medium text-indigo-600">{{ $item->category->name ?? 'Danh mục' }}</p>
+                                    <h3 class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">{{ $item->name }}</h3>
+                                    <p class="text-base font-bold text-indigo-700">{{ number_format($item->price, 0, ',', '.') }} đ</p>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                @else
                 <div class="bg-gray-50 rounded-xl p-8 text-center border border-dashed border-gray-300">
-                    <p class="text-gray-500">Các sản phẩm cùng danh mục sẽ hiển thị ở đây.</p>
+                        <p class="text-gray-500">Chưa có sản phẩm liên quan.</p>
                 </div>
+                @endif
             </div>
 
         </div>
@@ -330,8 +355,8 @@
                                 Xoá đánh giá
                             </button>
                         </form>
-                    </div>
-                @endif
+                        </div>
+                    @endif
 
                 <div class="space-y-6">
                     @forelse($reviews as $review)

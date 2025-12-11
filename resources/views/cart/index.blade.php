@@ -42,17 +42,30 @@
 
             // Hàm tính giảm giá dựa trên tổng tiền đã chọn
             get calculatedDiscount() {
+                // Ưu tiên dùng discountAmount từ server (đã tính sẵn)
+                if (this.discountAmount && typeof this.discountAmount === 'number' && this.discountAmount > 0) {
+                    return parseFloat(this.discountAmount);
+                }
+                
+                // Nếu không có, tính lại dựa trên voucher info (fallback)
                 if (!this.appliedVoucher || this.total === 0) return 0;
+                
+                // Kiểm tra xem có type và value không
+                if (!this.appliedVoucher.type || !this.appliedVoucher.value) {
+                    return 0;
+                }
+                
                 // Tính lại giảm giá dựa trên tổng tiền đã chọn
-                // Nếu voucher là percentage, tính theo %
-                // Nếu là fixed, giữ nguyên giá trị
                 if (this.appliedVoucher.type === 'percentage') {
-                    let discount = (this.total * this.appliedVoucher.value) / 100;
-                    // Áp dụng max_discount nếu có (cần lấy từ server)
-                    return discount;
+                    let discount = (this.total * parseFloat(this.appliedVoucher.value)) / 100;
+                    // Áp dụng max_discount nếu có
+                    if (this.appliedVoucher.max_discount && discount > parseFloat(this.appliedVoucher.max_discount)) {
+                        discount = parseFloat(this.appliedVoucher.max_discount);
+                    }
+                    return Math.round(discount * 100) / 100; // Làm tròn 2 chữ số
                 } else {
                     // Fixed amount - không được vượt quá tổng tiền
-                    return Math.min(this.appliedVoucher.value, this.total);
+                    return Math.min(parseFloat(this.appliedVoucher.value), this.total);
                 }
             },
 
@@ -90,11 +103,12 @@
 
                     if (data.success) {
                         this.appliedVoucher = data.voucher;
-                        this.discountAmount = data.discount_amount;
+                        // Đảm bảo discountAmount là số
+                        this.discountAmount = parseFloat(data.discount_amount) || 0;
                         this.voucherError = '';
                         // Lưu vào session
                         sessionStorage.setItem('applied_voucher', JSON.stringify(data.voucher));
-                        sessionStorage.setItem('discount_amount', data.discount_amount);
+                        sessionStorage.setItem('discount_amount', this.discountAmount);
                     } else {
                         this.voucherError = data.message || 'Mã voucher không hợp lệ.';
                         this.appliedVoucher = null;
