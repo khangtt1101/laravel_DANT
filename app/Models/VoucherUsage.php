@@ -38,3 +38,4 @@ class VoucherUsage extends Model
     }
 }
 
+
