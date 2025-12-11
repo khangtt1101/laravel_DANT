@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Order;
 class AccountController extends Controller
 {
@@ -54,5 +55,44 @@ class AccountController extends Controller
         $order->load('items.product.images');
 
         return view('account.orders-show', compact('order'));
+    }
+
+    /**
+     * Cho phép người dùng huỷ đơn khi đơn còn ở trạng thái xử lý ban đầu.
+     */
+    public function cancelOrder(Request $request, Order $order)
+    {
+        if ($request->user()->id !== $order->user_id) {
+            abort(403);
+        }
+
+        if (!in_array($order->status, ['pending', 'processing'])) {
+            return back()->with('error', 'Đơn hàng chỉ có thể huỷ khi đang chờ xử lý.');
+        }
+
+        DB::transaction(function () use ($order) {
+            $order->loadMissing('items.product', 'voucherUsage.voucher');
+
+            foreach ($order->items as $item) {
+                if ($item->product) {
+                    $item->product->increment('stock_quantity', $item->quantity);
+                }
+            }
+
+            if ($order->voucherUsage) {
+                $voucher = $order->voucherUsage->voucher;
+                if ($voucher && $voucher->used_count > 0) {
+                    $voucher->decrement('used_count');
+                }
+                $order->voucherUsage->delete();
+            }
+
+            $order->status = 'cancelled';
+            $order->save();
+        });
+
+        return redirect()
+            ->route('account.orders.show', $order)
+            ->with('success', 'Đơn hàng đã được huỷ.');
     }
 }

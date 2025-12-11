@@ -22,7 +22,20 @@ class CartController extends Controller
             $totalPrice += $item['price'] * $item['quantity'];
         }
 
-        return view('cart.index', compact('cart', 'totalPrice'));
+        // Lấy voucher đã áp dụng (nếu có)
+        $appliedVoucher = session()->get('applied_voucher');
+        $discountAmount = 0;
+        $finalPrice = $totalPrice;
+
+        if ($appliedVoucher) {
+            $voucher = \App\Models\Voucher::where('code', $appliedVoucher['code'])->first();
+            if ($voucher) {
+                $discountAmount = $voucher->calculateDiscount($totalPrice);
+                $finalPrice = max(0, $totalPrice - $discountAmount);
+            }
+        }
+
+        return view('cart.index', compact('cart', 'totalPrice', 'discountAmount', 'finalPrice', 'appliedVoucher'));
     }
 
     /**
@@ -67,6 +80,7 @@ class CartController extends Controller
                 'quantity' => $quantity,
                 'price' => $product->price,
                 'image_url' => $product->images->isEmpty() ? '' : $product->images->first()->image_url,
+                'category_id' => $product->category_id, // Lưu category_id để kiểm tra voucher
             ];
         }
 
@@ -157,7 +171,7 @@ class CartController extends Controller
         ]);
 
         $cart = session()->get('cart', []);
-        $selectedProductIds = $validated['selected_products'];
+        $selectedProductIds = array_unique($validated['selected_products']);
         $checkoutItems = [];
         $totalPrice = 0;
 
@@ -177,6 +191,14 @@ class CartController extends Controller
         // 4. Lưu giỏ hàng SẼ THANH TOÁN vào một session riêng
         session()->put('checkout_cart', $checkoutItems);
         session()->put('checkout_total', $totalPrice);
+        
+        // Lưu voucher vào session checkout (nếu có)
+        $appliedVoucher = session('applied_voucher');
+        $voucherDiscount = session('voucher_discount', 0);
+        if ($appliedVoucher) {
+            session()->put('checkout_voucher', $appliedVoucher);
+            session()->put('checkout_voucher_discount', $voucherDiscount);
+        }
 
         foreach ($selectedProductIds as $id) {
             unset($cart[$id]);
@@ -186,5 +208,96 @@ class CartController extends Controller
         return redirect()->route('checkout.index');
 
         
+    }
+
+    /**
+     * Validate và áp dụng voucher.
+     */
+    public function validateVoucher(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|max:50',
+        ]);
+
+        $code = strtoupper(trim($request->input('code')));
+        $voucher = \App\Models\Voucher::where('code', $code)->first();
+
+        if (!$voucher) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Mã voucher không tồn tại.'
+            ], 404);
+        }
+
+        // Lấy giỏ hàng và tính tổng tiền
+        $cart = session()->get('cart', []);
+        $totalPrice = 0;
+        foreach ($cart as $item) {
+            $totalPrice += $item['price'] * $item['quantity'];
+        }
+
+        // Kiểm tra voucher có hợp lệ không
+        $validation = $voucher->isValid(auth()->user(), $totalPrice);
+        if (!$validation['valid']) {
+            return response()->json([
+                'success' => false,
+                'message' => $validation['message'] || 'Mã voucher không hợp lệ hoặc không đủ điều kiện sử dụng.'
+            ], 400);
+        }
+
+        // Tính discount
+        $discountAmount = $voucher->calculateDiscount($totalPrice);
+        $finalPrice = max(0, $totalPrice - $discountAmount);
+
+        // Lưu vào session
+        session()->put('applied_voucher', [
+            'id' => $voucher->id,
+            'code' => $voucher->code,
+            'name' => $voucher->name,
+            'type' => $voucher->type,
+            'value' => $voucher->value,
+        ]);
+        session()->put('voucher_discount', $discountAmount);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Áp dụng voucher thành công!',
+            'voucher' => [
+                'id' => $voucher->id,
+                'code' => $voucher->code,
+                'name' => $voucher->name,
+                'type' => $voucher->type,
+                'value' => $voucher->value,
+                'max_discount' => $voucher->max_discount,
+                'discount_amount' => $discountAmount,
+            ],
+            'total_price' => $totalPrice,
+            'discount_amount' => $discountAmount,
+            'final_price' => $finalPrice,
+        ]);
+    }
+
+    /**
+     * Xóa voucher đã áp dụng.
+     */
+    public function removeVoucher()
+    {
+        session()->forget('applied_voucher');
+        session()->forget('voucher_discount');
+
+        // Tính lại tổng tiền
+        $cart = session()->get('cart', []);
+        $totalPrice = 0;
+        foreach ($cart as $item) {
+            $totalPrice += $item['price'] * $item['quantity'];
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Đã xóa voucher.',
+            'total_price' => $totalPrice,
+            'discount_amount' => 0,
+            'final_price' => $totalPrice,
+        ]);
     }
 }

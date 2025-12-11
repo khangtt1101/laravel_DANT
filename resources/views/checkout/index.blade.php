@@ -42,8 +42,21 @@
 
         {{-- Lấy dữ liệu từ Session --}}
         @php
+            // Lấy giỏ hàng sẽ thanh toán
             $checkoutCart = session('checkout_cart', []);
-            $totalPrice = session('checkout_total', 0);
+
+            // Tính lại tổng tiền từ giỏ hàng để đảm bảo luôn chính xác
+            $totalPrice = 0;
+            foreach ($checkoutCart as $id => $details) {
+                $totalPrice += $details['price'] * $details['quantity'];
+            }
+
+            // Lấy thông tin voucher (nếu có)
+            $checkoutVoucher = session('checkout_voucher');
+            $checkoutVoucherDiscount = session('checkout_voucher_discount', 0);
+
+            // Thành tiền cuối cùng sau giảm giá
+            $finalTotal = max(0, $totalPrice - $checkoutVoucherDiscount);
         @endphp
 
         @if(count($checkoutCart) > 0)
@@ -110,6 +123,7 @@
 
                             <ul class="divide-y divide-gray-200 mt-4">
                                 @foreach($checkoutCart as $id => $details)
+
                                     <li class="py-4 flex">
                                         <img src="{{ Storage::url($details['image_url']) }}" alt="{{ $details['name'] }}"
                                             class="h-16 w-16 rounded-md object-cover">
@@ -129,6 +143,18 @@
                                     <dt>Tổng tiền</dt>
                                     <dd>{{ number_format($totalPrice, 0, ',', '.') }} đ</dd>
                                 </div>
+
+                                @if($checkoutVoucherDiscount > 0)
+                                    <div class="flex items-center justify-between text-sm text-green-600">
+                                        <dt>Giảm giá</dt>
+                                        <dd>-{{ number_format($checkoutVoucherDiscount, 0, ',', '.') }} đ</dd>
+                                    </div>
+                                    <div
+                                        class="flex items-center justify-between text-base font-medium text-gray-900 border-t border-gray-200 pt-4">
+                                        <dt>Thành tiền</dt>
+                                        <dd>{{ number_format($finalTotal, 0, ',', '.') }} đ</dd>
+                                    </div>
+                                @endif
                             </dl>
                             <div class="mt-6">
                                 <button type="submit"

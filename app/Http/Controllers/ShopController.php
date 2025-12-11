@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
 
@@ -32,6 +33,8 @@ class ShopController extends Controller
                 $categoryIds = array_merge($categoryIds, $category->children->pluck('id')->toArray());
                 
                 $products = Product::with(['category', 'images'])
+                    ->withAvg('reviews', 'rating')
+                    ->withCount('reviews')
                     ->whereIn('category_id', $categoryIds)
                     ->latest()
                     ->paginate(12);
@@ -47,6 +50,8 @@ class ShopController extends Controller
         
         // 1. Lấy 4 sản phẩm nổi bật (ví dụ: mới nhất)
         $featuredProducts = Product::with(['category', 'images'])
+                                    ->withAvg('reviews', 'rating')
+                                    ->withCount('reviews')
                                     ->latest()
                                     ->take(9)
                                     ->get();
@@ -55,7 +60,11 @@ class ShopController extends Controller
         $categoriesWithProducts = Category::whereNull('parent_id')
             ->with(['products' => function ($query) {
                 // Với mỗi danh mục, tải 4 sản phẩm mới nhất và ảnh của chúng
-                $query->with('images')->latest()->take(4);
+                $query->with('images')
+                    ->withAvg('reviews', 'rating')
+                    ->withCount('reviews')
+                    ->latest()
+                    ->take(4);
             }])
             ->get();
 
@@ -65,14 +74,54 @@ class ShopController extends Controller
 
     public function show(Category $category, Product $product)
     {
-        // Nhờ scopeBindings(), $product đã được tự động
-        // xác thực là thuộc về $category.
-        
-        // Tải các thông tin liên quan (ảnh)
-        $product->load(['images']); 
+        $product->load([
+            'images',
+            'reviews.user:id,full_name',
+        ]);
 
-        // Trả về view
-        return view('product-detail', compact('product', 'category'));
+        $reviews = $product->reviews()
+            ->with('user:id,full_name')
+            ->latest()
+            ->get();
+
+        $averageRatingRaw = $product->reviews()->avg('rating');
+        $averageRating = $averageRatingRaw ? round($averageRatingRaw, 1) : null;
+        $reviewsCount = $product->reviews()->count();
+
+        // Sản phẩm liên quan (cùng danh mục, loại trừ sản phẩm hiện tại)
+        $relatedProducts = Product::with(['category', 'images'])
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->latest()
+            ->take(4)
+            ->get();
+
+        $canReview = false;
+        $userReview = null;
+
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            $hasPurchased = $user->orders()
+                ->whereHas('items', function ($query) use ($product) {
+                    $query->where('product_id', $product->id);
+                })
+                ->exists();
+
+            $userReview = $product->reviews()->where('user_id', $user->id)->first();
+            $canReview = $hasPurchased && !$userReview;
+        }
+
+        return view('product-detail', compact(
+            'product',
+            'category',
+            'reviews',
+            'averageRating',
+            'reviewsCount',
+            'canReview',
+            'userReview',
+            'relatedProducts'
+        ));
     }
 
     /**
@@ -89,6 +138,8 @@ class ShopController extends Controller
 
         // Tìm kiếm sản phẩm theo tên hoặc mô tả
         $products = Product::with(['category', 'images'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->where(function($q) use ($query) {
                 $q->where('name', 'like', '%' . $query . '%')
                   ->orWhere('description', 'like', '%' . $query . '%');

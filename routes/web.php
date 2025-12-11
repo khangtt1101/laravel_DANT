@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
 use App\Models\Product;
@@ -18,6 +19,9 @@ use App\Http\Controllers\AccountController;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductViewController;
+use App\Http\Controllers\ProductReviewController;
+use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -28,12 +32,19 @@ Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
 Route::get('/products/{category:slug}/{product:slug}', [ShopController::class, 'show'])
     ->name('products.show')
     ->scopeBindings();
+Route::get('/promotions', [PromotionController::class, 'index'])->name('promotions');
+Route::get('/contact', function () {
+    return view('pages.contact');
+})->name('contact');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 // ===== BẮT ĐẦU CÁC ROUTE GIỎ HÀNG (KHÔNG CẦN ĐĂNG NHẬP) =====
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/voucher/validate', [CartController::class, 'validateVoucher'])->name('voucher.validate');
+Route::post('/voucher/remove', [CartController::class, 'removeVoucher'])->name('voucher.remove');
 // ===== KẾT THÚC CÁC ROUTE GIỎ HÀNG =====
 
 // ===== ROUTE TRACKING SỐ NGƯỜI ĐANG XEM SẢN PHẨM =====
@@ -57,16 +68,14 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::resource('orders', OrderController::class)->only(['index', 'show', 'update', 'destroy']);
         Route::resource('reviews', ReviewController::class)->only(['index', 'destroy']);
         Route::resource('categories', CategoryController::class);
-        Route::resource('users', UserController::class)->except(['store', 'show']);
+        Route::resource('users', UserController::class)->except(['create', 'store', 'show']);
+        Route::resource('vouchers', AdminVoucherController::class);
     });
 
 Route::middleware(['auth', 'verified'])->prefix('account')->name('account.')->group(function () {
     Route::get('/orders', [AccountController::class, 'orderHistory'])->name('orders');
     Route::get('/orders/{order}', [AccountController::class, 'showOrder'])->name('orders.show');
-
-    // ROUTE VNPAY
-
-
+    Route::post('/orders/{order}/cancel', [AccountController::class, 'cancelOrder'])->name('orders.cancel');
     Route::get('/support', [AccountController::class, 'support'])->name('support');
 });
 
@@ -81,21 +90,29 @@ Route::middleware('auth')->group(function () {
 
     // ===== ROUTE CHECKOUT (CẦN ĐĂNG NHẬP) =====
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-
+    
     // ===== ROUTE THANH TOÁN =====
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-
-    // ROUTE VNPay
+    // VNPay create payment
     Route::post('/checkout/vnpay', [CheckoutController::class, 'vnpayPayment'])->name('checkout.vnpay');
-    Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpayReturn');
-
+    
     Route::post('/checkout/address/store', [CheckoutController::class, 'storeAddress'])->name('checkout.address.store');
     // Tuyến xử lý (POST)
     Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
-
-    // Trang cảm ơn (GET)
-    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+    
     // ===== KẾT THÚC ROUTE THANH TOÁN =====
+
+    Route::post('/products/{product}/reviews', [ProductReviewController::class, 'store'])
+        ->name('products.reviews.store');
+    Route::put('/products/{product}/reviews/{review}', [ProductReviewController::class, 'update'])
+        ->name('products.reviews.update');
+    Route::delete('/products/{product}/reviews/{review}', [ProductReviewController::class, 'destroy'])
+        ->name('products.reviews.destroy');
 });
+
+// VNPay return callback (không yêu cầu đăng nhập)
+Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpayReturn');
+// Trang cảm ơn (GET) sau thanh toán (để public để VNPay redirect không bị chặn)
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 
 require __DIR__ . '/auth.php';

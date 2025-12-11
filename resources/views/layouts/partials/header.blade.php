@@ -331,8 +331,8 @@
                     <a href="/" class="hover:text-indigo-200 transition text-sm font-medium">Trang chủ</a>
                     <a href="{{ route('shop.index') }}" class="hover:text-indigo-200 transition text-sm font-medium">Sản
                         phẩm</a>
-                    <a href="#" class="hover:text-indigo-200 transition text-sm font-medium">Khuyến mãi</a>
-                    <a href="#" class="hover:text-indigo-200 transition text-sm font-medium">Liên hệ</a>
+                    <a href="{{ route('promotions') }}" class="hover:text-indigo-200 transition text-sm font-medium">Khuyến mãi</a>
+                    <a href="{{ route('contact') }}" class="hover:text-indigo-200 transition text-sm font-medium">Liên hệ</a>
                 </div>
             </div>
         </div>
@@ -354,13 +354,13 @@
             <a href="{{ route('shop.index') }}"
                 class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition">Sản
                 phẩm</a>
-            <a href="#"
+            <a href="{{ route('shop.index') }}"
                 class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition">Danh
                 mục</a>
-            <a href="#"
+            <a href="{{ route('promotions') }}"
                 class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition">Khuyến
                 mãi</a>
-            <a href="#"
+            <a href="{{ route('contact') }}"
                 class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition">Liên
                 hệ</a>
 

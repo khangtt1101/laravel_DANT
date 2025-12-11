@@ -8,6 +8,19 @@
          x-data="{
             cart: {{ json_encode($cart) }},
             selected: [],
+            voucherCode: '{{ isset($appliedVoucher) && isset($appliedVoucher['code']) ? $appliedVoucher['code'] : '' }}',
+            appliedVoucher: {{ json_encode($appliedVoucher ?? null) }},
+            discountAmount: {{ $discountAmount ?? 0 }},
+            isLoadingVoucher: false,
+            voucherError: '',
+            
+            // Load voucher từ session khi trang load
+            init() {
+                // Nếu có voucher trong session, load vào
+                if (this.appliedVoucher) {
+                    this.voucherCode = this.appliedVoucher.code || '';
+                }
+            },
 
             // Hàm kiểm tra 'Chọn tất cả'
             get isAllSelected() {
@@ -25,6 +38,113 @@
                     }
                 });
                 return calculatedTotal;
+            },
+
+            // Hàm tính giảm giá dựa trên tổng tiền đã chọn
+            get calculatedDiscount() {
+                // Ưu tiên dùng discountAmount từ server (đã tính sẵn)
+                if (this.discountAmount && typeof this.discountAmount === 'number' && this.discountAmount > 0) {
+                    return parseFloat(this.discountAmount);
+                }
+                
+                // Nếu không có, tính lại dựa trên voucher info (fallback)
+                if (!this.appliedVoucher || this.total === 0) return 0;
+                
+                // Kiểm tra xem có type và value không
+                if (!this.appliedVoucher.type || !this.appliedVoucher.value) {
+                    return 0;
+                }
+                
+                // Tính lại giảm giá dựa trên tổng tiền đã chọn
+                if (this.appliedVoucher.type === 'percentage') {
+                    let discount = (this.total * parseFloat(this.appliedVoucher.value)) / 100;
+                    // Áp dụng max_discount nếu có
+                    if (this.appliedVoucher.max_discount && discount > parseFloat(this.appliedVoucher.max_discount)) {
+                        discount = parseFloat(this.appliedVoucher.max_discount);
+                    }
+                    return Math.round(discount * 100) / 100; // Làm tròn 2 chữ số
+                } else {
+                    // Fixed amount - không được vượt quá tổng tiền
+                    return Math.min(parseFloat(this.appliedVoucher.value), this.total);
+                }
+            },
+
+            // Hàm tính tổng tiền cuối cùng sau khi giảm giá
+            get finalTotal() {
+                const discount = this.appliedVoucher ? this.calculatedDiscount : 0;
+                return Math.max(0, this.total - discount);
+            },
+
+            // Hàm áp dụng voucher
+            async applyVoucher() {
+                if (!this.voucherCode.trim()) {
+                    this.voucherError = 'Vui lòng nhập mã voucher.';
+                    return;
+                }
+
+                this.isLoadingVoucher = true;
+                this.voucherError = '';
+
+                try {
+                    const response = await fetch('{{ route('voucher.validate') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            code: this.voucherCode.trim(),
+                            total_amount: this.total, // Gửi tổng tiền của các sản phẩm đã chọn
+                            selected_products: this.selected // Gửi danh sách sản phẩm đã chọn để kiểm tra category
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.appliedVoucher = data.voucher;
+                        // Đảm bảo discountAmount là số
+                        this.discountAmount = parseFloat(data.discount_amount) || 0;
+                        this.voucherError = '';
+                        // Lưu vào session
+                        sessionStorage.setItem('applied_voucher', JSON.stringify(data.voucher));
+                        sessionStorage.setItem('discount_amount', this.discountAmount);
+                    } else {
+                        this.voucherError = data.message || 'Mã voucher không hợp lệ.';
+                        this.appliedVoucher = null;
+                        this.discountAmount = 0;
+                    }
+                } catch (error) {
+                    this.voucherError = 'Có lỗi xảy ra. Vui lòng thử lại.';
+                } finally {
+                    this.isLoadingVoucher = false;
+                }
+            },
+
+            // Hàm xóa voucher
+            async removeVoucher() {
+                try {
+                    const response = await fetch('{{ route('voucher.remove') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.appliedVoucher = null;
+                        this.discountAmount = data.discount_amount || 0;
+                        this.voucherCode = '';
+                        this.voucherError = '';
+                        sessionStorage.removeItem('applied_voucher');
+                        sessionStorage.removeItem('discount_amount');
+                    }
+                } catch (error) {
+                    console.error('Error removing voucher:', error);
+                }
             },
 
             // Hàm 'Chọn tất cả'
@@ -134,14 +254,6 @@
             @csrf
             
             {{-- 
-                Bí mật: Gửi mảng 'selected' đi
-                Chúng ta tạo các input[type=hidden] bằng Alpine.js
-            --}}
-            <template x-for="id in selected" :key="id">
-                <input type="hidden" name="selected_products[]" :value="id">
-            </template>
-            
-            {{-- 
                 BƯỚC 2: Dùng x-show để hiển thị giỏ hàng hoặc thông báo "trống"
                 thay vì dùng @if
             --}}
@@ -237,11 +349,60 @@
                 <div class="md:col-span-1">
                         <div class="bg-white shadow rounded-lg p-6 sticky top-8">
                         <h2 class="text-lg font-medium text-gray-900">Tóm tắt đơn hàng</h2>
+                        
+                        <!-- Phần nhập mã voucher -->
+                        <div class="mt-6 border-t border-gray-200 pt-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="block text-sm font-medium text-gray-700">Mã giảm giá</label>
+                                <a href="{{ route('promotions') }}" class="text-xs text-indigo-600 hover:text-indigo-800 hover:underline">
+                                    Xem tất cả voucher →
+                                </a>
+                            </div>
+                            <div class="flex gap-2">
+                                <input type="text" 
+                                       x-model="voucherCode"
+                                       @keyup.enter="applyVoucher()"
+                                       :disabled="isLoadingVoucher || appliedVoucher"
+                                       placeholder="Nhập mã voucher"
+                                       class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <button type="button"
+                                        @click="appliedVoucher ? removeVoucher() : applyVoucher()"
+                                        :disabled="isLoadingVoucher"
+                                        class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <span x-show="!isLoadingVoucher && !appliedVoucher">Áp dụng</span>
+                                    <span x-show="isLoadingVoucher">...</span>
+                                    <span x-show="appliedVoucher">Xóa</span>
+                                </button>
+                            </div>
+                            <p x-show="voucherError" x-text="voucherError" class="mt-2 text-sm text-red-600"></p>
+                            <div x-show="appliedVoucher" class="mt-2 p-3 bg-green-50 border border-green-200 rounded-md">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-semibold text-green-800" x-text="appliedVoucher?.name"></p>
+                                        <p class="text-xs text-green-600" x-text="'Mã: ' + appliedVoucher?.code"></p>
+                                    </div>
+                                    <span class="text-sm font-bold text-green-700" x-text="'-' + new Intl.NumberFormat('vi-VN').format(calculatedDiscount) + ' đ'"></span>
+                                </div>
+                            </div>
+                        </div>
+
                         <dl class="mt-6 space-y-4">
+                            <div class="flex items-center justify-between">
+                                <dt class="text-sm text-gray-600">Tạm tính</dt>
+                                <dd class="text-sm font-medium text-gray-900">
+                                    <span x-text="new Intl.NumberFormat('vi-VN').format(total)">0</span> đ
+                                </dd>
+                            </div>
+                            <div x-show="appliedVoucher && calculatedDiscount > 0" class="flex items-center justify-between">
+                                <dt class="text-sm text-gray-600">Giảm giá</dt>
+                                <dd class="text-sm font-medium text-green-600">
+                                    -<span x-text="new Intl.NumberFormat('vi-VN').format(calculatedDiscount)">0</span> đ
+                                </dd>
+                            </div>
                             <div class="flex items-center justify-between border-t border-gray-200 pt-4">
                                 <dt class="text-base font-medium text-gray-900">Tổng tiền</dt>
                                 <dd class="text-base font-medium text-gray-900">
-                                        <span x-text="new Intl.NumberFormat('vi-VN').format(total)">0</span> đ
+                                    <span x-text="new Intl.NumberFormat('vi-VN').format(finalTotal)">0</span> đ
                                 </dd>
                             </div>
                         </dl>

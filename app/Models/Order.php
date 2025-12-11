@@ -21,6 +21,8 @@ class Order extends Model
         'shipping_address',
         'payment_method',
         'order_code',
+        'voucher_code',
+        'discount_amount',
     ];
 
     /**
@@ -52,5 +54,13 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Một đơn hàng có thể có một voucher usage
+     */
+    public function voucherUsage()
+    {
+        return $this->hasOne(\App\Models\VoucherUsage::class);
     }
 }
