@@ -66,8 +66,8 @@ Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.') // <-- THÊM DÒNG NÀY ĐỂ TẠO TIỀN TỐ TÊN
     ->group(function () {
-    
-    // Route cho trang dashboard admin
+
+        // Route cho trang dashboard admin
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // Các resource route khác
@@ -98,14 +98,18 @@ Route::middleware('auth')->group(function () {
 
     // ===== ROUTE CHECKOUT (CẦN ĐĂNG NHẬP) =====
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-    
+
     // ===== ROUTE THANH TOÁN =====
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    
+
+    // ROUTE VNPay
+    Route::post('/checkout/vnpay', [CheckoutController::class, 'vnpayPayment'])->name('checkout.vnpay');
+    Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpayReturn');
+
     Route::post('/checkout/address/store', [CheckoutController::class, 'storeAddress'])->name('checkout.address.store');
     // Tuyến xử lý (POST)
     Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
-    
+
     // Trang cảm ơn (GET)
     Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
     // ===== KẾT THÚC ROUTE THANH TOÁN =====
