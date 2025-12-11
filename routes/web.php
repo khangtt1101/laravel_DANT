@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
 use App\Models\Product;
@@ -19,6 +20,8 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductViewController;
 use App\Http\Controllers\ProductReviewController;
+use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -29,12 +32,19 @@ Route::get('/search', [ShopController::class, 'search'])->name('shop.search');
 Route::get('/products/{category:slug}/{product:slug}', [ShopController::class, 'show'])
     ->name('products.show')
     ->scopeBindings();
+Route::get('/promotions', [PromotionController::class, 'index'])->name('promotions');
+Route::get('/contact', function () {
+    return view('pages.contact');
+})->name('contact');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 // ===== BẮT ĐẦU CÁC ROUTE GIỎ HÀNG (KHÔNG CẦN ĐĂNG NHẬP) =====
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/voucher/validate', [CartController::class, 'validateVoucher'])->name('voucher.validate');
+Route::post('/voucher/remove', [CartController::class, 'removeVoucher'])->name('voucher.remove');
 // ===== KẾT THÚC CÁC ROUTE GIỎ HÀNG =====
 
 // ===== ROUTE TRACKING SỐ NGƯỜI ĐANG XEM SẢN PHẨM =====
@@ -58,11 +68,13 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::resource('reviews', ReviewController::class)->only(['index', 'destroy']);
         Route::resource('categories', CategoryController::class);
         Route::resource('users', UserController::class)->except(['create', 'store', 'show']);
+        Route::resource('vouchers', AdminVoucherController::class);
     });
 
 Route::middleware(['auth', 'verified'])->prefix('account')->name('account.')->group(function () {
     Route::get('/orders', [AccountController::class, 'orderHistory'])->name('orders');
     Route::get('/orders/{order}', [AccountController::class, 'showOrder'])->name('orders.show');
+    Route::post('/orders/{order}/cancel', [AccountController::class, 'cancelOrder'])->name('orders.cancel');
     Route::get('/support', [AccountController::class, 'support'])->name('support');
 });    
 
