@@ -151,11 +151,11 @@
             <!-- Logo -->
             <div class="flex-shrink-0">
                 <a href="/" class="flex items-center">
-                    <img class="w-auto mr-2 transition-all duration-300" :class="isScrolled ? 'h-10' : 'h-16'"
-                        src="{{ asset('images/logo.png') }}" alt="PolyTech Store Logo">
+                    <img class="w-auto -mr-3 transition-all duration-300" :class="isScrolled ? 'h-10' : 'h-14'"
+                        src="{{ asset('images/logo.png') }}" alt="CellphoneS Store Logo">
                     <span class="text-2xl font-bold text-indigo-600 transition-all duration-300"
                         :class="isScrolled ? 'text-xl' : 'text-2xl'">
-                        PolyTech Store
+                        CellphoneS
                     </span>
                 </a>
             </div>
