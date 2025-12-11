@@ -374,6 +374,9 @@ class CheckoutController extends Controller
                 // Xóa session checkout
                 session()->forget(['checkout_cart', 'checkout_total']);
 
+                // Lưu order_id để trang success hiển thị (không phụ thuộc vào auth)
+                session()->put('order_id', $order->id);
+
                 // Chuyển hướng đến trang Thành công
                 return redirect()->route('checkout.success')->with('order_id', $order->id);
             } else {
