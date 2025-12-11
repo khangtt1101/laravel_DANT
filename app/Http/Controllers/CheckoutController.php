@@ -11,6 +11,8 @@ use App\Models\Voucher;
 use App\Models\VoucherUsage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderPlaced;
 
 class CheckoutController extends Controller
 {
@@ -141,8 +143,14 @@ class CheckoutController extends Controller
             // 6. Xóa session checkout và voucher
             session()->forget(['checkout_cart', 'checkout_total', 'checkout_voucher', 'checkout_voucher_discount', 'applied_voucher', 'voucher_discount']);
 
-            // 7. (Tùy chọn) Gửi email xác nhận
-            // Mail::to($user->email)->send(new OrderPlaced($order));
+            // 7. Gửi email xác nhận đơn hàng
+            try {
+                $order->load(['items.product', 'user']);
+                Mail::to($user->email)->send(new OrderPlaced($order));
+            } catch (\Exception $mailException) {
+                // Log lỗi gửi email nhưng không làm gián đoạn quá trình đặt hàng
+                Log::error('Lỗi gửi email xác nhận đơn hàng: ' . $mailException->getMessage());
+            }
 
             // 8. Chuyển hướng đến trang Thành công
             // Truyền ID đơn hàng để hiển thị

@@ -237,10 +237,11 @@ class CartController extends Controller
         }
 
         // Kiểm tra voucher có hợp lệ không
-        if (!$voucher->isValid($totalPrice, auth()->id())) {
+        $validation = $voucher->isValid(auth()->user(), $totalPrice);
+        if (!$validation['valid']) {
             return response()->json([
                 'success' => false,
-                'message' => 'Mã voucher không hợp lệ hoặc không đủ điều kiện sử dụng.'
+                'message' => $validation['message'] || 'Mã voucher không hợp lệ hoặc không đủ điều kiện sử dụng.'
             ], 400);
         }
 
@@ -262,8 +263,12 @@ class CartController extends Controller
             'success' => true,
             'message' => 'Áp dụng voucher thành công!',
             'voucher' => [
+                'id' => $voucher->id,
                 'code' => $voucher->code,
                 'name' => $voucher->name,
+                'type' => $voucher->type,
+                'value' => $voucher->value,
+                'max_discount' => $voucher->max_discount,
                 'discount_amount' => $discountAmount,
             ],
             'total_price' => $totalPrice,
