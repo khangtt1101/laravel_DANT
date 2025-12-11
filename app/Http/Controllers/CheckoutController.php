@@ -193,12 +193,31 @@ class CheckoutController extends Controller
      */
     public function success()
     {
+        // Ưu tiên lấy order_id từ session (case COD, MoMo, VNPay đặt thành công)
         $orderId = session('order_id');
-        if (!$orderId) {
-            return redirect()->route('shop.index');
+        $orderCode = request('order_code');
+
+        $order = null;
+
+        if ($orderId) {
+            $order = Order::find($orderId);
         }
 
-        $order = Order::find($orderId);
+        // Fallback: nếu mất session (redirect từ VNPay), tìm theo order_code trên URL
+        if (!$order && $orderCode) {
+            $order = Order::where('order_code', $orderCode)->first();
+        }
+
+        // Nếu vẫn không tìm thấy, fallback theo user (đơn mới nhất)
+        if (!$order && auth()->check()) {
+            $order = Order::where('user_id', auth()->id())
+                ->latest('created_at')
+                ->first();
+        }
+
+        if (!$order) {
+            return redirect()->route('shop.index');
+        }
 
         return view('checkout.success', compact('order'));
     }
@@ -277,6 +296,7 @@ class CheckoutController extends Controller
         $vnp_Amount = $totalPrice * 100; // VNPay yêu cầu nhân 100
         $vnp_Locale = 'vn';
         $vnp_IpAddr = request()->ip();
+        $vnp_SecureHashType = 'SHA512';
 
         $vnp_TmnCode = env('VNP_TMN_CODE');
         $vnp_HashSecret = env('VNP_HASH_SECRET');
@@ -296,6 +316,7 @@ class CheckoutController extends Controller
             "vnp_OrderType" => $vnp_OrderType,
             "vnp_ReturnUrl" => $vnp_Returnurl,
             "vnp_TxnRef" => $vnp_TxnRef,
+            "vnp_SecureHashType" => $vnp_SecureHashType,
         );
 
         // Sắp xếp mảng theo key để tạo mã hash đúng
@@ -331,7 +352,13 @@ class CheckoutController extends Controller
      */
     public function vnpayReturn(Request $request)
     {
+        // Nếu có vnp_TxnRef mà thiếu vnp_SecureHash (truy cập thủ công), đẩy về shop
+        if (!$request->has('vnp_SecureHash')) {
+            return redirect()->route('shop.index');
+        }
+
         // Lấy tất cả dữ liệu VNPay gửi về
+        Log::info('VNPay return raw query', $request->query());
         $vnp_SecureHash = $request->vnp_SecureHash;
         $inputData = array();
         foreach ($_GET as $key => $value) {
@@ -354,6 +381,11 @@ class CheckoutController extends Controller
 
         $vnp_HashSecret = env('VNP_HASH_SECRET');
         $secureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
+        Log::info('VNPay hash compare', [
+            'computed_secure_hash' => $secureHash,
+            'return_secure_hash' => $vnp_SecureHash,
+            'hashdata' => $hashdata,
+        ]);
 
         // Kiểm tra tính toàn vẹn của dữ liệu (tránh hacker sửa URL)
         if ($secureHash == $vnp_SecureHash) {
@@ -378,7 +410,9 @@ class CheckoutController extends Controller
                 session()->put('order_id', $order->id);
 
                 // Chuyển hướng đến trang Thành công
-                return redirect()->route('checkout.success')->with('order_id', $order->id);
+                return redirect()->route('checkout.success', [
+                    'order_code' => $order->order_code,
+                ])->with('order_id', $order->id);
             } else {
                 // Thanh toán thất bại / Hủy bỏ
                 // Có thể cập nhật status = cancelled nếu muốn
