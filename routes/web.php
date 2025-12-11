@@ -64,6 +64,7 @@ Route::middleware(['auth', 'verified', 'admin'])
 
         // Các resource route khác
         Route::resource('products', ProductController::class);
+        Route::get('orders/{order}/export-pdf', [OrderController::class, 'exportPdf'])->name('orders.exportPdf');
         Route::resource('orders', OrderController::class)->only(['index', 'show', 'update', 'destroy']);
         Route::resource('reviews', ReviewController::class)->only(['index', 'destroy']);
         Route::resource('categories', CategoryController::class);
