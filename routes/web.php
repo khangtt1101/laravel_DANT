@@ -96,7 +96,6 @@ Route::middleware('auth')->group(function () {
 
     // ROUTE VNPay
     Route::post('/checkout/vnpay', [CheckoutController::class, 'vnpayPayment'])->name('checkout.vnpay');
-    Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpayReturn');
 
     Route::post('/checkout/address/store', [CheckoutController::class, 'storeAddress'])->name('checkout.address.store');
     // Tuyến xử lý (POST)
@@ -113,5 +112,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/products/{product}/reviews/{review}', [ProductReviewController::class, 'destroy'])
         ->name('products.reviews.destroy');
 });
+
+// VNPay return callback (không yêu cầu đăng nhập)
+Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('checkout.vnpayReturn');
 
 require __DIR__ . '/auth.php';
