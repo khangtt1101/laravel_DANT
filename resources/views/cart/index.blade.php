@@ -77,6 +77,11 @@
 
             // Hàm áp dụng voucher
             async applyVoucher() {
+                // Nếu chưa chọn sản phẩm nào, tự động chọn tất cả để áp dụng voucher
+                if (this.selected.length === 0) {
+                    this.selected = Object.keys(this.cart);
+                }
+
                 if (!this.voucherCode.trim()) {
                     this.voucherError = 'Vui lòng nhập mã voucher.';
                     return;

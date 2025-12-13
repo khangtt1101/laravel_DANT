@@ -123,18 +123,17 @@
 
                             <ul class="divide-y divide-gray-200 mt-4">
                                 @foreach($checkoutCart as $id => $details)
-
-                                    <li class="py-4 flex">
-                                        <img src="{{ Storage::url($details['image_url']) }}" alt="{{ $details['name'] }}"
-                                            class="h-16 w-16 rounded-md object-cover">
-                                        <div class="ml-3 flex-1">
-                                            <h4 class="text-sm font-medium text-gray-900">{{ $details['name'] }}</h4>
-                                            <p class="text-sm text-gray-500">SL: {{ $details['quantity'] }}</p>
-                                        </div>
-                                        <p class="text-sm font-medium text-gray-900">
-                                            {{ number_format($details['price'] * $details['quantity'], 0, ',', '.') }} đ
-                                        </p>
-                                    </li>
+                                <li class="py-4 flex">
+                                    <img src="{{ Storage::url($details['image_url']) }}" alt="{{ $details['name'] }}"
+                                        class="h-16 w-16 rounded-md object-cover">
+                                    <div class="ml-3 flex-1">
+                                        <h4 class="text-sm font-medium text-gray-900">{{ $details['name'] }}</h4>
+                                        <p class="text-sm text-gray-500">SL: {{ $details['quantity'] }}</p>
+                                    </div>
+                                    <p class="text-sm font-medium text-gray-900">
+                                        {{ number_format($details['price'] * $details['quantity'], 0, ',', '.') }} đ
+                                    </p>
+                                </li>
                                 @endforeach
                             </ul>
 

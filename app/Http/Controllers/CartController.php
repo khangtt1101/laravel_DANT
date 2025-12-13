@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -217,6 +218,8 @@ class CartController extends Controller
     {
         $request->validate([
             'code' => 'required|string|max:50',
+            'total_amount' => 'nullable|numeric|min:0',
+            'selected_products' => 'nullable|array',
         ]);
 
         $code = strtoupper(trim($request->input('code')));
@@ -229,25 +232,47 @@ class CartController extends Controller
             ], 404);
         }
 
-        // Lấy giỏ hàng và tính tổng tiền
+        // Lấy giỏ hàng từ session
         $cart = session()->get('cart', []);
-        $totalPrice = 0;
-        foreach ($cart as $item) {
-            $totalPrice += $item['price'] * $item['quantity'];
+        $totalAmount = $request->input('total_amount');
+        $productCategories = [];
+
+        // Nếu có danh sách sản phẩm được chọn thì chỉ tính trên danh sách đó
+        if ($request->has('selected_products')) {
+            $selectedProducts = $request->input('selected_products', []);
+            foreach ($selectedProducts as $productId) {
+                if (isset($cart[$productId])) {
+                    $item = $cart[$productId];
+                    $totalAmount += $item['price'] * $item['quantity'];
+                    if (isset($item['category_id'])) {
+                        $productCategories[] = $item['category_id'];
+                    }
+                }
+            }
+        } else {
+            // Nếu không gửi selected_products, tính trên toàn bộ giỏ hàng
+            $totalAmount = 0;
+            foreach ($cart as $item) {
+                $totalAmount += $item['price'] * $item['quantity'];
+                if (isset($item['category_id'])) {
+                    $productCategories[] = $item['category_id'];
+                }
+            }
         }
 
-        // Kiểm tra voucher có hợp lệ không
-        $validation = $voucher->isValid(auth()->user(), $totalPrice);
+        // Kiểm tra voucher có hợp lệ không (bao gồm category)
+        $user = Auth::user();
+        $validation = $voucher->isValid($user, $totalAmount, array_unique($productCategories));
         if (!$validation['valid']) {
             return response()->json([
                 'success' => false,
-                'message' => $validation['message'] || 'Mã voucher không hợp lệ hoặc không đủ điều kiện sử dụng.'
+                'message' => $validation['message'] ?? 'Mã voucher không hợp lệ hoặc không đủ điều kiện sử dụng.'
             ], 400);
         }
 
         // Tính discount
-        $discountAmount = $voucher->calculateDiscount($totalPrice);
-        $finalPrice = max(0, $totalPrice - $discountAmount);
+        $discountAmount = $voucher->calculateDiscount($totalAmount);
+        $finalPrice = max(0, $totalAmount - $discountAmount);
 
         // Lưu vào session
         session()->put('applied_voucher', [
@@ -256,6 +281,7 @@ class CartController extends Controller
             'name' => $voucher->name,
             'type' => $voucher->type,
             'value' => $voucher->value,
+            'max_discount_amount' => $voucher->max_discount_amount,
         ]);
         session()->put('voucher_discount', $discountAmount);
 
@@ -268,12 +294,11 @@ class CartController extends Controller
                 'name' => $voucher->name,
                 'type' => $voucher->type,
                 'value' => $voucher->value,
-                'max_discount' => $voucher->max_discount,
-                'discount_amount' => $discountAmount,
+                'max_discount_amount' => $voucher->max_discount_amount,
             ],
-            'total_price' => $totalPrice,
             'discount_amount' => $discountAmount,
-            'final_price' => $finalPrice,
+            'total_amount' => $totalAmount,
+            'final_amount' => $finalPrice,
         ]);
     }
 
