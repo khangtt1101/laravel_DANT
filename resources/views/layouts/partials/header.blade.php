@@ -152,12 +152,12 @@
             <div class="flex-shrink-0">
                 <a href="/" class="flex items-center">
                     <img class="w-auto -mr-3 transition-all duration-300" :class="isScrolled ? 'h-10' : 'h-14'"
-                        src="{{ url('images/logo.png') }}" 
-                        alt="CellphoneS Store Logo"
-                        onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E📱%3C/text%3E%3C/svg%3E';">
+                        src="{{ asset('images/logo.png') }}" 
+                        alt="PolyTech Store Logo"
+                        onerror="this.style.display='none';">
                     <span class="text-2xl font-bold text-indigo-600 transition-all duration-300"
                         :class="isScrolled ? 'text-xl' : 'text-2xl'">
-                        CellphoneS
+                        PolyTech Store
                     </span>
                 </a>
             </div>

@@ -8,7 +8,7 @@
                         Săn deal công nghệ cực đỉnh – giảm đến <span class="text-yellow-300">50%</span>
                     </h1>
                     <p class="text-lg text-white/90 mb-6">
-                        Tổng hợp chương trình khuyến mãi đang diễn ra tại CellphoneS Store. Đổi máy mới, sắm phụ kiện, tích điểm nhận quà – tất cả trong một trang duy nhất.
+                        Tổng hợp chương trình khuyến mãi đang diễn ra tại PolyTech Store. Đổi máy mới, sắm phụ kiện, tích điểm nhận quà – tất cả trong một trang duy nhất.
                     </p>
                     <div class="flex flex-wrap gap-4">
                         <a href="{{ route('shop.index') }}"
@@ -225,7 +225,7 @@
                 </div>
 
                 <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Đặc quyền thành viên CellphoneSCare+</h3>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Đặc quyền thành viên PolyTechCare+</h3>
                     <ul class="space-y-4">
                         <li class="flex items-start gap-4">
                             <div class="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center text-indigo-600 font-bold">1</div>
@@ -251,7 +251,7 @@
                     </ul>
                     <div class="mt-6">
                         <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition">
-                            Đăng ký CellphoneSCare+
+                            Đăng ký PolyTechCare+
                         </a>
                     </div>
                 </div>
@@ -270,7 +270,7 @@
                 <div class="space-y-4">
                     <details class="bg-white/5 rounded-xl p-4 border border-white/10" open>
                         <summary class="font-semibold cursor-pointer">Làm sao để nhận thông báo sớm?</summary>
-                        <p class="text-sm text-white/70 mt-2">Đăng ký CellphoneSCare+ hoặc bật thông báo trong ứng dụng, bạn sẽ nhận email/SMS trước ít nhất 12 giờ.</p>
+                        <p class="text-sm text-white/70 mt-2">Đăng ký PolyTechCare+ hoặc bật thông báo trong ứng dụng, bạn sẽ nhận email/SMS trước ít nhất 12 giờ.</p>
                     </details>
                     <details class="bg-white/5 rounded-xl p-4 border border-white/10">
                         <summary class="font-semibold cursor-pointer">Có áp dụng chung nhiều voucher?</summary>
