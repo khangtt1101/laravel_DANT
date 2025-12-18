@@ -144,13 +144,7 @@ class CheckoutController extends Controller
             session()->forget(['checkout_cart', 'checkout_total', 'checkout_voucher', 'checkout_voucher_discount', 'applied_voucher', 'voucher_discount']);
 
             // 7. Gửi email xác nhận đơn hàng
-            try {
-                $order->load(['items.product', 'user']);
-                Mail::to($user->email)->send(new OrderPlaced($order));
-            } catch (\Exception $mailException) {
-                // Log lỗi gửi email nhưng không làm gián đoạn quá trình đặt hàng
-                Log::error('Lỗi gửi email xác nhận đơn hàng: ' . $mailException->getMessage());
-            }
+            $this->sendOrderConfirmationEmail($order);
 
             // 8. Chuyển hướng đến trang Thành công
             // Truyền ID đơn hàng để hiển thị
@@ -327,6 +321,28 @@ class CheckoutController extends Controller
      * 2. XỬ LÝ KẾT QUẢ TRẢ VỀ TỪ VNPAY
      */
     /**
+     * Gửi email xác nhận đơn hàng
+     */
+    private function sendOrderConfirmationEmail(Order $order)
+    {
+        try {
+            // Load quan hệ để tránh N+1 khi render view email
+            if (!$order->relationLoaded('items')) {
+                $order->load(['items.product', 'user']);
+            }
+
+            // Lấy email từ user của đơn hàng
+            $email = $order->user->email;
+
+            Mail::to($email)->send(new OrderPlaced($order));
+            Log::info('Đã gửi email đơn hàng #' . $order->order_code . ' tới ' . $email);
+        } catch (\Exception $mailException) {
+            // Log lỗi gửi email nhưng không làm gián đoạn quá trình đặt hàng
+            Log::error('Lỗi gửi email xác nhận đơn hàng #' . $order->order_code . ': ' . $mailException->getMessage());
+        }
+    }
+
+    /**
      * 2. XỬ LÝ KẾT QUẢ TRẢ VỀ TỪ VNPAY
      */
     public function vnpayReturn(Request $request)
@@ -373,6 +389,9 @@ class CheckoutController extends Controller
 
                 // Xóa session checkout
                 session()->forget(['checkout_cart', 'checkout_total']);
+
+                // Gửi email xác nhận
+                $this->sendOrderConfirmationEmail($order);
 
                 // Lưu order_id để trang success hiển thị (không phụ thuộc vào auth)
                 session()->put('order_id', $order->id);
