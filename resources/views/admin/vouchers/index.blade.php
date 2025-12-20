@@ -121,22 +121,21 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if($voucher->is_active && \Carbon\Carbon::parse($voucher->start_date)->isPast() && \Carbon\Carbon::parse($voucher->end_date)->isFuture())
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
-                                        Đang hoạt động
-                                    </span>
-                                @elseif(!$voucher->is_active)
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
-                                        Tạm dừng
-                                    </span>
-                                @elseif(\Carbon\Carbon::parse($voucher->end_date)->isPast())
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                        Hết hạn
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                        Chưa bắt đầu
-                                    </span>
+                                <div class="flex items-center">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer voucher-status-toggle" 
+                                               data-id="{{ $voucher->id }}" 
+                                               {{ $voucher->is_active ? 'checked' : '' }}>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                                        <span class="ml-3 text-sm font-medium text-gray-900 status-label-{{ $voucher->id }}">
+                                            {{ $voucher->is_active ? 'Đang hoạt động' : 'Tạm dừng' }}
+                                        </span>
+                                    </label>
+                                </div>
+                                @if(\Carbon\Carbon::parse($voucher->end_date)->isPast())
+                                    <span class="text-xs text-red-500 block mt-1">Hết hạn</span>
+                                @elseif(\Carbon\Carbon::parse($voucher->start_date)->isFuture())
+                                    <span class="text-xs text-yellow-600 block mt-1">Chưa bắt đầu</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -194,3 +193,48 @@
         </div>
     </div>
 </x-admin-layout>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggles = document.querySelectorAll('.voucher-status-toggle');
+        
+        toggles.forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const voucherId = this.dataset.id;
+                const statusLabel = document.querySelector(`.status-label-${voucherId}`);
+                
+                // Disable to prevent double click
+                this.disabled = true;
+                
+                fetch(`/admin/vouchers/${voucherId}/toggle-status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        statusLabel.textContent = data.is_active ? 'Đang hoạt động' : 'Tạm dừng';
+                        // Show success toast (basic alert for now, can be improved)
+                        // alert(data.message); 
+                    } else {
+                        // Revert status if failed
+                        this.checked = !this.checked;
+                        alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    this.checked = !this.checked;
+                    alert('Lỗi kết nối');
+                })
+                .finally(() => {
+                    this.disabled = false;
+                });
+            });
+        });
+    });
+</script>

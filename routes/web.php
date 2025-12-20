@@ -69,6 +69,7 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::resource('reviews', ReviewController::class)->only(['index', 'destroy']);
         Route::resource('categories', CategoryController::class);
         Route::resource('users', UserController::class)->except(['create', 'store', 'show']);
+        Route::patch('vouchers/{voucher}/toggle-status', [AdminVoucherController::class, 'toggleStatus'])->name('vouchers.toggle-status');
         Route::resource('vouchers', AdminVoucherController::class);
     });
 
@@ -90,16 +91,16 @@ Route::middleware('auth')->group(function () {
 
     // ===== ROUTE CHECKOUT (CẦN ĐĂNG NHẬP) =====
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-    
+
     // ===== ROUTE THANH TOÁN =====
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     // VNPay create payment
     Route::post('/checkout/vnpay', [CheckoutController::class, 'vnpayPayment'])->name('checkout.vnpay');
-    
+
     Route::post('/checkout/address/store', [CheckoutController::class, 'storeAddress'])->name('checkout.address.store');
     // Tuyến xử lý (POST)
     Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
-    
+
     // ===== KẾT THÚC ROUTE THANH TOÁN =====
 
     Route::post('/products/{product}/reviews', [ProductReviewController::class, 'store'])

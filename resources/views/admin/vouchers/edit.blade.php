@@ -29,16 +29,6 @@
                     @enderror
                 </div>
 
-                <!-- Mô tả -->
-                <div class="sm:col-span-2">
-                    <label for="description" class="block text-sm font-medium text-gray-700">Mô tả</label>
-                    <textarea name="description" id="description" rows="3"
-                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">{{ old('description', $voucher->description) }}</textarea>
-                    @error('description')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 <!-- Loại voucher -->
                 <div>
                     <label for="type" class="block text-sm font-medium text-gray-700">Loại giảm giá <span class="text-red-500">*</span></label>
@@ -59,7 +49,7 @@
                         Giá trị <span class="text-red-500">*</span>
                         <span id="value-label" class="text-gray-500 text-xs">(%)</span>
                     </label>
-                    <input type="number" name="value" id="value" value="{{ old('value', $voucher->value) }}" step="0.01" min="0" required
+                    <input type="text" name="value" id="value" value="{{ old('value', number_format($voucher->value, 0, ',', '.')) }}" required
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     @error('value')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -69,7 +59,7 @@
                 <!-- Đơn hàng tối thiểu -->
                 <div>
                     <label for="min_order_amount" class="block text-sm font-medium text-gray-700">Đơn hàng tối thiểu (VNĐ) <span class="text-red-500">*</span></label>
-                    <input type="number" name="min_order_amount" id="min_order_amount" value="{{ old('min_order_amount', $voucher->min_order_amount) }}" step="1000" min="0" required
+                    <input type="text" name="min_order_amount" id="min_order_amount" value="{{ old('min_order_amount', number_format($voucher->min_order_amount, 0, ',', '.')) }}" required
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     @error('min_order_amount')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -79,7 +69,7 @@
                 <!-- Giảm giá tối đa (chỉ cho percentage) -->
                 <div id="max_discount_container">
                     <label for="max_discount_amount" class="block text-sm font-medium text-gray-700">Giảm giá tối đa (VNĐ)</label>
-                    <input type="number" name="max_discount_amount" id="max_discount_amount" value="{{ old('max_discount_amount', $voucher->max_discount_amount) }}" step="1000" min="0"
+                    <input type="text" name="max_discount_amount" id="max_discount_amount" value="{{ old('max_discount_amount', $voucher->max_discount_amount ? number_format($voucher->max_discount_amount, 0, ',', '.') : '') }}"
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                            placeholder="Để trống nếu không giới hạn">
                     @error('max_discount_amount')
@@ -90,7 +80,7 @@
                 <!-- Giới hạn sử dụng -->
                 <div>
                     <label for="usage_limit" class="block text-sm font-medium text-gray-700">Giới hạn sử dụng (tổng)</label>
-                    <input type="number" name="usage_limit" id="usage_limit" value="{{ old('usage_limit', $voucher->usage_limit) }}" min="0"
+                    <input type="text" name="usage_limit" id="usage_limit" value="{{ old('usage_limit', $voucher->usage_limit ? number_format($voucher->usage_limit, 0, ',', '.') : '') }}"
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                            placeholder="Để trống nếu không giới hạn">
                     @error('usage_limit')
@@ -101,7 +91,7 @@
                 <!-- Giới hạn sử dụng mỗi user -->
                 <div>
                     <label for="usage_limit_per_user" class="block text-sm font-medium text-gray-700">Giới hạn sử dụng mỗi user</label>
-                    <input type="number" name="usage_limit_per_user" id="usage_limit_per_user" value="{{ old('usage_limit_per_user', $voucher->usage_limit_per_user) }}" min="0"
+                    <input type="text" name="usage_limit_per_user" id="usage_limit_per_user" value="{{ old('usage_limit_per_user', $voucher->usage_limit_per_user ? number_format($voucher->usage_limit_per_user, 0, ',', '.') : '') }}"
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                            placeholder="Để trống nếu không giới hạn">
                     @error('usage_limit_per_user')
@@ -112,7 +102,7 @@
                 <!-- Ngày bắt đầu -->
                 <div>
                     <label for="start_date" class="block text-sm font-medium text-gray-700">Ngày bắt đầu <span class="text-red-500">*</span></label>
-                    <input type="datetime-local" name="start_date" id="start_date" value="{{ old('start_date', $voucher->start_date->format('Y-m-d\TH:i')) }}" required
+                    <input type="date" name="start_date" id="start_date" value="{{ old('start_date', $voucher->start_date->format('Y-m-d')) }}" required
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     @error('start_date')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -122,7 +112,7 @@
                 <!-- Ngày kết thúc -->
                 <div>
                     <label for="end_date" class="block text-sm font-medium text-gray-700">Ngày kết thúc <span class="text-red-500">*</span></label>
-                    <input type="datetime-local" name="end_date" id="end_date" value="{{ old('end_date', $voucher->end_date->format('Y-m-d\TH:i')) }}" required
+                    <input type="date" name="end_date" id="end_date" value="{{ old('end_date', $voucher->end_date->format('Y-m-d')) }}" required
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     @error('end_date')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

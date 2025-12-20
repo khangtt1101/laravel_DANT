@@ -7,10 +7,12 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\ProductImage;
-use Illuminate\Support\Facades\DB; 
-use Illuminate\Support\Str; 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 
 class ProductController extends Controller
 {
@@ -57,18 +59,10 @@ class ProductController extends Controller
     /**
      * Lưu sản phẩm mới và ảnh vào database.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:products',
-            'category_id' => 'required|exists:categories,id',
-            'price' => 'required|numeric|min:0',
-            'stock_quantity' => 'required|integer|min:0',
-            'sku' => 'nullable|string|max:100|unique:products',
-            'description' => 'nullable|string',
-            'images' => 'nullable|array', // Phải là một mảng
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048' // Validate từng file trong mảng
-        ]);
+        // Sử dụng dữ liệu đã được validate và xử lý từ StoreProductRequest
+        $validatedData = $request->validated();
 
         // Bắt đầu một transaction
         DB::beginTransaction();
@@ -76,6 +70,9 @@ class ProductController extends Controller
         try {
             // Lấy dữ liệu sản phẩm (không bao gồm ảnh)
             $productData = collect($validatedData)->except('images')->toArray();
+            if (isset($productData['specifications'])) {
+                $productData['specifications'] = array_values($productData['specifications']);
+            }
             $productData['slug'] = Str::slug($productData['name']);
 
             // 1. Tạo sản phẩm
@@ -116,25 +113,17 @@ class ProductController extends Controller
     /**
      * Cập nhật thông tin sản phẩm và ảnh.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:products,name,' . $product->id,
-            'category_id' => 'required|exists:categories,id',
-            'price' => 'required|numeric|min:0',
-            'stock_quantity' => 'required|integer|min:0',
-            'sku' => 'nullable|string|max:100|unique:products,sku,' . $product->id,
-            'description' => 'nullable|string',
-            'images' => 'nullable|array', // Ảnh mới tải lên
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'delete_images' => 'nullable|array', // Mảng ID của các ảnh cần xóa
-            'delete_images.*' => 'integer|exists:product_images,id',
-        ]);
+        $validatedData = $request->validated();
 
         DB::beginTransaction();
         try {
             // 1. Cập nhật thông tin sản phẩm (trừ ảnh)
             $productData = $request->except(['_token', '_method', 'images', 'delete_images']);
+            if (isset($productData['specifications'])) {
+                $productData['specifications'] = array_values($productData['specifications']);
+            }
             $productData['slug'] = Str::slug($request->name);
             $product->update($productData);
 
@@ -178,12 +167,12 @@ class ProductController extends Controller
         try {
             // Lấy tất cả ảnh liên quan
             $images = $product->images;
-            
+
             // 1. Xóa tất cả file ảnh khỏi storage
             foreach ($images as $image) {
                 Storage::disk('public')->delete($image->image_url);
             }
-            
+
             // 2. Xóa các bản ghi ảnh (sẽ tự động nếu có onDelete('cascade'))
             // $product->images()->delete(); // Bỏ comment dòng này nếu bạn không set cascade
 

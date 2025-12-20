@@ -20,9 +20,9 @@ class VoucherController extends Controller
         // Tìm kiếm theo mã hoặc tên
         if ($request->filled('search')) {
             $searchTerm = $request->input('search');
-            $query->where(function($q) use ($searchTerm) {
+            $query->where(function ($q) use ($searchTerm) {
                 $q->where('code', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('name', 'like', '%' . $searchTerm . '%');
+                    ->orWhere('name', 'like', '%' . $searchTerm . '%');
             });
         }
 
@@ -30,8 +30,8 @@ class VoucherController extends Controller
         if ($request->filled('status')) {
             if ($request->status === 'active') {
                 $query->where('is_active', true)
-                      ->where('start_date', '<=', now())
-                      ->where('end_date', '>=', now());
+                    ->where('start_date', '<=', now())
+                    ->where('end_date', '>=', now());
             } elseif ($request->status === 'inactive') {
                 $query->where('is_active', false);
             } elseif ($request->status === 'expired') {
@@ -58,28 +58,50 @@ class VoucherController extends Controller
      */
     public function store(Request $request)
     {
+        // Sanitize numeric inputs (remove separators)
+        $inputs = $request->all();
+        $numericFields = ['value', 'min_order_amount', 'max_discount_amount', 'usage_limit', 'usage_limit_per_user'];
+        foreach ($numericFields as $field) {
+            if (isset($inputs[$field])) {
+                $inputs[$field] = str_replace(['.', ','], '', $inputs[$field]);
+            }
+        }
+        $request->merge($inputs);
+
         $validated = $request->validate([
             'code' => ['required', 'string', 'max:50', 'unique:vouchers,code'],
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:1000'],
             'type' => ['required', 'in:percentage,fixed'],
-            'value' => ['required', 'numeric', 'min:0'],
+            'value' => [
+                'required',
+                'numeric',
+                'min:0',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->type === 'percentage' && $value > 100) {
+                        $fail('Giá trị phần trăm không được quá 100.');
+                    }
+                },
+            ],
             'min_order_amount' => ['required', 'numeric', 'min:0'],
             'max_discount_amount' => ['nullable', 'numeric', 'min:0'],
             'usage_limit' => ['nullable', 'integer', 'min:0'],
             'usage_limit_per_user' => ['nullable', 'integer', 'min:0'],
             'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date', 'after:start_date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'is_active' => ['boolean'],
         ], [
             'code.unique' => 'Mã voucher này đã tồn tại.',
-            'end_date.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
+            'end_date.after_or_equal' => 'Ngày kết thúc phải bằng hoặc sau ngày bắt đầu.',
         ]);
 
         // Chuyển code thành chữ hoa
         $validated['code'] = strtoupper(trim($validated['code']));
         $validated['used_count'] = 0;
         $validated['is_active'] = $request->has('is_active');
+        // Set default start_date if not present
+        if (empty($validated['start_date'])) {
+            $validated['start_date'] = now()->toDateString();
+        }
         // Tránh null cho cột not-null
         $validated['usage_limit_per_user'] = $validated['usage_limit_per_user'] ?? 1;
 
@@ -112,22 +134,40 @@ class VoucherController extends Controller
      */
     public function update(Request $request, Voucher $voucher)
     {
+        // Sanitize numeric inputs
+        $inputs = $request->all();
+        $numericFields = ['value', 'min_order_amount', 'max_discount_amount', 'usage_limit', 'usage_limit_per_user'];
+        foreach ($numericFields as $field) {
+            if (isset($inputs[$field])) {
+                $inputs[$field] = str_replace(['.', ','], '', $inputs[$field]);
+            }
+        }
+        $request->merge($inputs);
+
         $validated = $request->validate([
             'code' => ['required', 'string', 'max:50', 'unique:vouchers,code,' . $voucher->id],
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:1000'],
             'type' => ['required', 'in:percentage,fixed'],
-            'value' => ['required', 'numeric', 'min:0'],
+            'value' => [
+                'required',
+                'numeric',
+                'min:0',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->type === 'percentage' && $value > 100) {
+                        $fail('Giá trị phần trăm không được quá 100.');
+                    }
+                },
+            ],
             'min_order_amount' => ['required', 'numeric', 'min:0'],
             'max_discount_amount' => ['nullable', 'numeric', 'min:0'],
             'usage_limit' => ['nullable', 'integer', 'min:0'],
             'usage_limit_per_user' => ['nullable', 'integer', 'min:0'],
             'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date', 'after:start_date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'is_active' => ['boolean'],
         ], [
             'code.unique' => 'Mã voucher này đã tồn tại.',
-            'end_date.after' => 'Ngày kết thúc phải sau ngày bắt đầu.',
+            'end_date.after_or_equal' => 'Ngày kết thúc phải bằng hoặc sau ngày bắt đầu.',
         ]);
 
         // Chuyển code thành chữ hoa
@@ -164,6 +204,21 @@ class VoucherController extends Controller
 
         return redirect()->route('admin.vouchers.index')
             ->with('success', 'Xóa voucher thành công!');
+    }
+
+    /**
+     * Toggle status voucher
+     */
+    public function toggleStatus(Voucher $voucher)
+    {
+        $voucher->is_active = !$voucher->is_active;
+        $voucher->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cập nhật trạng thái thành công!',
+            'is_active' => $voucher->is_active,
+        ]);
     }
 }
 
