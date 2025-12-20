@@ -7,6 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }} - Admin</title>
+    <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,7 +75,7 @@
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-2">
                     <div
                         class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/30">
-                        P</div>
+                        C</div>
                     <h1 class="text-2xl font-bold text-white tracking-tight">CellphoneS<span
                             class="text-indigo-500">Admin</span></h1>
                 </a>

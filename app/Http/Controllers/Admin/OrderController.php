@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Mail\OrderDelivered;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -51,6 +53,11 @@ class OrderController extends Controller
 
         $request->validate(['status' => 'required|in:pending,processing,shipped,delivered,cancelled']);
         $order->update(['status' => $request->status]);
+
+        if ($request->status == 'delivered') {
+            Mail::to($order->user->email)->send(new OrderDelivered($order));
+        }
+
         return redirect()->route('admin.orders.index', $order)->with('success', 'Trạng thái đơn hàng đã được cập nhật.'); // <-- Cập nhật
     }
 
