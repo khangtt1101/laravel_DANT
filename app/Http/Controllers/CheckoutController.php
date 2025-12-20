@@ -222,12 +222,36 @@ class CheckoutController extends Controller
             return back()->with('error', 'Địa chỉ không hợp lệ.');
         }
 
+        // Lấy voucher từ session checkout (nếu có)
+        $appliedVoucher = session('checkout_voucher');
+        $voucherDiscount = 0;
+        $voucherCode = null;
+        $finalAmount = $totalPrice;
+        $voucher = null;
+
+        if ($appliedVoucher && isset($appliedVoucher['id'])) {
+            $voucher = Voucher::find($appliedVoucher['id']);
+            if ($voucher) {
+                // Validate lại voucher trước khi đặt hàng
+                $validation = $voucher->isValid($user, $totalPrice);
+                if ($validation['valid']) {
+                    $voucherDiscount = $voucher->calculateDiscount($totalPrice);
+                    $finalAmount = max(0, $totalPrice - $voucherDiscount);
+                    $voucherCode = $voucher->code;
+                } else {
+                    // Nếu voucher không hợp lệ, bỏ qua
+                    $voucherDiscount = 0;
+                    $appliedVoucher = null;
+                }
+            }
+        }
+
         // 3. Tạo Đơn hàng (Order) với status 'pending'
         DB::beginTransaction();
         try {
             $order = Order::create([
                 'user_id' => $user->id,
-                'total_amount' => $totalPrice,
+                'total_amount' => $finalAmount,
                 'status' => 'pending', // Chờ thanh toán
                 'shipping_address' => sprintf(
                     "%s, %s, %s.",
@@ -236,6 +260,8 @@ class CheckoutController extends Controller
                     $address->city
                 ),
                 'payment_method' => 'VNPay',
+                'voucher_code' => $voucherCode,
+                'discount_amount' => $voucherDiscount,
             ]);
 
             // 4. Tạo Order Items
@@ -258,6 +284,19 @@ class CheckoutController extends Controller
                 $product->decrement('stock_quantity', $details['quantity']);
             }
 
+            // 4.5. Nếu có voucher, tạo VoucherUsage và cập nhật số lần sử dụng
+            if ($voucherCode && $voucher) {
+                VoucherUsage::create([
+                    'voucher_id' => $voucher->id,
+                    'user_id' => $user->id,
+                    'order_id' => $order->id,
+                    'discount_amount' => $voucherDiscount,
+                ]);
+
+                // Tăng số lần đã sử dụng
+                $voucher->increment('used_count');
+            }
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -268,7 +307,7 @@ class CheckoutController extends Controller
         $vnp_TxnRef = $order->order_code; // Sử dụng mã đơn hàng
         $vnp_OrderInfo = "Thanh toan don hang " . $vnp_TxnRef;
         $vnp_OrderType = 'billpayment';
-        $vnp_Amount = $totalPrice * 100; // VNPay yêu cầu nhân 100
+        $vnp_Amount = $finalAmount * 100; // VNPay yêu cầu nhân 100 - Dùng finalAmount đã giảm giá
         $vnp_Locale = 'vn';
         $vnp_IpAddr = request()->ip();
 
