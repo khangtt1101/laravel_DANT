@@ -25,7 +25,7 @@ MAIL_USERNAME=your-email@gmail.com
 MAIL_PASSWORD=abcd efgh ijkl mnop
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=your-email@gmail.com
-MAIL_FROM_NAME="PolyTech Store"
+MAIL_FROM_NAME="CellphoneS"
 ```
 
 **Lưu ý:**
@@ -63,8 +63,8 @@ MAIL_PORT=2525
 MAIL_USERNAME=your-mailtrap-username
 MAIL_PASSWORD=your-mailtrap-password
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=noreply@polytech.vn
-MAIL_FROM_NAME="PolyTech Store"
+MAIL_FROM_ADDRESS=noreply@cellphones.com.vn
+MAIL_FROM_NAME="CellphoneS"
 ```
 
 **Lưu ý:** Mailtrap chỉ lưu email để test, không gửi email thật.

@@ -4,6 +4,22 @@
     @endsection
 
     <div class="max-w-5xl mx-auto space-y-6">
+        @php
+            $statusClasses = [
+                'pending' => 'bg-amber-50 text-amber-700 border-amber-100',
+                'processing' => 'bg-blue-50 text-blue-700 border-blue-100',
+                'shipped' => 'bg-indigo-50 text-indigo-700 border-indigo-100',
+                'delivered' => 'bg-emerald-50 text-emerald-700 border-emerald-100',
+                'cancelled' => 'bg-rose-50 text-rose-700 border-rose-100',
+            ];
+            $statusLabels = [
+                'pending' => 'Chờ xử lý',
+                'processing' => 'Đang xử lý',
+                'shipped' => 'Đang giao',
+                'delivered' => 'Đã giao',
+                'cancelled' => 'Đã hủy',
+            ];
+        @endphp
         <!-- Header Actions -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div class="flex items-center gap-4">
@@ -28,11 +44,9 @@
                             <select name="status" onchange="this.form.submit()" 
                                     {{ in_array($order->status, ['delivered', 'cancelled']) ? 'disabled' : '' }}
                                     class="appearance-none pl-4 pr-10 py-2 bg-indigo-600 border border-transparent rounded-xl font-medium text-sm text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-lg shadow-indigo-500/30 {{ in_array($order->status, ['delivered', 'cancelled']) ? 'cursor-not-allowed opacity-75' : 'cursor-pointer' }}">
-                                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
-                                <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Đang xử lý</option>
-                                <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>Đang giao</option>
-                                <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Đã giao</option>
-                                <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+                                @foreach($statusLabels as $key => $label)
+                                    <option value="{{ $key }}" {{ $order->status == $key ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
                             </select>
                             @if(!in_array($order->status, ['delivered', 'cancelled']))
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
@@ -106,7 +120,7 @@
                             <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Thông tin liên hệ</h3>
                             <div class="flex items-start text-sm text-slate-600 mb-2">
                                 <svg class="w-4 h-4 mr-2 mt-0.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                                {{ $order->phone_number ?? 'Chưa cập nhật' }}
+                                {{ $order->user->phone_number ?? 'Chưa cập nhật' }}
                             </div>
                             <div class="flex items-start text-sm text-slate-600">
                                 <svg class="w-4 h-4 mr-2 mt-0.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -128,8 +142,8 @@
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-sm text-slate-500">Trạng thái</span>
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                Đã thanh toán
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $statusClasses[$order->status] ?? 'bg-slate-100 text-slate-800 border-slate-200' }}">
+                                {{ $statusLabels[$order->status] ?? $order->status }}
                             </span>
                         </div>
                     </div>

@@ -23,7 +23,7 @@ class ContactController extends Controller
 
         $contactRequest = ContactRequest::create($validated);
 
-        $receiver = config('mail.contact_receiver') ?? env('CONTACT_RECEIVER_EMAIL', 'care@polytech.vn');
+        $receiver = config('mail.contact_receiver') ?? env('CONTACT_RECEIVER_EMAIL', 'care@cellphones.com.vn');
 
         Mail::to($receiver)->send(new ContactRequestSubmitted($contactRequest));
 

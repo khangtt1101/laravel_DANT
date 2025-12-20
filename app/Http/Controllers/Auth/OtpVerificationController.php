@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
 
@@ -20,7 +21,12 @@ class OtpVerificationController extends Controller
     {
         // If email is not in session/request or user already verified, redirect appropriately
         // For simplicity, we assume the flow comes from register
-        if (!$request->session()->has('email') && !$request->has('email')) {
+        if (
+            !$request->session()->has('email')
+            && !$request->has('email')
+            && !$request->session()->has('registration_data')
+            && !$request->old('email')
+        ) {
             return redirect()->route('login');
         }
 
@@ -30,7 +36,7 @@ class OtpVerificationController extends Controller
     /**
      * Handle an incoming OTP verification request.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $request->validate([
             'otp' => ['required', 'string'],
@@ -67,6 +73,11 @@ class OtpVerificationController extends Controller
             $request->session()->forget(['registration_data', 'email']);
 
             Auth::login($user);
+
+            if ($request->wantsJson()) {
+                return response()->json(['redirect' => route('dashboard', absolute: false)]);
+            }
+
             return redirect()->intended(route('dashboard', absolute: false));
         }
 
@@ -99,6 +110,10 @@ class OtpVerificationController extends Controller
         ])->save();
 
         Auth::login($user);
+
+        if ($request->wantsJson()) {
+            return response()->json(['redirect' => route('dashboard', absolute: false)]);
+        }
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

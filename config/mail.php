@@ -123,6 +123,6 @@ return [
     | Email đích nhận form liên hệ. Có thể chỉnh bằng env CONTACT_RECEIVER_EMAIL.
     |
     */
-    'contact_receiver' => env('CONTACT_RECEIVER_EMAIL', 'care@polytech.vn'),
+    'contact_receiver' => env('CONTACT_RECEIVER_EMAIL', 'care@cellphones.com.vn'),
 
 ];

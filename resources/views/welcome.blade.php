@@ -32,7 +32,7 @@
                                 <span class="text-yellow-300">Điện tử</span>
                                 <br>
                                 Chất lượng cao
-            </h1>
+                            </h1>
                             <p class="text-lg md:text-xl mb-8 text-white/90 leading-relaxed drop-shadow-md">
                                 Chuyên cung cấp các sản phẩm công nghệ chính hãng với giá cả hợp lý và dịch vụ uy tín
                                 nhất.
@@ -78,7 +78,8 @@
                                             <div class="text-sm text-white/80">Khách hàng</div>
                                         </div>
                                         <div class="text-center">
-                                            <div class="text-2xl font-bold text-yellow-300">{{ number_format($globalRating, 1) }}★</div>
+                                            <div class="text-2xl font-bold text-yellow-300">
+                                                {{ number_format($globalRating, 1) }}★</div>
                                             <div class="text-sm text-white/80">
                                                 @if($globalReviewCount > 0)
                                                     {{ $globalReviewCount }}+ đánh giá
@@ -363,13 +364,15 @@
                                         class="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold z-10">
                                         Hot
                                     </div>
-                                    <div
-                                        class="absolute top-3 left-16 bg-blue-500 text-white px-2 py-1 rounded text-xs font-semibold z-10 social-proof-badge"
+                                    <div class="absolute top-3 left-16 bg-blue-500 text-white px-2 py-1 rounded text-xs font-semibold z-10 social-proof-badge"
                                         data-product-id="{{ $product->id }}">
                                         <span class="inline-flex items-center gap-1">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                                </path>
                                             </svg>
                                             <span class="viewers-count">-</span> đang xem
                                         </span>
@@ -443,8 +446,11 @@
                                             <div class="flex items-center gap-1">
                                                 <div class="flex">
                                                     @for($i = 1; $i <= 5; $i++)
-                                                        <svg class="w-4 h-4 {{ $ratingValue !== null && $ratingValue >= $i ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.98 8.72c-.783-.57-.38-1.81.588-1.81H8.03a1 1 0 00.95-.69l1.07-3.292z"></path>
+                                                        <svg class="w-4 h-4 {{ $ratingValue !== null && $ratingValue >= $i ? 'text-yellow-400' : 'text-gray-300' }}"
+                                                            fill="currentColor" viewBox="0 0 20 20">
+                                                            <path
+                                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.98 8.72c-.783-.57-.38-1.81.588-1.81H8.03a1 1 0 00.95-.69l1.07-3.292z">
+                                                            </path>
                                                         </svg>
                                                     @endfor
                                                 </div>
@@ -526,7 +532,7 @@
                                                 @if($product->images->first())
                                                     <img data-src="{{ Storage::url($product->images->first()->image_url) }}"
                                                         src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                                        alt="{{ $product->name }}" 
+                                                        alt="{{ $product->name }}"
                                                         class="lazyload w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                                 @else
                                                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
@@ -569,8 +575,8 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse($bestSellers->take(8) as $product)
-                    
-                    
+
+
 
                     <div
                         class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
@@ -664,7 +670,8 @@
     </section>
 
     <!-- Flash Sale Section - Nổi bật với timer riêng -->
-    <section id="flash-sale-section" class="bg-gradient-to-br from-red-600 via-pink-600 to-orange-600 py-16 relative overflow-hidden">
+    <section id="flash-sale-section"
+        class="bg-gradient-to-br from-red-600 via-pink-600 to-orange-600 py-16 relative overflow-hidden">
         <!-- Background Pattern -->
         <div class="absolute inset-0 opacity-10">
             <div class="absolute inset-0"
@@ -718,10 +725,9 @@
                             class="block">
                             <div class="relative h-40 bg-gray-50 overflow-hidden">
                                 @if($product->images->first())
-                                    <img
-                                        data-src="{{ Storage::url($product->images->first()->image_url) }}"
+                                    <img data-src="{{ Storage::url($product->images->first()->image_url) }}"
                                         src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                        alt="{{ $product->name }}" 
+                                        alt="{{ $product->name }}"
                                         class="lazyload w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
@@ -802,10 +808,9 @@
                             class="block">
                             <div class="relative h-64 bg-gray-50 overflow-hidden">
                                 @if($product->images->first())
-                                    <img
-                                        data-src="{{ Storage::url($product->images->first()->image_url) }}"
+                                    <img data-src="{{ Storage::url($product->images->first()->image_url) }}"
                                         src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                        alt="{{ $product->name }}" 
+                                        alt="{{ $product->name }}"
                                         class="lazyload w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
@@ -833,7 +838,7 @@
 
                                 <button onclick="event.preventDefault(); addToCart({{ $product->id }});"
                                     class="w-full bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 transition text-sm font-medium">
-                    Mua ngay
+                                    Mua ngay
                                 </button>
                             </div>
                         </a>
@@ -867,7 +872,7 @@
                     class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold">
                     Xem tất cả <span>→</span>
                 </a>
-    </div>
+            </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -884,10 +889,9 @@
                             class="group text-center p-4 rounded-lg hover:bg-gray-50 transition-all duration-300 border border-gray-100 hover:border-indigo-200">
                             <div class="relative h-32 mb-3 bg-gray-50 rounded overflow-hidden mx-auto">
                                 @if($product->images->first())
-                                    <img 
-                                        data-src="{{ Storage::url($product->images->first()->image_url) }}"
+                                    <img data-src="{{ Storage::url($product->images->first()->image_url) }}"
                                         src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                        alt="{{ $product->name }}" 
+                                        alt="{{ $product->name }}"
                                         class="lazyload w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 @else
                                     <div class="lazyload w-full h-full flex items-center justify-center bg-gray-100">
@@ -1088,10 +1092,9 @@
                             class="block">
                             <div class="relative h-56 bg-gray-50 overflow-hidden">
                                 @if($product->images->first())
-                                    <img 
-                                        data-src="{{ Storage::url($product->images->first()->image_url) }}"
+                                    <img data-src="{{ Storage::url($product->images->first()->image_url) }}"
                                         src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                        alt="{{ $product->name }}" 
+                                        alt="{{ $product->name }}"
                                         class="lazyload w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
@@ -1309,8 +1312,8 @@
                                 class="absolute top-3 left-3 bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
                                 Tin tức
                             </div>
-                    </div>
-                    <div class="p-6">
+                        </div>
+                        <div class="p-6">
                             <div class="flex items-center gap-2 text-xs text-gray-500 mb-3">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1318,7 +1321,7 @@
                                     </path>
                                 </svg>
                                 <span>{{ date('d/m/Y') }}</span>
-                    </div>
+                            </div>
                             <h3
                                 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition line-clamp-2">
                                 Top 10 sản phẩm công nghệ hot nhất năm 2024
@@ -1333,7 +1336,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 5l7 7-7 7"></path>
                                 </svg>
-                </div>
+                            </div>
                         </div>
                     </a>
                 </article>
@@ -1355,8 +1358,8 @@
                                 class="absolute top-3 left-3 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
                                 Hướng dẫn
                             </div>
-                    </div>
-                    <div class="p-6">
+                        </div>
+                        <div class="p-6">
                             <div class="flex items-center gap-2 text-xs text-gray-500 mb-3">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1364,7 +1367,7 @@
                                     </path>
                                 </svg>
                                 <span>{{ date('d/m/Y', strtotime('-1 day')) }}</span>
-                    </div>
+                            </div>
                             <h3
                                 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition line-clamp-2">
                                 Cách chọn mua điện thoại phù hợp với nhu cầu
@@ -1379,7 +1382,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 5l7 7-7 7"></path>
                                 </svg>
-                </div>
+                            </div>
                         </div>
                     </a>
                 </article>
@@ -1395,11 +1398,11 @@
                                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
                                     </path>
                                 </svg>
-                </div>
+                            </div>
                             <div
                                 class="absolute top-3 left-3 bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
                                 Đánh giá
-        </div>
+                            </div>
                         </div>
                         <div class="p-6">
                             <div class="flex items-center gap-2 text-xs text-gray-500 mb-3">
@@ -1428,10 +1431,11 @@
                         </div>
                     </a>
                 </article>
-    </div>
+            </div>
 
             <div class="text-center mt-8">
-                <a href="javascript:void(0)" title="Đang cập nhật" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold cursor-not-allowed">
+                <a href="javascript:void(0)" title="Đang cập nhật"
+                    class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold cursor-not-allowed">
                     Xem tất cả tin tức
                     <span>→</span>
                 </a>
@@ -1485,7 +1489,7 @@
                         <div class="p-4">
                             <h3
                                 class="text-sm font-semibold text-gray-900 mb-2 line-clamp-2 min-h-[2.5rem] group-hover:text-indigo-600 transition">
-                                {{ $product->name }} - Review chi tiết | PolyTech Store
+                                {{ $product->name }} - Review chi tiết | CellphoneS
                             </h3>
 
                             <!-- Channel Info -->
@@ -1494,7 +1498,7 @@
                                     <div class="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center">
                                         <span class="text-white text-xs font-bold">S</span>
                                     </div>
-                                    <span class="text-xs text-gray-600 font-medium">PolyTech Store</span>
+                                    <span class="text-xs text-gray-600 font-medium">CellphoneS</span>
                                 </div>
                                 <button
                                     class="px-3 py-1 bg-red-600 text-white text-xs font-semibold rounded-full hover:bg-red-700 transition">
@@ -1508,7 +1512,8 @@
                             <div class="flex items-center gap-3 mt-3">
                                 @if($product->images->first())
                                     <img data-src="{{ Storage::url($product->images->first()->image_url) }}"
-                                        alt="{{ $product->name }}" class="lazyload w-16 h-16 object-cover rounded border border-gray-200"
+                                        alt="{{ $product->name }}"
+                                        class="lazyload w-16 h-16 object-cover rounded border border-gray-200"
                                         src="data:image/gif;base64,R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==">
                                 @else
                                     <div
@@ -1656,8 +1661,8 @@
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-gray-900 mb-1">Email</h4>
-                                    <a href="mailto:support@PolyTech.com"
-                                        class="text-indigo-600 hover:text-indigo-700 text-sm">support@PolyTech.com</a>
+                                    <a href="mailto:support@cellphones.com.vn"
+                                        class="text-indigo-600 hover:text-indigo-700 text-sm">support@cellphones.com.vn</a>
                                 </div>
                             </div>
                             <div class="flex items-start gap-4">
@@ -1977,13 +1982,13 @@
         setInterval(nextSlide, 5000);
 
         // Countdown Timer cho "Deal sốc hôm nay"
-        (function() {
+        (function () {
             function updateCountdown() {
                 // Tính thời gian kết thúc: cuối ngày hôm nay (23:59:59)
                 const now = new Date();
                 const endOfDay = new Date();
                 endOfDay.setHours(23, 59, 59, 999); // Set về cuối ngày hôm nay
-                
+
                 const nowTime = now.getTime();
                 const endTime = endOfDay.getTime();
                 const distance = endTime - nowTime;
@@ -2047,36 +2052,36 @@
                     quantity: 1
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Cập nhật số lượng giỏ hàng trong header
-                    window.dispatchEvent(new CustomEvent('cart-updated', {
-                        detail: { cartCount: data.cartCount }
-                    }));
-                    
-                    btn.textContent = '✓ Đã thêm';
-                    btn.classList.remove('bg-red-600', 'hover:bg-red-700');
-                    btn.classList.add('bg-green-600', 'hover:bg-green-700');
-                    
-                    setTimeout(() => {
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Cập nhật số lượng giỏ hàng trong header
+                        window.dispatchEvent(new CustomEvent('cart-updated', {
+                            detail: { cartCount: data.cartCount }
+                        }));
+
+                        btn.textContent = '✓ Đã thêm';
+                        btn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                        btn.classList.add('bg-green-600', 'hover:bg-green-700');
+
+                        setTimeout(() => {
+                            btn.textContent = originalText;
+                            btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                            btn.classList.add('bg-red-600', 'hover:bg-red-700');
+                            btn.disabled = false;
+                        }, 2000);
+                    } else {
+                        alert(data.message || 'Có lỗi xảy ra khi thêm vào giỏ hàng');
                         btn.textContent = originalText;
-                        btn.classList.remove('bg-green-600', 'hover:bg-green-700');
-                        btn.classList.add('bg-red-600', 'hover:bg-red-700');
                         btn.disabled = false;
-                    }, 2000);
-                } else {
-                    alert(data.message || 'Có lỗi xảy ra khi thêm vào giỏ hàng');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Lỗi kết nối. Vui lòng thử lại!');
                     btn.textContent = originalText;
                     btn.disabled = false;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Lỗi kết nối. Vui lòng thử lại!');
-                btn.textContent = originalText;
-                btn.disabled = false;
-            });
+                });
         }
         // }
 
@@ -2168,13 +2173,13 @@
         }, 10000);
 
         // Flash Sale Countdown Timer cho "Siêu khuyến mãi"
-        (function() {
+        (function () {
             function updateFlashSaleCountdown() {
                 // Tính thời gian kết thúc: cuối ngày hôm nay (23:59:59)
                 const now = new Date();
                 const endOfDay = new Date();
                 endOfDay.setHours(23, 59, 59, 999); // Set về cuối ngày hôm nay
-                
+
                 const nowTime = now.getTime();
                 const endTime = endOfDay.getTime();
                 const distance = endTime - nowTime;
@@ -2221,7 +2226,7 @@
         })();
 
         // Floating Icons Animation - Hiệu ứng tuyết rơi cho Flash Sale
-        (function() {
+        (function () {
             // Đợi DOM load xong
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', initFloatingIcons);
@@ -2620,7 +2625,7 @@
         }
 
         // Track khi người dùng hover vào product card
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Cập nhật số đang xem khi trang load
             updateAllViewersCounts();
 
@@ -2632,7 +2637,7 @@
                 const productId = card.dataset.productId;
                 if (productId) {
                     let hoverTimeout;
-                    card.addEventListener('mouseenter', function() {
+                    card.addEventListener('mouseenter', function () {
                         hoverTimeout = setTimeout(() => {
                             trackProductViewing(productId);
                             // Cập nhật số đang xem sau khi track
@@ -2643,7 +2648,7 @@
                         }, 1000); // Track sau 1 giây hover
                     });
 
-                    card.addEventListener('mouseleave', function() {
+                    card.addEventListener('mouseleave', function () {
                         if (hoverTimeout) {
                             clearTimeout(hoverTimeout);
                         }

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Hóa đơn #{{ $order->order_code }}</title>
     <style>
         body {
@@ -9,51 +10,64 @@
             font-size: 14px;
             line-height: 1.6;
         }
+
         .header {
             text-align: center;
             margin-bottom: 20px;
         }
+
         .header h1 {
             margin: 0;
             font-size: 24px;
             text-transform: uppercase;
         }
+
         .header p {
             margin: 5px 0;
         }
+
         .info-section {
             margin-bottom: 20px;
             width: 100%;
         }
+
         .info-table {
             width: 100%;
             border-collapse: collapse;
         }
+
         .info-table td {
             vertical-align: top;
             padding: 5px;
         }
+
         .items-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
-        .items-table th, .items-table td {
+
+        .items-table th,
+        .items-table td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
+
         .items-table th {
             background-color: #f2f2f2;
             font-weight: bold;
         }
+
         .text-right {
             text-align: right;
         }
+
         .total-section {
             text-align: right;
             margin-top: 20px;
         }
+
         .footer {
             margin-top: 50px;
             text-align: center;
@@ -62,6 +76,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h1>HÓA ĐƠN BÁN HÀNG</h1>
@@ -81,10 +96,10 @@
                 </td>
                 <td width="50%">
                     <strong>Thông tin cửa hàng:</strong><br>
-                    Polytech Store<br>
+                    CellphoneS<br>
                     Địa chỉ: 123 Đường ABC, Quận XYZ, TP.HCM<br>
                     Hotline: 1900 1234<br>
-                    Website: www.polytechstore.com
+                    Website: www.cellphones.com.vn
                 </td>
             </tr>
         </table>
@@ -102,13 +117,13 @@
         </thead>
         <tbody>
             @foreach($order->items as $index => $item)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $item->product->name }}</td>
-                <td class="text-right">{{ number_format($item->price, 0, ',', '.') }} đ</td>
-                <td class="text-right">{{ $item->quantity }}</td>
-                <td class="text-right">{{ number_format($item->price * $item->quantity, 0, ',', '.') }} đ</td>
-            </tr>
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $item->product->name }}</td>
+                    <td class="text-right">{{ number_format($item->price, 0, ',', '.') }} đ</td>
+                    <td class="text-right">{{ $item->quantity }}</td>
+                    <td class="text-right">{{ number_format($item->price * $item->quantity, 0, ',', '.') }} đ</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
@@ -116,12 +131,15 @@
     <div class="total-section">
         <p><strong>Tổng tiền hàng:</strong> {{ number_format($order->total_amount, 0, ',', '.') }} đ</p>
         <!-- Nếu có phí vận chuyển hoặc giảm giá, thêm vào đây -->
-        <p><strong>Tổng cộng:</strong> <span style="font-size: 18px; color: #d32f2f;">{{ number_format($order->total_amount, 0, ',', '.') }} đ</span></p>
+        <p><strong>Tổng cộng:</strong> <span
+                style="font-size: 18px; color: #d32f2f;">{{ number_format($order->total_amount, 0, ',', '.') }} đ</span>
+        </p>
     </div>
 
     <div class="footer">
-        <p>Cảm ơn quý khách đã mua hàng tại Polytech Store!</p>
+        <p>Cảm ơn quý khách đã mua hàng tại CellphoneS!</p>
         <p>Vui lòng giữ lại hóa đơn để được bảo hành.</p>
     </div>
 </body>
+
 </html>

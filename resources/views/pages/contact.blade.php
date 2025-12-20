@@ -3,7 +3,7 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 gap-10 items-center">
                 <div>
-                    <p class="uppercase text-xs tracking-widest text-white/80 mb-2">PolyTech Support</p>
+                    <p class="uppercase text-xs tracking-widest text-white/80 mb-2">CellphoneS Support</p>
                     <h1 class="text-4xl lg:text-5xl font-bold leading-tight mb-6">
                         Liên hệ đội ngũ hỗ trợ 24/7 của chúng tôi
                     </h1>
@@ -14,8 +14,8 @@
                         <a href="tel:18002097" class="inline-flex items-center gap-2 bg-white text-indigo-600 font-semibold px-6 py-3 rounded-xl shadow-lg">
                             Gọi hotline
                         </a>
-                        <a href="mailto:care@polytech.vn" class="inline-flex items-center gap-2 border border-white/50 text-white font-medium px-6 py-3 rounded-xl hover:bg-white/10 transition">
-                            care@polytech.vn
+                        <a href="mailto:care@cellphones.com.vn" class="inline-flex items-center gap-2 border border-white/50 text-white font-medium px-6 py-3 rounded-xl hover:bg-white/10 transition">
+                            care@cellphones.com.vn
                         </a>
                     </div>
                 </div>
@@ -44,8 +44,8 @@
         $contactChannels = [
             ['title' => 'Hotline bán hàng', 'info' => '1800 2097', 'desc' => '08:00 – 22:00 mỗi ngày', 'icon' => 'phone'],
             ['title' => 'Hỗ trợ kỹ thuật', 'info' => '1800 1188', 'desc' => 'Bảo hành, sửa chữa, đổi trả', 'icon' => 'wrench'],
-            ['title' => 'Email chăm sóc', 'info' => 'care@polytech.vn', 'desc' => 'Phản hồi trong 4 giờ làm việc', 'icon' => 'mail'],
-            ['title' => 'Zalo/Livechat', 'info' => 'PolyTech Official', 'desc' => 'Chat trực tuyến 24/7', 'icon' => 'chat'],
+            ['title' => 'Email chăm sóc', 'info' => 'care@cellphones.com.vn', 'desc' => 'Phản hồi trong 4 giờ làm việc', 'icon' => 'mail'],
+            ['title' => 'Zalo/Livechat', 'info' => 'CellphoneS Official', 'desc' => 'Chat trực tuyến 24/7', 'icon' => 'chat'],
         ];
 
         $stores = [
@@ -137,7 +137,7 @@
                     <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl hover:bg-indigo-700 transition">
                         Gửi yêu cầu
                     </button>
-                    <p class="text-xs text-gray-400 text-center">Bằng cách gửi form, bạn đồng ý với Chính sách bảo mật của PolyTech.</p>
+                    <p class="text-xs text-gray-400 text-center">Bằng cách gửi form, bạn đồng ý với Chính sách bảo mật của CellphoneS.</p>
                 </form>
             </div>
             <div>
@@ -169,17 +169,17 @@
             <div class="border border-gray-100 rounded-2xl p-6">
                 <h4 class="font-semibold text-gray-900 mb-2">Hỗ trợ bảo hành</h4>
                 <p class="text-sm text-gray-600 mb-3">Kiểm tra tình trạng sửa chữa, đặt lịch giao nhận tận nơi.</p>
-                <a href="mailto:warranty@polytech.vn" class="inline-flex items-center gap-2 text-indigo-600 font-semibold">warranty@polytech.vn →</a>
+                <a href="mailto:warranty@cellphones.com.vn" class="inline-flex items-center gap-2 text-indigo-600 font-semibold">warranty@cellphones.com.vn →</a>
             </div>
             <div class="border border-gray-100 rounded-2xl p-6">
                 <h4 class="font-semibold text-gray-900 mb-2">Hợp tác doanh nghiệp</h4>
                 <p class="text-sm text-gray-600 mb-3">Cung cấp thiết bị IT, giải pháp văn phòng, ưu đãi theo hợp đồng.</p>
-                <a href="mailto:biz@polytech.vn" class="inline-flex items-center gap-2 text-indigo-600 font-semibold">biz@polytech.vn →</a>
+                <a href="mailto:biz@cellphones.com.vn" class="inline-flex items-center gap-2 text-indigo-600 font-semibold">biz@cellphones.com.vn →</a>
             </div>
             <div class="border border-gray-100 rounded-2xl p-6">
                 <h4 class="font-semibold text-gray-900 mb-2">Trở thành đối tác</h4>
                 <p class="text-sm text-gray-600 mb-3">Liên hệ để đặt kệ trưng bày, mở shop-in-shop hoặc nhượng quyền.</p>
-                <a href="mailto:partners@polytech.vn" class="inline-flex items-center gap-2 text-indigo-600 font-semibold">partners@polytech.vn →</a>
+                <a href="mailto:partners@cellphones.com.vn" class="inline-flex items-center gap-2 text-indigo-600 font-semibold">partners@cellphones.com.vn →</a>
             </div>
         </div>
     </section>

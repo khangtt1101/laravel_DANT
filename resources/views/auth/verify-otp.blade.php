@@ -60,5 +60,75 @@
                 </form>
             </div>
         </form>
+
+        <script>
+            document.querySelector('form[action="{{ route('otp.verify') }}"]').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const form = this;
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerText;
+                const otpInput = form.querySelector('input[name="otp"]');
+                const errorContainer = form.querySelector('.text-red-600'); // Assuming x-input-error uses this class
+
+                // Disable button and show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Đang xử lý...';
+
+                // Clear previous errors
+                if (errorContainer) {
+                    errorContainer.innerText = '';
+                    errorContainer.style.display = 'none';
+                }
+                const existingError = form.querySelector('#otp-error');
+                if (existingError) existingError.remove();
+
+
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
+                    },
+                    body: JSON.stringify({
+                        email: form.querySelector('input[name="email"]').value,
+                        otp: otpInput.value
+                    })
+                })
+                    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+                    .then(({ status, body }) => {
+                        if (status === 200) {
+                            window.location.href = body.redirect;
+                        } else if (status === 422) {
+                            // Show error
+                            let message = body.message;
+                            if (body.errors && body.errors.otp) {
+                                message = body.errors.otp[0];
+                            }
+
+                            // Create error element if not exists or use existing structure
+                            // Using a simple insertion for now tailored to the x-input-error component structure
+                            const errorDiv = document.createElement('p');
+                            errorDiv.id = 'otp-error';
+                            errorDiv.className = 'text-sm text-red-600 dark:text-red-400 mt-2 space-y-1';
+                            errorDiv.innerText = message;
+
+                            otpInput.closest('div').parentNode.appendChild(errorDiv);
+                        } else {
+                            alert('Đã có lỗi xảy ra. Vui lòng thử lại.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Lỗi kết nối. Vui lòng thử lại.');
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = originalBtnText;
+                    });
+            });
+        </script>
     </div>
 </x-auth-modern-layout>
