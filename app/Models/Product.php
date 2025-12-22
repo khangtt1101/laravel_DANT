@@ -23,6 +23,7 @@ class Product extends Model
         'price',
         'stock_quantity',
         'sku',
+        'is_active',
     ];
 
     /**

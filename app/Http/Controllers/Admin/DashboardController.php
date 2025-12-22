@@ -20,9 +20,10 @@ class DashboardController extends Controller
     {
         // Lấy các số liệu thống kê
         $totalProducts = Product::count();
+        $lowStockCount = Product::where('stock_quantity', '<=', 10)->where('stock_quantity', '>', 0)->count();
         $totalCustomers = User::where('role', 'customer')->count();
         $totalOrders = Order::count();
-        
+
         // Tính tổng doanh thu từ các đơn hàng đã "delivered"
         $totalRevenue = Order::where('status', 'delivered')->sum('total_amount');
 
@@ -33,7 +34,7 @@ class DashboardController extends Controller
         $revenueData = Order::where('status', 'delivered')
             ->where('created_at', '>=', Carbon::now()->subDays(30))
             ->select(
-                DB::raw('DATE(created_at) as date'), 
+                DB::raw('DATE(created_at) as date'),
                 DB::raw('SUM(total_amount) as total')
             )
             ->groupBy('date')
@@ -46,7 +47,7 @@ class DashboardController extends Controller
         for ($i = 29; $i >= 0; $i--) {
             $date = Carbon::now()->subDays($i)->format('Y-m-d');
             $dates[] = $date;
-            
+
             $record = $revenueData->firstWhere('date', $date);
             $revenues[] = $record ? $record->total : 0;
         }
@@ -56,7 +57,7 @@ class DashboardController extends Controller
             ->groupBy('status')
             ->pluck('total', 'status')
             ->toArray();
-        
+
         // Đảm bảo có đủ các key để tránh lỗi JS nếu thiếu status
         $statuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
         $statusCounts = [];
@@ -68,7 +69,7 @@ class DashboardController extends Controller
         $topProducts = OrderItem::join('orders', 'order_items.order_id', '=', 'orders.id')
             ->where('orders.status', 'delivered')
             ->select(
-                'order_items.product_id', 
+                'order_items.product_id',
                 DB::raw('SUM(order_items.quantity * order_items.price) as total_revenue'),
                 DB::raw('SUM(order_items.quantity) as total_sold')
             )
@@ -89,7 +90,8 @@ class DashboardController extends Controller
             'revenues',
             'statuses',
             'statusCounts',
-            'topProducts'
+            'topProducts',
+            'lowStockCount'
         ));
     }
 }

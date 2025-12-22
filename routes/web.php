@@ -63,7 +63,8 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // Các resource route khác
-        Route::resource('products', ProductController::class);
+        Route::patch('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
+        Route::resource('products', ProductController::class)->except(['destroy']);
         Route::get('orders/{order}/export-pdf', [OrderController::class, 'exportPdf'])->name('orders.exportPdf');
         Route::resource('orders', OrderController::class)->only(['index', 'show', 'update', 'destroy']);
         Route::resource('reviews', ReviewController::class)->only(['index', 'destroy']);

@@ -106,7 +106,8 @@ class CheckoutController extends Controller
 
             // 4. Tạo các Chi tiết Đơn hàng (Order Items)
             foreach ($checkoutCart as $productId => $details) {
-                $product = Product::find($productId);
+                // Sử dụng lockForUpdate để khóa row sản phẩm, tránh xung đột tồn kho (Race Condition)
+                $product = Product::where('id', $productId)->lockForUpdate()->first();
 
                 // (Nâng cao) Kiểm tra tồn kho
                 if ($product->stock_quantity < $details['quantity']) {
@@ -266,7 +267,8 @@ class CheckoutController extends Controller
 
             // 4. Tạo Order Items
             foreach ($checkoutCart as $productId => $details) {
-                $product = Product::find($productId);
+                // Sử dụng lockForUpdate để khóa row sản phẩm, tránh xung đột tồn kho
+                $product = Product::where('id', $productId)->lockForUpdate()->first();
 
                 // Kiểm tra tồn kho
                 if ($product->stock_quantity < $details['quantity']) {

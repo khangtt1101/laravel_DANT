@@ -36,7 +36,19 @@ class ProductController extends Controller
             $query->where('category_id', $request->input('category'));
         }
 
-        // 5. Lấy kết quả, phân trang và giữ lại các tham số query (search, category)
+        // 5. Xử lý lọc theo tình trạng kho (nếu có)
+        if ($request->filled('stock_status')) {
+            $status = $request->input('stock_status');
+            if ($status === 'low_stock') {
+                $query->where('stock_quantity', '<=', 10)->where('stock_quantity', '>', 0);
+            } elseif ($status === 'out_of_stock') {
+                $query->where('stock_quantity', 0);
+            } elseif ($status === 'in_stock') {
+                $query->where('stock_quantity', '>', 10);
+            }
+        }
+
+        // 6. Lấy kết quả, phân trang và giữ lại các tham số query (search, category, stock_status)
         $products = $query->paginate(10)->withQueryString();
 
         // 6. Trả về view với cả $products và $categories
@@ -161,30 +173,41 @@ class ProductController extends Controller
         }
     }
 
-    public function destroy(Product $product)
+    public function toggleStatus(Product $product)
     {
-        DB::beginTransaction();
-        try {
-            // Lấy tất cả ảnh liên quan
-            $images = $product->images;
+        $product->update(['is_active' => !$product->is_active]);
 
-            // 1. Xóa tất cả file ảnh khỏi storage
-            foreach ($images as $image) {
-                Storage::disk('public')->delete($image->image_url);
-            }
-
-            // 2. Xóa các bản ghi ảnh (sẽ tự động nếu có onDelete('cascade'))
-            // $product->images()->delete(); // Bỏ comment dòng này nếu bạn không set cascade
-
-            // 3. Xóa sản phẩm
-            $product->delete(); // Thao tác này sẽ tự động xóa images và order_items nếu migration của bạn có onDelete('cascade')
-
-            DB::commit();
-            return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được xóa thành công.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error($e);
-            return back()->with('error', 'Đã xảy ra lỗi khi xóa sản phẩm.');
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Trạng thái sản phẩm đã được cập nhật.',
+            'is_active' => $product->is_active,
+        ]);
     }
+
+    // public function destroy(Product $product)
+    // {
+    //     DB::beginTransaction();
+    //     try {
+    //         // Lấy tất cả ảnh liên quan
+    //         $images = $product->images;
+    //
+    //         // 1. Xóa tất cả file ảnh khỏi storage
+    //         foreach ($images as $image) {
+    //             Storage::disk('public')->delete($image->image_url);
+    //         }
+    //
+    //         // 2. Xóa các bản ghi ảnh (sẽ tự động nếu có onDelete('cascade'))
+    //         // $product->images()->delete(); // Bỏ comment dòng này nếu bạn không set cascade
+    //
+    //         // 3. Xóa sản phẩm
+    //         $product->delete(); // Thao tác này sẽ tự động xóa images và order_items nếu migration của bạn có onDelete('cascade')
+    //
+    //         DB::commit();
+    //         return redirect()->route('admin.products.index')->with('success', 'Sản phẩm đã được xóa thành công.');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         Log::error($e);
+    //         return back()->with('error', 'Đã xảy ra lỗi khi xóa sản phẩm.');
+    //     }
+    // }
 }
