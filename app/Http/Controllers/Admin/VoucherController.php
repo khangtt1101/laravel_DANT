@@ -77,8 +77,8 @@ class VoucherController extends Controller
                 'numeric',
                 'min:0',
                 function ($attribute, $value, $fail) use ($request) {
-                    if ($request->type === 'percentage' && $value > 100) {
-                        $fail('Giá trị phần trăm không được quá 100.');
+                    if ($request->type === 'percentage' && $value > 50) {
+                        $fail('Giá trị phần trăm không được quá 50%.');
                     }
                 },
             ],
@@ -153,8 +153,8 @@ class VoucherController extends Controller
                 'numeric',
                 'min:0',
                 function ($attribute, $value, $fail) use ($request) {
-                    if ($request->type === 'percentage' && $value > 100) {
-                        $fail('Giá trị phần trăm không được quá 100.');
+                    if ($request->type === 'percentage' && $value > 50) {
+                        $fail('Giá trị phần trăm không được quá 50%.');
                     }
                 },
             ],

@@ -64,6 +64,19 @@
                         placeholder="VD: SP-001">
                     @error('sku') <p class="mt-1 text-sm text-rose-500">{{ $message }}</p> @enderror
                 </div>
+
+                <div class="sm:col-span-2 pt-4 border-t border-slate-100">
+                    <div class="flex items-center">
+                        <input type="hidden" name="is_active" value="0">
+                        <input type="checkbox" name="is_active" id="is_active" value="1" 
+                            {{ old('is_active', $product->is_active ?? true) ? 'checked' : '' }}
+                            class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                        <label for="is_active" class="ml-2 block text-sm font-medium text-slate-700">
+                            Kích hoạt sản phẩm (Hiển thị trên web)
+                        </label>
+                    </div>
+                    @error('is_active') <p class="mt-1 text-sm text-rose-500">{{ $message }}</p> @enderror
+                </div>
             </div>
         </div>
 

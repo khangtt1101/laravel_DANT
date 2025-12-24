@@ -30,6 +30,7 @@ class StoreProductRequest extends FormRequest
             'specifications' => 'nullable|array',
             'specifications.*.name' => 'required|string|max:255',
             'specifications.*.value' => 'required|string|max:255',
+            'is_active' => 'boolean',
         ];
     }
 }

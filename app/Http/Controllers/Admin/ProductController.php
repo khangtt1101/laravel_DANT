@@ -173,15 +173,31 @@ class ProductController extends Controller
         }
     }
 
-    public function toggleStatus(Product $product)
+    public function toggleStatus(Request $request, Product $product)
     {
-        $product->update(['is_active' => !$product->is_active]);
+        try {
+            \Log::info("Toggle Status Request for Product: " . $product->id . ". Current status: " . $product->is_active);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Trạng thái sản phẩm đã được cập nhật.',
-            'is_active' => $product->is_active,
-        ]);
+            // Force reload to ensure we have latest state
+            $product = $product->fresh();
+
+            $product->is_active = !$product->is_active;
+            $product->save();
+
+            \Log::info("New status saved: " . $product->is_active);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cập nhật trạng thái thành công!',
+                'is_active' => $product->is_active,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error("Toggle Status Error: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi server: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     // public function destroy(Product $product)

@@ -88,11 +88,24 @@ class CheckoutController extends Controller
         DB::beginTransaction();
 
         try {
+            // 2.1. (MỚI) Lock Voucher để định danh và tránh Race Condition số lượng
+            if ($voucherCode && isset($appliedVoucher['id'])) {
+                // Lock voucher record để đảm bảo không ai khác dùng hết lượt trong khi ta đang xử lý
+                $voucher = Voucher::where('id', $appliedVoucher['id'])->lockForUpdate()->first();
+
+                // Kiểm tra lại sau khi lock
+                if (!$voucher || !$voucher->isValid($user, $totalPrice)['valid']) {
+                    throw new \Exception('Voucher không hợp lệ hoặc đã hết lượt sử dụng.');
+                }
+
+                // Recalculate discount based on latest state if needed, but strict check above is key
+            }
+
             // 3. Tạo Đơn hàng (Order)
             $order = Order::create([
                 'user_id' => $user->id,
-                'total_amount' => $finalAmount, // Tổng tiền sau khi giảm giá
-                'status' => 'pending', // Trạng thái mặc định
+                'total_amount' => $finalAmount, // Lưu ý: Cần tính toán lại nếu giá thay đổi, nhưng ở đây ta sẽ chặn nếu giá đổi
+                'status' => 'pending',
                 'shipping_address' => sprintf(
                     "%s, %s, %s.",
                     $address->address_line,
@@ -105,25 +118,44 @@ class CheckoutController extends Controller
             ]);
 
             // 4. Tạo các Chi tiết Đơn hàng (Order Items)
+            $calculatedTotal = 0;
+
             foreach ($checkoutCart as $productId => $details) {
-                // Sử dụng lockForUpdate để khóa row sản phẩm, tránh xung đột tồn kho (Race Condition)
+                // Sử dụng lockForUpdate để khóa row sản phẩm
                 $product = Product::where('id', $productId)->lockForUpdate()->first();
 
-                // (Nâng cao) Kiểm tra tồn kho
+                // (MỚI) Kiểm tra sản phẩm có đang active không
+                if (!$product->is_active) {
+                    throw new \Exception('Sản phẩm "' . $product->name . '" đã ngừng kinh doanh.');
+                }
+
+                // (MỚI) Kiểm tra giá có bị thay đổi không
+                // So sánh giá trong session ($details['price']) với giá DB ($product->price)
+                if ($product->price != $details['price']) {
+                    throw new \Exception('Giá sản phẩm "' . $product->name . '" đã thay đổi (' . number_format($product->price) . 'đ). Vui lòng cập nhật lại giỏ hàng.');
+                }
+
+                // Kiểm tra tồn kho
                 if ($product->stock_quantity < $details['quantity']) {
-                    throw new \Exception('Sản phẩm ' . $product->name . ' không đủ hàng.');
+                    throw new \Exception('Sản phẩm "' . $product->name . '" không đủ hàng (Còn ' . $product->stock_quantity . ').');
                 }
 
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $productId,
                     'quantity' => $details['quantity'],
-                    'price' => $details['price'],
+                    'price' => $product->price, // Luôn dùng giá từ DB để an toàn
                 ]);
 
-                // (Nâng cao) Trừ kho
+                $calculatedTotal += $product->price * $details['quantity'];
+
+                // Trừ kho
                 $product->decrement('stock_quantity', $details['quantity']);
             }
+
+            // (MỚI) Double check tổng tiền (Optional safety net)
+            // Nếu logic session đúng thì $calculatedTotal == $totalPrice. 
+            // Ta đã chặn sai giá ở trên nên không cần check lại ở đây, nhưng logic flow đã an toàn.
 
             // 4.5. Nếu có voucher, tạo VoucherUsage và cập nhật số lần sử dụng
             if ($voucherCode && $voucher) {
@@ -250,6 +282,14 @@ class CheckoutController extends Controller
         // 3. Tạo Đơn hàng (Order) với status 'pending'
         DB::beginTransaction();
         try {
+            // 2.1. (MỚI) Lock Voucher để định danh và tránh Race Condition số lượng
+            if ($voucherCode && isset($appliedVoucher['id'])) {
+                $voucher = Voucher::where('id', $appliedVoucher['id'])->lockForUpdate()->first();
+                if (!$voucher || !$voucher->isValid($user, $totalPrice)['valid']) {
+                    throw new \Exception('Voucher không hợp lệ hoặc đã hết lượt sử dụng.');
+                }
+            }
+
             $order = Order::create([
                 'user_id' => $user->id,
                 'total_amount' => $finalAmount,
@@ -270,16 +310,26 @@ class CheckoutController extends Controller
                 // Sử dụng lockForUpdate để khóa row sản phẩm, tránh xung đột tồn kho
                 $product = Product::where('id', $productId)->lockForUpdate()->first();
 
+                // (MỚI) Kiểm tra sản phẩm có đang active không
+                if (!$product->is_active) {
+                    throw new \Exception('Sản phẩm "' . $product->name . '" đã ngừng kinh doanh.');
+                }
+
+                // (MỚI) Kiểm tra giá có bị thay đổi không
+                if ($product->price != $details['price']) {
+                    throw new \Exception('Giá sản phẩm "' . $product->name . '" đã thay đổi (' . number_format($product->price) . 'đ). Vui lòng cập nhật lại giỏ hàng.');
+                }
+
                 // Kiểm tra tồn kho
                 if ($product->stock_quantity < $details['quantity']) {
-                    throw new \Exception('Sản phẩm ' . $product->name . ' không đủ hàng.');
+                    throw new \Exception('Sản phẩm "' . $product->name . '" không đủ hàng (Còn ' . $product->stock_quantity . ').');
                 }
 
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $productId,
                     'quantity' => $details['quantity'],
-                    'price' => $details['price'],
+                    'price' => $product->price,
                 ]);
 
                 // Trừ kho

@@ -195,19 +195,47 @@
             const type = document.getElementById('type').value;
             const valueLabel = document.getElementById('value-label');
             const maxDiscountContainer = document.getElementById('max_discount_container');
+            const valueInput = document.getElementById('value');
             
             if (type === 'percentage') {
                 valueLabel.textContent = '(%)';
                 maxDiscountContainer.style.display = 'block';
+                valueInput.setAttribute('max', '50');
+
+                 // Trigger validation immediately in case value is already > 50
+                 validateValue(valueInput);
             } else {
                 valueLabel.textContent = '(VNĐ)';
                 maxDiscountContainer.style.display = 'none';
+                valueInput.removeAttribute('max');
+                valueInput.setCustomValidity(''); // Clear custom error
+            }
+        }
+
+        function validateValue(input) {
+            const type = document.getElementById('type').value;
+            const value = parseFloat(input.value.replace(/,/g, '')); // Remove commas
+
+            if (type === 'percentage') {
+                if (value > 50) {
+                    input.setCustomValidity('Giá trị phần trăm không được vượt quá 50%');
+                    input.reportValidity();
+                } else {
+                    input.setCustomValidity('');
+                }
+            } else {
+                 input.setCustomValidity('');
             }
         }
 
         // Gọi hàm khi trang load
         document.addEventListener('DOMContentLoaded', function() {
             updateValueLabel();
+
+            const valueInput = document.getElementById('value');
+            valueInput.addEventListener('input', function() {
+                validateValue(this);
+            });
         });
     </script>
 </x-admin-layout>
